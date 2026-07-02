@@ -1,0 +1,230 @@
+{
+  "24AW": {
+    "description": "Seasonal-focused streetwear brand dropping curated pieces for each collection cycle. Clean design language with intentional color blocking and silhouette experimentation. Each season feels like a complete thought.",
+    "aesthetic": ["seasonal", "contemporary", "color-blocking", "minimalist", "design-led"],
+    "targetCustomer": "Collectors aged 20-35 who appreciate seasonal design progression and curated drops",
+    "notes": "Strong seasonal identity with thoughtful color palettes and modern silhouettes. Worth following for each new drop."
+  },
+  "Armour Design": {
+    "description": "Protective aesthetic streetwear with tactical elements and functional design. Heavy armor-inspired graphics, structured silhouettes, and edgy attitude. Built for people who want to look ready for anything.",
+    "aesthetic": ["tactical", "armor-inspired", "edgy", "structured", "functional"],
+    "targetCustomer": "Streetwear enthusiasts aged 18-35 interested in militaristic and tactical aesthetics",
+    "notes": "Armor-inspired designs with serious construction. Strong visual identity around protective gear and tactical fashion."
+  },
+  "AVAVAVA": {
+    "description": "Repetitive pattern-heavy brand playing with geometric and abstract designs. Maximalist approach to graphic placement—bold, unapologetic, built for visual impact. No minimalism here.",
+    "aesthetic": ["geometric", "maximalist", "pattern-heavy", "abstract", "bold"],
+    "targetCustomer": "Bold fashion lovers aged 18-35 seeking statement-making pieces",
+    "notes": "Specializes in detailed geometric patterns and abstract graphics. Strong commitment to visual maximalism."
+  },
+  "Avinmade": {
+    "description": "Contemporary pieces with careful attention to fit and proportion. Quality-focused approach to modern streetwear without unnecessary details. Clean execution on timeless silhouettes.",
+    "aesthetic": ["contemporary", "quality-focused", "clean-design", "minimalist", "modern"],
+    "targetCustomer": "Minimalist fashion enthusiasts aged 20-35 valuing quality construction",
+    "notes": "Emphasizes fit and quality materials. Modern approach to essential pieces."
+  },
+  "Blacklists": {
+    "description": "Dark aesthetic streetwear with edgy graphics and moody color schemes. List-inspired aesthetics, sometimes cryptic messaging. For people who appreciate darker fashion narratives.",
+    "aesthetic": ["dark", "edgy", "moody", "graphic-heavy", "alternative"],
+    "targetCustomer": "Alternative fashion enthusiasts aged 18-35 with darker aesthetic preferences",
+    "notes": "Known for dark color palettes and conceptual graphics. Strong alternative aesthetic."
+  },
+  "BMOB": {
+    "description": "Bold streetwear with confident graphic execution. Modern silhouettes paired with statement-making prints. Designed for people who want their clothes to speak.",
+    "aesthetic": ["bold", "graphic-heavy", "contemporary", "confident", "streetwear"],
+    "targetCustomer": "Statement-seeking fashion enthusiasts aged 18-35",
+    "notes": "Strong graphic design paired with modern fits. Confident brand identity."
+  },
+  "CENS": {
+    "description": "Minimalist contemporary brand focusing on essential pieces. Clean lines, neutral palettes, architectural silhouettes. Built for people who value wardrobe fundamentals.",
+    "aesthetic": ["minimalist", "essential", "clean-lines", "neutral", "architectural"],
+    "targetCustomer": "Minimalist fashion enthusiasts aged 20-40 seeking wardrobe basics",
+    "notes": "Emphasizes clean design and functional simplicity. Quality fundamentals."
+  },
+  "DannyAndZee": {
+    "description": "Collaborative brand blending two creative perspectives into unified pieces. Balanced approach between bold and subtle—thoughtful design from dual creative vision.",
+    "aesthetic": ["collaborative", "balanced", "thoughtful", "contemporary", "creative"],
+    "targetCustomer": "Design-conscious consumers aged 20-35 appreciating collaborative perspectives",
+    "notes": "Unique collaborative approach brings fresh perspective to contemporary streetwear."
+  },
+  "Dreamband": {
+    "description": "Surreal and dreamlike aesthetic in streetwear form. Soft color palettes, ethereal graphics, pieces that feel like wearable art. For contemplative fashion lovers.",
+    "aesthetic": ["surreal", "ethereal", "dreamy", "artistic", "soft-palette"],
+    "targetCustomer": "Artistic fashion lovers aged 18-35 seeking dreamlike aesthetics",
+    "notes": "Emphasizes surrealism and dream-inspired visuals. Soft, ethereal approach to streetwear."
+  },
+  "Exoskeleton": {
+    "description": "Techwear meets streetwear with structural, armor-like silhouettes. Futuristic design language with technical details. Built for people interested in fashion that feels ahead of its time.",
+    "aesthetic": ["techwear", "futuristic", "armor-like", "technical", "structural"],
+    "targetCustomer": "Tech-fashion enthusiasts aged 18-35 interested in futuristic aesthetics",
+    "notes": "Strong techwear influence with technical design details. Futuristic silhouettes."
+  },
+  "FIVEKOH": {
+    "description": "Asian streetwear brand with modern design sensibility. Contemporary pieces with cultural sensitivity and clean execution. Quality-focused approach to modern fashion.",
+    "aesthetic": ["contemporary", "modern", "asian-influenced", "quality-driven", "clean"],
+    "targetCustomer": "Young fashion enthusiasts aged 18-30 interested in contemporary Asian streetwear",
+    "notes": "Modern Asian streetwear with strong design perspective. Growing presence in contemporary fashion."
+  },
+  "Ghost Hand": {
+    "description": "Spectral and ethereal aesthetic with ghostly graphics and haunting color schemes. Almost supernatural approach to fashion design. For people who appreciate the mysterious.",
+    "aesthetic": ["ethereal", "haunting", "supernatural", "ghostly", "mysterious"],
+    "targetCustomer": "Alternative fashion lovers aged 18-35 with appreciation for mysterious aesthetics",
+    "notes": "Unique ghostly aesthetic with carefully designed graphics. Ethereal and eerie design language."
+  },
+  "Guiba": {
+    "description": "Playful contemporary streetwear with character and personality. Fun approach to design without sacrificing quality. Pieces that make you smile when you wear them.",
+    "aesthetic": ["playful", "character-driven", "contemporary", "fun", "quality"],
+    "targetCustomer": "Young adults aged 18-30 seeking personality-driven fashion",
+    "notes": "Brings personality and playfulness to contemporary pieces. Quality fun streetwear."
+  },
+  "Guliang": {
+    "description": "Contemporary urban pieces with clean modern aesthetic. Understated approach to design focusing on wearability. Modern streetwear for everyday life.",
+    "aesthetic": ["contemporary", "urban", "clean", "understated", "modern"],
+    "targetCustomer": "Urban lifestyle followers aged 20-35",
+    "notes": "Modern urban fashion with emphasis on wearability. Clean contemporary design."
+  },
+  "Hell System": {
+    "description": "Dark, conceptual brand with system-inspired aesthetics. Heavy graphics exploring darker themes. For people interested in fashion with ideological edge.",
+    "aesthetic": ["dark", "conceptual", "system-inspired", "heavy-graphics", "edgy"],
+    "targetCustomer": "Conceptual fashion enthusiasts aged 20-35 interested in ideologically-driven design",
+    "notes": "Explores darker, conceptual themes through streetwear. System-inspired design language."
+  },
+  "Jarno": {
+    "description": "Contemporary pieces with Scandinavian minimalist influence. Clean lines, quality materials, timeless silhouettes. Built for understated sophistication.",
+    "aesthetic": ["scandinavian", "minimalist", "timeless", "clean", "sophisticated"],
+    "targetCustomer": "Minimalist fashion enthusiasts aged 20-40 appreciating Nordic design",
+    "notes": "Scandinavian minimalist approach to contemporary fashion. Quality timeless pieces."
+  },
+  "Jceaser": {
+    "description": "Confident contemporary brand with strong design identity. Balanced approach between bold and wearable. Modern pieces with personality and edge.",
+    "aesthetic": ["contemporary", "confident", "bold", "modern", "edgy"],
+    "targetCustomer": "Fashion-forward individuals aged 18-35 seeking confident pieces",
+    "notes": "Strong design identity with confident approach. Bold modern fashion."
+  },
+  "KUOYI": {
+    "description": "Contemporary Asian streetwear with refined aesthetics. Quality construction paired with thoughtful design. Modern pieces honoring craftsmanship.",
+    "aesthetic": ["contemporary", "refined", "quality-crafted", "modern", "asian-inspired"],
+    "targetCustomer": "Quality-conscious fashion enthusiasts aged 20-35",
+    "notes": "Emphasizes quality craftsmanship and refined design. Modern Asian streetwear."
+  },
+  "Leviathan 1000": {
+    "description": "Massive, oversized-focused brand with emphasis on scale and presence. Theatrical silhouettes that command attention. For people who want to take up space.",
+    "aesthetic": ["oversized", "theatrical", "massive", "bold", "statement"],
+    "targetCustomer": "Fashion lovers aged 18-35 interested in oversized and statement silhouettes",
+    "notes": "Specializes in oversized silhouettes and theatrical proportions. Bold presence-focused design."
+  },
+  "lost Paradise": {
+    "description": "Nostalgic streetwear channeling memories of lost utopias. Vintage-inspired aesthetics with modern execution. Wistful, reflective design language.",
+    "aesthetic": ["nostalgic", "vintage-inspired", "wistful", "reflective", "utopian"],
+    "targetCustomer": "Vintage fashion lovers aged 20-40 appreciating nostalgic aesthetics",
+    "notes": "Captures nostalgic and utopian themes through vintage-inspired design. Reflective approach."
+  },
+  "Melanin": {
+    "description": "Celebrating melanin with bold, unapologetic design language. Culturally-rooted aesthetics paired with modern streetwear. Proud, identity-affirming pieces.",
+    "aesthetic": ["cultural", "identity-affirming", "bold", "contemporary", "proud"],
+    "targetCustomer": "Culturally-conscious fashion lovers aged 18-35",
+    "notes": "Celebrates cultural identity through bold, proud design. Culturally-rooted streetwear."
+  },
+  "Mohair": {
+    "description": "Luxury-focused streetwear with emphasis on premium materials. Soft textures and high-quality fabrics paired with modern silhouettes. Comfort meets sophistication.",
+    "aesthetic": ["luxury", "premium-materials", "soft", "sophisticated", "contemporary"],
+    "targetCustomer": "Luxury-conscious fashion enthusiasts aged 25-40",
+    "notes": "Focuses on premium materials like mohair and luxury construction. Sophisticated comfort."
+  },
+  "Nomaniai": {
+    "description": "Experimental contemporary brand pushing design boundaries. Unconventional silhouettes and surprising material combinations. For fashion adventurers.",
+    "aesthetic": ["experimental", "unconventional", "boundary-pushing", "contemporary", "adventurous"],
+    "targetCustomer": "Fashion experimenters aged 18-35 seeking unconventional pieces",
+    "notes": "Pushes boundaries with experimental design. Unconventional approach to contemporary fashion."
+  },
+  "NZPJ": {
+    "description": "Sharp, structured contemporary pieces with attention to tailoring. Modern silhouettes executed with precision. Clean design for people who value fit.",
+    "aesthetic": ["structured", "sharp", "tailored", "modern", "clean"],
+    "targetCustomer": "Fashion enthusiasts aged 20-35 valuing precise fit and tailoring",
+    "notes": "Emphasizes tailoring and structured silhouettes. Precision in modern design."
+  },
+  "Original": {
+    "description": "Authentic contemporary brand focused on original design perspective. No trends, just sincere creative expression. For people who appreciate genuine design.",
+    "aesthetic": ["authentic", "original", "sincere", "contemporary", "creative"],
+    "targetCustomer": "Design-conscious individuals aged 18-35 valuing authenticity",
+    "notes": "Commits to original creative vision. Sincere approach without trend-chasing."
+  },
+  "Peoplesense": {
+    "description": "Community-focused brand celebrating human connection through fashion. Design for and with people in mind. Social-conscious contemporary pieces.",
+    "aesthetic": ["community-driven", "social", "human-centered", "contemporary", "inclusive"],
+    "targetCustomer": "Socially-conscious fashion lovers aged 18-35",
+    "notes": "Emphasizes community and human connection. Social-conscious design approach."
+  },
+  "PI0NEER": {
+    "description": "Pioneering brand charting new territory in contemporary streetwear. Experimental approach combined with wearability. For fashion frontierspeople.",
+    "aesthetic": ["pioneering", "experimental", "innovative", "contemporary", "forward-thinking"],
+    "targetCustomer": "Forward-thinking fashion enthusiasts aged 18-35",
+    "notes": "Pioneers new approaches to streetwear design. Innovative and experimental."
+  },
+  "Riot": {
+    "description": "Rebellious streetwear with chaotic energy and confrontational aesthetics. Loud graphics, bold statements, unapologetic attitude. For the uncompromising.",
+    "aesthetic": ["rebellious", "chaotic", "confrontational", "bold", "anarchic"],
+    "targetCustomer": "Alternative fashion lovers aged 18-35 with rebellious aesthetic",
+    "notes": "Brings rebellious energy to contemporary design. Uncompromising attitude."
+  },
+  "Silver Bone": {
+    "description": "Skeletal and skeletal-inspired aesthetics in contemporary form. Bone-white color schemes, skeletal graphics, mystical edge. Gothic contemporary pieces.",
+    "aesthetic": ["skeletal", "mystical", "gothic", "bone-inspired", "edgy"],
+    "targetCustomer": "Alternative fashion lovers aged 18-35 with gothic appreciation",
+    "notes": "Skeletal and bone-inspired aesthetics. Gothic contemporary design language."
+  },
+  "Temporary": {
+    "description": "Impermanence-focused brand celebrating transient beauty. Pieces designed for the moment. Thoughtful approach to fashion as temporary expression.",
+    "aesthetic": ["transient", "ephemeral", "temporary", "contemplative", "artistic"],
+    "targetCustomer": "Thoughtful fashion lovers aged 20-35 valuing experiential fashion",
+    "notes": "Explores themes of impermanence and transience. Conceptual contemporary pieces."
+  },
+  "THEWET": {
+    "description": "Water-inspired aesthetic with fluid silhouettes and aquatic graphics. Wet, dripping motifs in streetwear form. For people fascinated by liquidity.",
+    "aesthetic": ["water-inspired", "fluid", "aquatic", "wet-aesthetic", "organic"],
+    "targetCustomer": "Nature-inspired fashion lovers aged 18-35",
+    "notes": "Water and aquatic themes influence design language. Fluid silhouettes and motifs."
+  },
+  "ThinkDifferent": {
+    "description": "Concept-driven brand encouraging unconventional thinking. Thoughtful design language paired with intellectual approach. Fashion for the mind.",
+    "aesthetic": ["conceptual", "intellectual", "unconventional", "thoughtful", "contemporary"],
+    "targetCustomer": "Intellectually-engaged fashion enthusiasts aged 20-35",
+    "notes": "Emphasizes conceptual thinking in design. Thoughtful, idea-driven approach."
+  },
+  "Vanguardia": {
+    "description": "Avant-garde contemporary brand pushing artistic boundaries. Spanish-influenced modernist approach to streetwear. Art-first fashion.",
+    "aesthetic": ["avant-garde", "modernist", "artistic", "experimental", "boundary-pushing"],
+    "targetCustomer": "Art-conscious fashion enthusiasts aged 20-35",
+    "notes": "Brings Spanish avant-garde influence to contemporary streetwear. Artistic approach."
+  },
+  "Whistlehunter": {
+    "description": "Playful brand with whistle-inspired aesthetics and hunting themes. Adventurous approach to contemporary design. Fun, energetic pieces.",
+    "aesthetic": ["playful", "adventurous", "energetic", "whimsical", "contemporary"],
+    "targetCustomer": "Adventurous fashion lovers aged 18-30",
+    "notes": "Playful hunting and adventure-inspired design. Energetic and fun approach."
+  },
+  "White Iris": {
+    "description": "Ethereal floral-inspired streetwear with white iris motifs. Delicate aesthetic paired with modern silhouettes. Botanical contemporary fashion.",
+    "aesthetic": ["floral", "ethereal", "botanical", "delicate", "modern"],
+    "targetCustomer": "Fashion lovers aged 18-35 with botanical appreciation",
+    "notes": "Iris-inspired designs with delicate botanical aesthetics. Ethereal modern fashion."
+  },
+  "XPXME": {
+    "description": "Experimental contemporary brand with emphasis on personal expression. Letter-play and typographic approach to design. Fashion as typography.",
+    "aesthetic": ["experimental", "typographic", "letter-play", "expressive", "contemporary"],
+    "targetCustomer": "Creative individuals aged 18-35 seeking experimental pieces",
+    "notes": "Uses typography and letters as design language. Experimental expression through fashion."
+  },
+  "ZDX": {
+    "description": "Minimalist contemporary pieces with Japanese design sensibility. Clean, precise execution on simple silhouettes. Modern essentials with Japanese attention to detail.",
+    "aesthetic": ["minimalist", "japanese-influenced", "clean", "precise", "essential"],
+    "targetCustomer": "Minimalist fashion enthusiasts aged 20-40 appreciating Japanese design",
+    "notes": "Combines Japanese design philosophy with contemporary minimalism. Precise execution."
+  },
+  "Zeppein": {
+    "description": "Bold, zeppelin-inspired aesthetic with airship motifs and vintage-futuristic vibes. Steampunk-leaning contemporary streetwear. For the inventive.",
+    "aesthetic": ["steampunk", "vintage-futuristic", "airship-inspired", "bold", "inventive"],
+    "targetCustomer": "Steampunk and vintage-futuristic enthusiasts aged 18-35",
+    "notes": "Airship and zeppelin-inspired aesthetic. Vintage-futuristic contemporary pieces."
+  }
+}

