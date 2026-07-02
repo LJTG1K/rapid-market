@@ -26,7 +26,11 @@ export default function Reveal({ children, className = '', delay = 0, as = 'div'
           observer.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      // threshold: 0 — fires as soon as any part of the element is on screen.
+      // A percentage threshold breaks on tall wrapped content (e.g. a grid of
+      // 100+ product cards): a % of a very tall element may never be
+      // simultaneously visible in one viewport, so it would never reveal.
+      { threshold: 0, rootMargin: '0px 0px -40px 0px' }
     );
     observer.observe(el);
     return () => observer.disconnect();
