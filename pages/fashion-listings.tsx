@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
+import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 
 interface Product {
   id: string;
@@ -240,7 +241,7 @@ export default function FashionListings() {
           {/* Grid */}
           <div className="lg:col-span-3">
             {loading ? (
-              <p className="font-mono text-sm text-muted py-12">Loading products…</p>
+              <ProductGridSkeleton />
             ) : filteredProducts.length === 0 ? (
               <p className="font-mono text-sm text-muted py-12">
                 No products found. Try a different search or category.
@@ -255,7 +256,7 @@ export default function FashionListings() {
                           src={product.image}
                           alt={product.name}
                           loading="lazy"
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                       <span className="font-mono text-[11px] uppercase tracking-wide text-muted mb-1 block">

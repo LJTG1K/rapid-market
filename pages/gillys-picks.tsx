@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
+import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 
 declare global {
   interface Window {
@@ -133,7 +134,9 @@ export default function GillysPicks() {
         </div>
 
         {loading ? (
-          <p className="font-mono text-sm text-muted py-12">Loading Gilly&apos;s picks…</p>
+          <div className="border-t border-line pt-12">
+            <ProductGridSkeleton />
+          </div>
         ) : filteredProducts.length === 0 ? (
           <p className="font-mono text-sm text-muted py-12">No picked items found yet. Check back soon!</p>
         ) : (
@@ -147,7 +150,7 @@ export default function GillysPicks() {
                         src={product.image}
                         alt={`${product.name} — picked by Gilly`}
                         loading="lazy"
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <h3 className="font-semibold text-sm leading-snug mb-1 line-clamp-2 group-hover:text-stamp transition-colors">

@@ -57,7 +57,24 @@ export default function ProductPage() {
   };
 
   if (loading) {
-    return <div className="container-edit py-24"><p className="font-mono text-sm text-muted">Loading product…</p></div>;
+    return (
+      <div className="container-edit py-12 md:py-16">
+        <div className="h-3 w-28 bg-line/60 mb-8 motion-safe:animate-pulse" aria-hidden="true" />
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 motion-safe:animate-pulse" aria-hidden="true">
+          <div className="aspect-square bg-paper border border-line" />
+          <div>
+            <div className="h-2.5 w-20 bg-line/60 mb-4" />
+            <div className="h-8 w-full bg-line/60 mb-2" />
+            <div className="h-8 w-2/3 bg-line/60 mb-6" />
+            <div className="h-4 w-36 bg-line/60 mb-7" />
+            <div className="h-4 w-full bg-line/60 mb-1.5" />
+            <div className="h-4 w-4/5 bg-line/60 mb-8" />
+            <div className="h-8 w-24 bg-line/60 mb-8" />
+            <div className="h-12 w-44 bg-line/60" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!product) {
@@ -108,7 +125,7 @@ export default function ProductPage() {
           {/* Image */}
           <div className="relative">
             <div className="aspect-square bg-paper border border-line overflow-hidden">
-              <img src={product.image} alt={product.name} className="w-full h-full object-contain" />
+              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
             </div>
             {product.verified && (
               <div className="absolute -top-4 -left-4 hidden sm:block">
@@ -174,7 +191,7 @@ export default function ProductPage() {
               {more.map((p) => (
                 <Link key={p.id} href={`/product/${p.id}?category=${cat}`} className="flex flex-col group">
                   <div className="aspect-square bg-paper border border-line overflow-hidden mb-3">
-                    <img src={p.image} alt={p.name} className="w-full h-full object-contain" loading="lazy" />
+                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
                   </div>
                   <h3 className="font-semibold text-sm leading-snug mb-1 line-clamp-2 group-hover:text-stamp transition-colors">
                     {p.name}
