@@ -121,15 +121,19 @@ export default function Home() {
 
         <Reveal delay={160} className="container-edit mt-10 md:mt-14 pb-6">
           <div className="relative pb-10 sm:pb-16 md:pb-20">
-            <div className="aspect-[16/10] md:aspect-[21/9] overflow-hidden border border-line bg-paper placeholder-media flex items-center justify-center">
-              <span className="font-mono text-xs uppercase tracking-wide text-muted text-center px-8">
-                [ Hero photograph — streetwear sourced via RAPID sellers ]
-              </span>
+            <div className="aspect-[16/10] md:aspect-[21/9] overflow-hidden border border-line bg-paper">
+              <img
+                src="/assets/hero-main.png"
+                alt="Streetwear sourced via RAPID sellers"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <div className="absolute bottom-0 right-2 sm:right-6 md:right-14 w-[46%] sm:w-[34%] md:w-[26%] aspect-[3/4] overflow-hidden border-4 border-stone shadow-stamp bg-paper placeholder-media flex items-center justify-center">
-              <span className="font-mono text-[10px] uppercase tracking-wide text-muted text-center px-3">
-                [ Detail shot ]
-              </span>
+            <div className="absolute bottom-0 right-2 sm:right-6 md:right-14 w-[46%] sm:w-[34%] md:w-[26%] aspect-[3/4] overflow-hidden border-4 border-stone shadow-stamp bg-paper">
+              <img
+                src="/assets/hero-detail.png"
+                alt="Detail shot — RAPID seller network"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div
               className="hidden lg:block absolute top-4 right-0 font-mono text-[11px] tracking-widest text-muted"
