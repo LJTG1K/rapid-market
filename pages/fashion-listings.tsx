@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import { productMatchesBrand } from '@/lib/brandMatch';
 
 interface Product {
   id: string;
@@ -96,7 +97,7 @@ export default function FashionListings() {
       filtered = filtered.filter((p) => p.category === selectedCategory);
     }
     if (selectedBrand !== 'All') {
-      filtered = filtered.filter((p) => p.name.toLowerCase().includes(selectedBrand.toLowerCase()));
+      filtered = filtered.filter((p) => productMatchesBrand(p.name, selectedBrand));
     }
     if (searchTerm.trim()) {
       const s = searchTerm.toLowerCase();

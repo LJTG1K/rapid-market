@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Stamp from '@/components/Stamp';
 import Stars from '@/components/Stars';
 import Reveal from '@/components/Reveal';
+import { productMatchesBrand } from '@/lib/brandMatch';
 
 interface BrandProduct {
   id: string;
@@ -47,7 +48,7 @@ function FeaturedBrand() {
     fetch('/api/products')
       .then((r) => r.json())
       .then((products: BrandProduct[]) => {
-        const match = products.find((p) => p.name.toLowerCase().includes(brand.brandName.toLowerCase()));
+        const match = products.find((p) => productMatchesBrand(p.name, brand.brandName));
         if (match) setProductImage(match.image);
       })
       .catch(() => {});

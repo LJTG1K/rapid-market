@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
+import { productMatchesBrand } from '@/lib/brandMatch';
 
 interface Brand {
   brandName: string;
@@ -53,7 +54,7 @@ export default function BrandsDirectory({ brands }: { brands: Brand[] }) {
   }, [searchTerm, brands]);
 
   const getFeaturedProduct = (brandName: string) =>
-    products.find((p) => p.name.toLowerCase().includes(brandName.toLowerCase()));
+    products.find((p) => productMatchesBrand(p.name, brandName));
 
   return (
     <>

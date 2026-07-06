@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import { productMatchesBrand } from '@/lib/brandMatch';
 
 interface Brand {
   brandName: string;
@@ -65,7 +66,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
 
   useEffect(() => {
     if (brand) {
-      setFilteredProducts(products.filter((p) => p.name.toLowerCase().includes(brand.brandName.toLowerCase())));
+      setFilteredProducts(products.filter((p) => productMatchesBrand(p.name, brand.brandName)));
     }
   }, [products, brand]);
 
