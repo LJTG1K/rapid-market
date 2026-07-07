@@ -5,6 +5,21 @@ import Stars from '@/components/Stars';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import CascadeStack from '@/components/CascadeStack';
+import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+
+interface HighlightProduct {
+  id: string;
+  name: string;
+  image: string;
+  price: string;
+  sugargooLink: string;
+}
+
+const HIGHLIGHT_NAMES = [
+  'YOKOSUKA HEAVY INDUSTRIES FOX SPRING & AUTUMN JACKET',
+  'UUSCC FUNCTIONAL WINTER ZIP UP JACKET',
+  'DIAMOND SOLDIER BELT',
+];
 
 const CASCADE_IMAGES = [
   { src: '/assets/campaign/cascade-1.png', alt: 'Seller product photograph 1' },
@@ -61,6 +76,70 @@ const FAQS = [
     a: 'No. Creating a RAPID / Sugargoo account is free — you only ever pay the sellers and shipping, direct.',
   },
 ];
+
+function ProductHighlights() {
+  const [products, setProducts] = useState<HighlightProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((r) => r.json())
+      .then((all: HighlightProduct[]) => {
+        const matched = HIGHLIGHT_NAMES.map((name) =>
+          all.find((p) => p.name.trim().toLowerCase() === name.trim().toLowerCase())
+        ).filter((p): p is HighlightProduct => Boolean(p));
+        setProducts(matched);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (!loading && products.length === 0) return null;
+
+  return (
+    <Reveal as="section" className="container-edit py-12 md:py-16">
+      <div className="flex items-baseline justify-between mb-10">
+        <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest max-w-xl">
+          Straight from the index
+        </h2>
+        <span className="eyebrow hidden sm:inline">Handpicked This Week</span>
+      </div>
+
+      {loading ? (
+        <ProductGridSkeleton count={3} />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-10">
+          {products.map((p, i) => (
+            <div key={p.id} className="flex flex-col">
+              <Link href={`/product/${p.id}?category=fashion`} className="group">
+                <div className="aspect-square bg-paper border border-line overflow-hidden mb-3">
+                  <img src={p.image} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
+                </div>
+                <span className="font-mono text-[11px] text-stamp mb-1.5 block">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="font-display font-black text-lg leading-snug mb-3 group-hover:text-stamp transition-colors">
+                  {p.name}
+                </h3>
+              </Link>
+              <div className="mt-auto flex items-center justify-between gap-3">
+                <span className="font-mono text-sm">{p.price}</span>
+                <a
+                  href={p.sugargooLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary !px-4 !py-2 text-[11px]"
+                >
+                  Buy
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </Reveal>
+  );
+}
 
 function StickyCTA() {
   const [show, setShow] = useState(false);
@@ -139,6 +218,9 @@ export default function Campaign() {
           ))}
         </div>
       </Reveal>
+
+      {/* ---------- Product highlights ---------- */}
+      <ProductHighlights />
 
       {/* ---------- Differentiators ---------- */}
       <Reveal as="section" className="container-edit py-20 md:py-28">
