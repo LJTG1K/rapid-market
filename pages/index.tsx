@@ -178,7 +178,7 @@ export default function Home() {
           </div>
           <div className="hidden sm:block w-px h-8 bg-line shrink-0" />
           <p className="font-mono text-sm text-muted">
-            47,000+ hauls shipped · 150+ verified sellers · buyer protection on every order
+            47,000+ hauls shipped · 100+ verified sellers · buyer protection on every order
           </p>
         </div>
       </Reveal>

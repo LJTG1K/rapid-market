@@ -107,10 +107,10 @@ export default function LandingPageTest2({ topBrands = [] }: { topBrands: Brand[
 
           <div className="space-y-3 mb-12">
             <p className="text-2xl font-black" style={{ fontFamily: 'Jaro' }}>
-              150+ sellers all verified.
+              100+ sellers all verified.
             </p>
             <p className="text-2xl font-black" style={{ fontFamily: 'Jaro' }}>
-              3M+ authentic products.
+              New items indexed daily.
             </p>
           </div>
 
@@ -139,13 +139,12 @@ export default function LandingPageTest2({ topBrands = [] }: { topBrands: Brand[
             </div>
 
             <div className="bg-white bg-opacity-20 backdrop-blur p-8 rounded-2xl text-center">
-              <div className="text-4xl font-black mb-2 text-white" style={{ fontFamily: 'Jaro' }}>3M+</div>
-              <div className="text-sm font-bold uppercase text-white mb-2">Products</div>
+              <div className="text-sm font-bold uppercase text-white mb-2" style={{ fontFamily: 'Jaro' }}>New items indexed daily</div>
               <p className="text-sm text-blue-100" style={{ fontFamily: 'Staatliches' }}>Verified authentic</p>
             </div>
 
             <div className="bg-white bg-opacity-20 backdrop-blur p-8 rounded-2xl text-center">
-              <div className="text-4xl font-black mb-2 text-white" style={{ fontFamily: 'Jaro' }}>150+</div>
+              <div className="text-4xl font-black mb-2 text-white" style={{ fontFamily: 'Jaro' }}>100+</div>
               <div className="text-sm font-bold uppercase text-white mb-2">Sellers</div>
               <p className="text-sm text-blue-100" style={{ fontFamily: 'Staatliches' }}>All verified</p>
             </div>
@@ -220,7 +219,7 @@ export default function LandingPageTest2({ topBrands = [] }: { topBrands: Brand[
               <div className="text-6xl font-black mb-4" style={{ fontFamily: 'Jaro' }}>1</div>
               <h3 className="text-2xl font-black mb-3 uppercase" style={{ fontFamily: 'Jaro' }}>Browse</h3>
               <p className="text-gray-700" style={{ fontFamily: 'Staatliches' }}>
-                Explore 150+ verified sellers & 3M+ authentic products.
+                Explore 100+ verified sellers with new items indexed daily.
               </p>
             </div>
 
@@ -251,7 +250,7 @@ export default function LandingPageTest2({ topBrands = [] }: { topBrands: Brand[
           </h2>
 
           <p className="text-lg mb-8 opacity-95" style={{ fontFamily: 'Staatliches' }}>
-            150+ verified sellers. 3M+ authentic products. All in one place.
+            100+ verified sellers. New items indexed daily. All in one place.
           </p>
 
           <button

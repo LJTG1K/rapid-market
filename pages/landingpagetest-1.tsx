@@ -118,7 +118,7 @@ export default function LandingPageTest1() {
           >
             100+ 5 Star Reviews
           </h2>
-          <p className="text-center text-gray-700 mb-16 text-lg">150+ original brands and counting</p>
+          <p className="text-center text-gray-700 mb-16 text-lg">100+ original brands and counting</p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {topReviews.map((review, idx) => (

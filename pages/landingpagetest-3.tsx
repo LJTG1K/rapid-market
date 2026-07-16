@@ -118,7 +118,7 @@ export default function LandingPageTest3({
       <section className="bg-white py-24 md:py-32 px-4 relative flex items-center justify-center min-h-[600px]">
         <div className="max-w-6xl mx-auto text-center">
           <p className="text-2xl font-black mb-2 text-gray-700" style={{ fontFamily: 'Jaro' }}>
-            47,000+ hauls. 150+ sellers.
+            47,000+ hauls. 100+ sellers.
           </p>
           <p className="text-2xl font-black mb-8 text-gray-700" style={{ fontFamily: 'Jaro' }}>
             4.8★ average seller rating.
@@ -129,7 +129,7 @@ export default function LandingPageTest3({
           </h1>
 
           <p className="text-xl text-gray-700 mb-12 max-w-2xl mx-auto" style={{ fontFamily: 'Staatliches' }}>
-            Buy from 150+ verified sellers with complete buyer protection.
+            Buy from 100+ verified sellers with complete buyer protection.
           </p>
 
           <button
