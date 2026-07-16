@@ -13,18 +13,38 @@
     "notes": "Late-night inspired streetwear pieces with edgy aesthetic and contemporary urban styling."
   },
   {
-    "brandName": "24AW",
-    "slug": "24aw",
-    "description": "Seasonal-focused streetwear brand dropping curated pieces for each collection cycle. Clean design language with intentional color blocking and silhouette experimentation. Each season feels like a complete thought.",
+    "brandName": "22Doodle",
+    "slug": "22doodle",
+    "description": "Artistic streetwear brand featuring hand-drawn illustrations and playful doodle-inspired graphics on contemporary pieces.",
     "aesthetic": [
-      "seasonal",
-      "contemporary",
-      "color-blocking",
-      "minimalist",
-      "design-led"
+      "artistic",
+      "doodle-inspired",
+      "hand-drawn",
+      "playful",
+      "contemporary"
     ],
-    "targetCustomer": "Collectors aged 20-35 who appreciate seasonal design progression and curated drops",
-    "notes": "Strong seasonal identity with thoughtful color palettes and modern silhouettes. Worth following for each new drop."
+    "targetCustomer": "Creative individuals and artists aged 18-35",
+    "notes": "Art-focused approach with unique graphic designs and limited releases"
+  },
+  {
+    "brandName": "99club",
+    "slug": "99club",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "A Square Root",
+    "slug": "a-square-root",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Aberdeen",
@@ -39,6 +59,16 @@
     ],
     "targetCustomer": "Mod enthusiasts and vintage fashion aficionados",
     "notes": "Boutique approach with physical presence in Aberdeen. Focuses on quality over quantity with clear design identity rooted in UK subculture."
+  },
+  {
+    "brandName": "Andlife",
+    "slug": "andlife",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Antiphase",
@@ -81,18 +111,14 @@
     "notes": "Multi-country presence with solid manufacturing infrastructure and retail partnerships. Modern aesthetics with attention to materials and fit."
   },
   {
-    "brandName": "Armour Design",
-    "slug": "armour-design",
-    "description": "Protective aesthetic streetwear with tactical elements and functional design. Heavy armor-inspired graphics, structured silhouettes, and edgy attitude. Built for people who want to look ready for anything.",
+    "brandName": "Arrow Of Cocoon",
+    "slug": "arrow-of-cocoon",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
     "aesthetic": [
-      "tactical",
-      "armor-inspired",
-      "edgy",
-      "structured",
-      "functional"
+      "streetwear"
     ],
-    "targetCustomer": "Streetwear enthusiasts aged 18-35 interested in militaristic and tactical aesthetics",
-    "notes": "Armor-inspired designs with serious construction. Strong visual identity around protective gear and tactical fashion."
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "AsentDboom",
@@ -136,6 +162,16 @@
     "notes": "Emphasizes fit and quality materials. Modern approach to essential pieces."
   },
   {
+    "brandName": "Beft",
+    "slug": "beft",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
     "brandName": "Beliefyao",
     "slug": "beliefyao",
     "description": "Contemporary streetwear with intentional design philosophy. Modern cuts and thoughtful aesthetic approach.",
@@ -147,6 +183,20 @@
     ],
     "targetCustomer": "Young adults aged 18-30 seeking meaningful fashion",
     "notes": "Creates contemporary pieces rooted in design philosophy. Modern streetwear with emphasis on meaningful aesthetics."
+  },
+  {
+    "brandName": "Bevan Up",
+    "slug": "bevan-up",
+    "description": "Minimalist contemporary fashion brand with clean lines and sophisticated design approach.",
+    "aesthetic": [
+      "minimalist",
+      "sophisticated",
+      "clean-lines",
+      "contemporary",
+      "refined"
+    ],
+    "targetCustomer": "Design-conscious professionals aged 25-45",
+    "notes": "Boutique brand with focus on timeless pieces and quality craftsmanship"
   },
   {
     "brandName": "Blacklists",
@@ -204,6 +254,20 @@
     "notes": "Specializing in bags as fashion statements"
   },
   {
+    "brandName": "Bungeris",
+    "slug": "bungeris",
+    "description": "Functional streetwear brand featuring utility design and practical silhouettes with contemporary aesthetic.",
+    "aesthetic": [
+      "functional",
+      "utility",
+      "practical",
+      "contemporary",
+      "oversized"
+    ],
+    "targetCustomer": "Practical-minded streetwear enthusiasts aged 18-35",
+    "notes": "Available on Asian platforms with emphasis on durability and wearability"
+  },
+  {
     "brandName": "CENS",
     "slug": "cens",
     "description": "Minimalist contemporary brand focusing on essential pieces. Clean lines, neutral palettes, architectural silhouettes. Built for people who value wardrobe fundamentals.",
@@ -229,6 +293,36 @@
     ],
     "targetCustomer": "Creative individuals aged 18-35",
     "notes": "Creates bold, experimental contemporary streetwear with playful and energetic design approach."
+  },
+  {
+    "brandName": "Chill High",
+    "slug": "chill-high",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Cinder Vein",
+    "slug": "cinder-vein",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Coupure",
+    "slug": "coupure",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Crashbaggage",
@@ -272,6 +366,26 @@
     "notes": "Focus on atmospheric design elements"
   },
   {
+    "brandName": "Dec Club",
+    "slug": "dec-club",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Detw",
+    "slug": "detw",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
     "brandName": "DL",
     "slug": "dl",
     "description": "Contemporary fashion with clean design philosophy. Minimalist approach executed with intentionality and taste.",
@@ -283,6 +397,16 @@
     ],
     "targetCustomer": "Design-conscious consumers aged 20-40",
     "notes": "Curated contemporary pieces with emphasis on design clarity. Boutique brand focused on architectural silhouettes."
+  },
+  {
+    "brandName": "Doomsdayvanguard",
+    "slug": "doomsdayvanguard",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Dreamband",
@@ -310,6 +434,16 @@
     ],
     "targetCustomer": "Youth culture enthusiasts and streetwear followers",
     "notes": "Consistent graphic drops with strong urban aesthetic. Bold designs executed with contemporary silhouettes."
+  },
+  {
+    "brandName": "Enthusiast Creativity",
+    "slug": "enthusiast-creativity",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "EODUP",
@@ -340,20 +474,6 @@
     "notes": "Focuses on vintage washes and batik designs—pieces that feel lived-in without feeling cheap. Building momentum with strong social following."
   },
   {
-    "brandName": "Exoskeleton",
-    "slug": "exoskeleton",
-    "description": "Techwear meets streetwear with structural, armor-like silhouettes. Futuristic design language with technical details. Built for people interested in fashion that feels ahead of its time.",
-    "aesthetic": [
-      "techwear",
-      "futuristic",
-      "armor-like",
-      "technical",
-      "structural"
-    ],
-    "targetCustomer": "Tech-fashion enthusiasts aged 18-35 interested in futuristic aesthetics",
-    "notes": "Strong techwear influence with technical design details. Futuristic silhouettes."
-  },
-  {
     "brandName": "Fan Original",
     "slug": "fan-original",
     "description": "Authentic independent brand emphasizing original design and cultural relevance in fashion.",
@@ -365,6 +485,16 @@
     ],
     "targetCustomer": "Consumers valuing authenticity and originality aged 18-40",
     "notes": "Produces original design-driven contemporary pieces with cultural relevance and authentic styling."
+  },
+  {
+    "brandName": "Fanvan",
+    "slug": "fanvan",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Fashion Express",
@@ -407,6 +537,30 @@
     "notes": "Modern Asian streetwear with strong design perspective. Growing presence in contemporary fashion."
   },
   {
+    "brandName": "Flyerrer",
+    "slug": "flyerrer",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Fourth3Ex",
+    "slug": "fourth3ex",
+    "description": "Experimental streetwear brand exploring unconventional design and boundary-pushing aesthetics.",
+    "aesthetic": [
+      "experimental",
+      "unconventional",
+      "boundary-pushing",
+      "contemporary",
+      "bold"
+    ],
+    "targetCustomer": "Fashion experimenters and design enthusiasts aged 18-35",
+    "notes": "Niche brand with focus on innovative design approaches"
+  },
+  {
     "brandName": "From Mars",
     "slug": "from-mars",
     "description": "Experimental streetwear brand with space-age and futuristic design inspiration.",
@@ -418,6 +572,20 @@
     ],
     "targetCustomer": "Fashion experimenters and sci-fi enthusiasts aged 18-35",
     "notes": "Unique perspective with otherworldly aesthetics"
+  },
+  {
+    "brandName": "FVVK",
+    "slug": "fvvk",
+    "description": "Contemporary streetwear brand with modern aesthetic and quality-focused construction philosophy.",
+    "aesthetic": [
+      "contemporary",
+      "modern",
+      "quality-driven",
+      "urban",
+      "minimalist-elements"
+    ],
+    "targetCustomer": "Young urbanites aged 18-30 seeking quality streetwear",
+    "notes": "Emerging brand with growing presence on social media and global platforms"
   },
   {
     "brandName": "Galaxor",
@@ -433,18 +601,14 @@
     "notes": "Unique futuristic design perspective with bold graphics. Contemporary pieces with experimental sci-fi aesthetic."
   },
   {
-    "brandName": "Ghost Hand",
-    "slug": "ghost-hand",
-    "description": "Spectral and ethereal aesthetic with ghostly graphics and haunting color schemes. Almost supernatural approach to fashion design. For people who appreciate the mysterious.",
+    "brandName": "Good",
+    "slug": "good",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
     "aesthetic": [
-      "ethereal",
-      "haunting",
-      "supernatural",
-      "ghostly",
-      "mysterious"
+      "streetwear"
     ],
-    "targetCustomer": "Alternative fashion lovers aged 18-35 with appreciation for mysterious aesthetics",
-    "notes": "Unique ghostly aesthetic with carefully designed graphics. Ethereal and eerie design language."
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "GpStudio",
@@ -458,6 +622,16 @@
     ],
     "targetCustomer": "Design-conscious consumers seeking unique, conceptual pieces",
     "notes": "Art-driven pieces with emphasis on design innovation. Community-focused brand pushing creative boundaries in streetwear."
+  },
+  {
+    "brandName": "Gray Dreams",
+    "slug": "gray-dreams",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Guiba",
@@ -486,6 +660,16 @@
     ],
     "targetCustomer": "Urban lifestyle followers aged 20-35",
     "notes": "Modern urban fashion with emphasis on wearability. Clean contemporary design."
+  },
+  {
+    "brandName": "H76w",
+    "slug": "h76w",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Heatseeking",
@@ -555,8 +739,8 @@
     "notes": "Scandinavian minimalist approach to contemporary fashion. Quality timeless pieces."
   },
   {
-    "brandName": "Jceaser",
-    "slug": "jceaser",
+    "brandName": "JCaesar",
+    "slug": "jcaesar",
     "description": "Confident contemporary brand with strong design identity. Balanced approach between bold and wearable. Modern pieces with personality and edge.",
     "aesthetic": [
       "contemporary",
@@ -567,6 +751,16 @@
     ],
     "targetCustomer": "Fashion-forward individuals aged 18-35 seeking confident pieces",
     "notes": "Strong design identity with confident approach. Bold modern fashion."
+  },
+  {
+    "brandName": "Joinboy",
+    "slug": "joinboy",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "JZ Jewelry",
@@ -606,6 +800,16 @@
     ],
     "targetCustomer": "Design-conscious young adults aged 20-35",
     "notes": "Minimalist contemporary fashion with attention to construction details. Thoughtful design approach to modern wardrobe essentials."
+  },
+  {
+    "brandName": "Klick Clak",
+    "slug": "klick-clak",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "KUOYI",
@@ -648,18 +852,14 @@
     "notes": "Camera brand heritage with fashion collaborations; available on premium retailers"
   },
   {
-    "brandName": "Leviathan 1000",
-    "slug": "leviathan-1000",
-    "description": "Massive, oversized-focused brand with emphasis on scale and presence. Theatrical silhouettes that command attention. For people who want to take up space.",
+    "brandName": "Lhhomme",
+    "slug": "lhhomme",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
     "aesthetic": [
-      "oversized",
-      "theatrical",
-      "massive",
-      "bold",
-      "statement"
+      "streetwear"
     ],
-    "targetCustomer": "Fashion lovers aged 18-35 interested in oversized and statement silhouettes",
-    "notes": "Specializes in oversized silhouettes and theatrical proportions. Bold presence-focused design."
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "LOOX GZ",
@@ -675,6 +875,16 @@
     "notes": "Regional contemporary streetwear with emphasis on Guangzhou street culture. Modern urban design approach."
   },
   {
+    "brandName": "Losecontroledge",
+    "slug": "losecontroledge",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
     "brandName": "Loselos",
     "slug": "loselos",
     "description": "Contemporary pieces designed for individual expression. Design-driven approach without genre constraints.",
@@ -688,22 +898,18 @@
     "notes": "Limited releases emphasizing individual style over trends. Focus on thoughtful design that encourages personal interpretation."
   },
   {
-    "brandName": "lost Paradise",
-    "slug": "lost-paradise",
-    "description": "Nostalgic streetwear channeling memories of lost utopias. Vintage-inspired aesthetics with modern execution. Wistful, reflective design language.",
+    "brandName": "Luuucam",
+    "slug": "luuucam",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
     "aesthetic": [
-      "nostalgic",
-      "vintage-inspired",
-      "wistful",
-      "reflective",
-      "utopian"
+      "streetwear"
     ],
-    "targetCustomer": "Vintage fashion lovers aged 20-40 appreciating nostalgic aesthetics",
-    "notes": "Captures nostalgic and utopian themes through vintage-inspired design. Reflective approach."
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "MadeExtreme",
-    "slug": "made-extreme",
+    "slug": "madeextreme",
     "description": "Unisex streetwear brand offering high-quality pieces with bold designs, focusing on inclusive fashion for all body types.",
     "aesthetic": [
       "unisex",
@@ -810,18 +1016,14 @@
     "notes": "Produces alternative contemporary pieces with strong design identity. Quality construction and unique approach to streetwear aesthetics."
   },
   {
-    "brandName": "Mohair",
-    "slug": "mohair",
-    "description": "Luxury-focused streetwear with emphasis on premium materials. Soft textures and high-quality fabrics paired with modern silhouettes. Comfort meets sophistication.",
+    "brandName": "Moon Baby",
+    "slug": "moon-baby",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
     "aesthetic": [
-      "luxury",
-      "premium-materials",
-      "soft",
-      "sophisticated",
-      "contemporary"
+      "streetwear"
     ],
-    "targetCustomer": "Luxury-conscious fashion enthusiasts aged 25-40",
-    "notes": "Focuses on premium materials like mohair and luxury construction. Sophisticated comfort."
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "MPF",
@@ -835,6 +1037,26 @@
     ],
     "targetCustomer": "Minimalist fashion enthusiasts aged 20-40",
     "notes": "Focused on minimalist design with attention to fit and proportion. Modern approach to contemporary fashion without compromise on quality."
+  },
+  {
+    "brandName": "Mr Grid",
+    "slug": "mr-grid",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Mr Nearly",
+    "slug": "mr-nearly",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "MSX",
@@ -876,6 +1098,16 @@
     "notes": "Blends traditional cultural elements with modern streetwear. Contemporary approach to cultural expression through fashion."
   },
   {
+    "brandName": "Nietpxfo",
+    "slug": "nietpxfo",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
     "brandName": "Nihaohao",
     "slug": "nihaohao",
     "description": "Asian streetwear brand offering oversized graphic pieces with retro-washed vintage distressed aesthetic, featuring bone and flower prints.",
@@ -903,8 +1135,8 @@
     "notes": "High-quality focus with reduced aesthetic"
   },
   {
-    "brandName": "NINE",
-    "slug": "nine",
+    "brandName": "Nine Leather",
+    "slug": "nine-leather",
     "description": "Contemporary fashion brand with focus on quality construction and modern silhouettes.",
     "aesthetic": [
       "contemporary",
@@ -914,6 +1146,16 @@
     ],
     "targetCustomer": "Quality-conscious consumers aged 20-40",
     "notes": "Premium positioning with focus on details"
+  },
+  {
+    "brandName": "No E",
+    "slug": "no-e",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Nomaniai",
@@ -944,6 +1186,16 @@
     "notes": "Emphasizes tailoring and structured silhouettes. Precision in modern design."
   },
   {
+    "brandName": "Okaythxbye",
+    "slug": "okaythxbye",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
     "brandName": "Original",
     "slug": "original",
     "description": "Authentic contemporary brand focused on original design perspective. No trends, just sincere creative expression. For people who appreciate genuine design.",
@@ -958,8 +1210,8 @@
     "notes": "Commits to original creative vision. Sincere approach without trend-chasing."
   },
   {
-    "brandName": "Ornament",
-    "slug": "ornament",
+    "brandName": "Ornament View",
+    "slug": "ornament-view",
     "description": "Decorative and ornamental streetwear. Detailed craftsmanship on pieces designed to stand out through embellishment.",
     "aesthetic": [
       "decorative",
@@ -970,6 +1222,16 @@
     ],
     "targetCustomer": "Design-conscious consumers and fashion collectors",
     "notes": "Specializes in detailed, ornamental design elements. Limited edition approach with emphasis on crafted aesthetics."
+  },
+  {
+    "brandName": "Paiki",
+    "slug": "paiki",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Peoplesense",
@@ -986,6 +1248,16 @@
     "notes": "Emphasizes community and human connection. Social-conscious design approach."
   },
   {
+    "brandName": "Personsoul",
+    "slug": "personsoul",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
     "brandName": "PI0NEER",
     "slug": "pi0neer",
     "description": "Pioneering brand charting new territory in contemporary streetwear. Experimental approach combined with wearability. For fashion frontierspeople.",
@@ -998,6 +1270,26 @@
     ],
     "targetCustomer": "Forward-thinking fashion enthusiasts aged 18-35",
     "notes": "Pioneers new approaches to streetwear design. Innovative and experimental."
+  },
+  {
+    "brandName": "Pickle Club",
+    "slug": "pickle-club",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Plain",
+    "slug": "plain",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "POPProject",
@@ -1026,18 +1318,52 @@
     "notes": "Offers bold, experimental contemporary streetwear with edgy personality and daring designs."
   },
   {
-    "brandName": "Riot",
-    "slug": "riot",
-    "description": "Rebellious streetwear with chaotic energy and confrontational aesthetics. Loud graphics, bold statements, unapologetic attitude. For the uncompromising.",
+    "brandName": "Rebel Wave",
+    "slug": "rebel-wave",
+    "description": "Contemporary streetwear brand with rebellious spirit and wave-inspired design elements, offering bold graphics and modern silhouettes.",
     "aesthetic": [
       "rebellious",
-      "chaotic",
-      "confrontational",
-      "bold",
-      "anarchic"
+      "contemporary",
+      "bold-graphics",
+      "wave-inspired",
+      "modern-silhouette"
     ],
-    "targetCustomer": "Alternative fashion lovers aged 18-35 with rebellious aesthetic",
-    "notes": "Brings rebellious energy to contemporary design. Uncompromising attitude."
+    "targetCustomer": "Young rebels and trend-conscious consumers aged 18-35",
+    "notes": "Emerging brand with emphasis on statement-making designs and quality construction"
+  },
+  {
+    "brandName": "Regen",
+    "slug": "regen",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Rogic Logic",
+    "slug": "rogic-logic",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "RollingMoney",
+    "slug": "rollingmoney",
+    "description": "Luxury-inspired streetwear brand focusing on wealth aesthetics and premium design with contemporary edge.",
+    "aesthetic": [
+      "luxury-inspired",
+      "wealth-focused",
+      "premium-aesthetic",
+      "contemporary",
+      "bold"
+    ],
+    "targetCustomer": "Aspirational consumers aged 20-40 seeking luxury streetwear",
+    "notes": "Upscale positioning with emphasis on quality materials and logo presence"
   },
   {
     "brandName": "Saint Dee",
@@ -1053,6 +1379,16 @@
     "notes": "Offers refined contemporary pieces with quality construction and minimalist aesthetic."
   },
   {
+    "brandName": "Sanslaws",
+    "slug": "sanslaws",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
     "brandName": "Saylam",
     "slug": "saylam",
     "description": "Contemporary Asian streetwear with design-first mentality. Modern silhouettes rooted in cultural aesthetic.",
@@ -1064,6 +1400,16 @@
     ],
     "targetCustomer": "Design-conscious youth aged 18-30",
     "notes": "Modern design philosophy with contemporary Asian-inspired styling. Thoughtful approach to contemporary fashion."
+  },
+  {
+    "brandName": "Seasons",
+    "slug": "seasons",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Sick it Rain",
@@ -1080,18 +1426,34 @@
     "notes": "Statement-making brand with niche following"
   },
   {
-    "brandName": "Silver Bone",
-    "slug": "silver-bone",
-    "description": "Skeletal and skeletal-inspired aesthetics in contemporary form. Bone-white color schemes, skeletal graphics, mystical edge. Gothic contemporary pieces.",
+    "brandName": "Slight Vouge",
+    "slug": "slight-vouge",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
     "aesthetic": [
-      "skeletal",
-      "mystical",
-      "gothic",
-      "bone-inspired",
-      "edgy"
+      "streetwear"
     ],
-    "targetCustomer": "Alternative fashion lovers aged 18-35 with gothic appreciation",
-    "notes": "Skeletal and bone-inspired aesthetics. Gothic contemporary design language."
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Smileandsad",
+    "slug": "smileandsad",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Taak",
+    "slug": "taak",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Taofengchao",
@@ -1161,20 +1523,6 @@
     "notes": "Philosophy-driven brand approach"
   },
   {
-    "brandName": "ThinkDifferent",
-    "slug": "thinkdifferent",
-    "description": "Concept-driven brand encouraging unconventional thinking. Thoughtful design language paired with intellectual approach. Fashion for the mind.",
-    "aesthetic": [
-      "conceptual",
-      "intellectual",
-      "unconventional",
-      "thoughtful",
-      "contemporary"
-    ],
-    "targetCustomer": "Intellectually-engaged fashion enthusiasts aged 20-35",
-    "notes": "Emphasizes conceptual thinking in design. Thoughtful, idea-driven approach."
-  },
-  {
     "brandName": "Tiantianfa",
     "slug": "tiantianfa",
     "description": "Asian fashion brand with contemporary streetwear aesthetic and modern design philosophy.",
@@ -1199,6 +1547,16 @@
     ],
     "targetCustomer": "Trend-conscious consumers aged 18-30",
     "notes": "Produces contemporary fashion exploring current trends with quality construction and modern aesthetic."
+  },
+  {
+    "brandName": "Ueshima",
+    "slug": "ueshima",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "UUCSCC",
@@ -1229,6 +1587,26 @@
     "notes": "Brings Spanish avant-garde influence to contemporary streetwear. Artistic approach."
   },
   {
+    "brandName": "Ve2",
+    "slug": "ve2",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Wassup Happy",
+    "slug": "wassup-happy",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
     "brandName": "Watch Out For Cuffs",
     "slug": "watch-out-for-cuffs",
     "description": "Streetwear brand with distinctive cuff styling details and contemporary urban aesthetic.",
@@ -1255,8 +1633,8 @@
     "notes": "Produces contemporary lifestyle fashion with modern design and aesthetic approach."
   },
   {
-    "brandName": "West Coast",
-    "slug": "west-coast",
+    "brandName": "West Coast Hiphop",
+    "slug": "west-coast-hiphop",
     "description": "West Coast-inspired streetwear focused on graphic-heavy oversized tees with serious 90s hip-hop influence. Bold American iconography and solid basics with that laid-back California aesthetic.",
     "aesthetic": [
       "streetwear",
@@ -1283,18 +1661,34 @@
     "notes": "Playful hunting and adventure-inspired design. Energetic and fun approach."
   },
   {
-    "brandName": "White Iris",
-    "slug": "white-iris",
-    "description": "Ethereal floral-inspired streetwear with white iris motifs. Delicate aesthetic paired with modern silhouettes. Botanical contemporary fashion.",
+    "brandName": "Wulien",
+    "slug": "wulien",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
     "aesthetic": [
-      "floral",
-      "ethereal",
-      "botanical",
-      "delicate",
-      "modern"
+      "streetwear"
     ],
-    "targetCustomer": "Fashion lovers aged 18-35 with botanical appreciation",
-    "notes": "Iris-inspired designs with delicate botanical aesthetics. Ethereal modern fashion."
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Xanvas",
+    "slug": "xanvas",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
+  },
+  {
+    "brandName": "Xiao Guwan",
+    "slug": "xiao-guwan",
+    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "aesthetic": [
+      "streetwear"
+    ],
+    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
+    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "XMYB",
@@ -1324,8 +1718,8 @@
     "notes": "Uses typography and letters as design language. Experimental expression through fashion."
   },
   {
-    "brandName": "Yokosuka",
-    "slug": "yokosuka",
+    "brandName": "Yokosuka Heavy Industries",
+    "slug": "yokosuka-heavy-industries",
     "description": "Japanese streetwear heavy on embroidery—dragon motifs, cultural graphics, vintage baseball styling. Oversized fits with that deliberate distressed amekaji energy.",
     "aesthetic": [
       "embroidered",
@@ -1363,134 +1757,5 @@
     ],
     "targetCustomer": "Minimalist fashion enthusiasts aged 20-40 appreciating Japanese design",
     "notes": "Combines Japanese design philosophy with contemporary minimalism. Precise execution."
-  },
-  {
-    "brandName": "Zeppein",
-    "slug": "zeppein",
-    "description": "Bold, zeppelin-inspired aesthetic with airship motifs and vintage-futuristic vibes. Steampunk-leaning contemporary streetwear. For the inventive.",
-    "aesthetic": [
-      "steampunk",
-      "vintage-futuristic",
-      "airship-inspired",
-      "bold",
-      "inventive"
-    ],
-    "targetCustomer": "Steampunk and vintage-futuristic enthusiasts aged 18-35",
-    "notes": "Airship and zeppelin-inspired aesthetic. Vintage-futuristic contemporary pieces."
-  },
-  {
-    "brandName": "Rebel Wave",
-    "slug": "rebel-wave",
-    "description": "Contemporary streetwear brand with rebellious spirit and wave-inspired design elements, offering bold graphics and modern silhouettes.",
-    "aesthetic": [
-      "rebellious",
-      "contemporary",
-      "bold-graphics",
-      "wave-inspired",
-      "modern-silhouette"
-    ],
-    "targetCustomer": "Young rebels and trend-conscious consumers aged 18-35",
-    "notes": "Emerging brand with emphasis on statement-making designs and quality construction"
-  },
-  {
-    "brandName": "RollingMoney",
-    "slug": "rolling-money",
-    "description": "Luxury-inspired streetwear brand focusing on wealth aesthetics and premium design with contemporary edge.",
-    "aesthetic": [
-      "luxury-inspired",
-      "wealth-focused",
-      "premium-aesthetic",
-      "contemporary",
-      "bold"
-    ],
-    "targetCustomer": "Aspirational consumers aged 20-40 seeking luxury streetwear",
-    "notes": "Upscale positioning with emphasis on quality materials and logo presence"
-  },
-  {
-    "brandName": "Bevan",
-    "slug": "bevan",
-    "description": "Minimalist contemporary fashion brand with clean lines and sophisticated design approach.",
-    "aesthetic": [
-      "minimalist",
-      "sophisticated",
-      "clean-lines",
-      "contemporary",
-      "refined"
-    ],
-    "targetCustomer": "Design-conscious professionals aged 25-45",
-    "notes": "Boutique brand with focus on timeless pieces and quality craftsmanship"
-  },
-  {
-    "brandName": "Bungeris",
-    "slug": "bungeris",
-    "description": "Functional streetwear brand featuring utility design and practical silhouettes with contemporary aesthetic.",
-    "aesthetic": [
-      "functional",
-      "utility",
-      "practical",
-      "contemporary",
-      "oversized"
-    ],
-    "targetCustomer": "Practical-minded streetwear enthusiasts aged 18-35",
-    "notes": "Available on Asian platforms with emphasis on durability and wearability"
-  },
-  {
-    "brandName": "22Doodle",
-    "slug": "22doodle",
-    "description": "Artistic streetwear brand featuring hand-drawn illustrations and playful doodle-inspired graphics on contemporary pieces.",
-    "aesthetic": [
-      "artistic",
-      "doodle-inspired",
-      "hand-drawn",
-      "playful",
-      "contemporary"
-    ],
-    "targetCustomer": "Creative individuals and artists aged 18-35",
-    "notes": "Art-focused approach with unique graphic designs and limited releases"
-  },
-  {
-    "brandName": "Fourth3Ex",
-    "slug": "fourth3ex",
-    "description": "Experimental streetwear brand exploring unconventional design and boundary-pushing aesthetics.",
-    "aesthetic": [
-      "experimental",
-      "unconventional",
-      "boundary-pushing",
-      "contemporary",
-      "bold"
-    ],
-    "targetCustomer": "Fashion experimenters and design enthusiasts aged 18-35",
-    "notes": "Niche brand with focus on innovative design approaches"
-  },
-  {
-    "brandName": "FVVK",
-    "slug": "fvvk",
-    "description": "Contemporary streetwear brand with modern aesthetic and quality-focused construction philosophy.",
-    "aesthetic": [
-      "contemporary",
-      "modern",
-      "quality-driven",
-      "urban",
-      "minimalist-elements"
-    ],
-    "targetCustomer": "Young urbanites aged 18-30 seeking quality streetwear",
-    "notes": "Emerging brand with growing presence on social media and global platforms"
-  },
-  {
-    "brandName": "Wooster",
-    "slug": "wooster",
-    "description": "Heavy-wash denim and utility cargo wear channeling early-00s archive aesthetics. Oversized silhouettes with tactical detailing, vintage graphic prints, and multi-pocket construction. Each piece feels like a curated thrift find from a different era.",
-    "aesthetic": [
-      "vintage",
-      "y2k",
-      "utility",
-      "cargo",
-      "archive",
-      "oversized",
-      "heavy-wash",
-      "tactical"
-    ],
-    "targetCustomer": "Early-2000s nostalgia enthusiasts aged 18-30 who value vintage authenticity and archive-inspired pieces. Collectors seeking statement cargo and wash-heavy denim basics.",
-    "notes": "Strong emphasis on denim quality and wash variation. Functional utility details create authentic streetwear. Vintage graphic prints paired with modern oversized tailoring. Mining different decades of archive inspiration each season."
   }
 ]
