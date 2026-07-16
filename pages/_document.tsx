@@ -11,7 +11,7 @@ export default function Document() {
         <link rel="sitemap" href="/api/sitemap.xml" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#DAD5C8" />
-        <meta name="description" content="RAPID - Access 1,500 sellers and 3 million products through Sugargoo" />
+        <meta name="description" content="RAPID - Access 100+ sellers, with new items indexed daily, through Sugargoo" />
 
         {/* Preload fonts */}
         <link
@@ -22,14 +22,14 @@ export default function Document() {
 
         {/* Meta tags for SEO */}
         <meta property="og:title" content="RAPID. - Direct from China" />
-        <meta property="og:description" content="1,500+ sellers, 3M+ pieces. Shipped via Sugargoo. No middleman, no markup." />
+        <meta property="og:description" content="100+ sellers, new items indexed daily. Shipped via Sugargoo. No middleman, no markup." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://rapid.market" />
         <meta property="og:image" content="https://rapid.market/assets/logo.png" />
         <meta property="og:image:alt" content="RAPID Logo" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="RAPID. - Direct from China" />
-        <meta name="twitter:description" content="1,500+ sellers, 3M+ pieces. Shipped via Sugargoo." />
+        <meta name="twitter:description" content="100+ sellers, new items indexed daily. Shipped via Sugargoo." />
         <meta name="twitter:image" content="https://rapid.market/assets/logo.png" />
         <link rel="canonical" href="https://rapid.market" />
         <link rel="alternate" type="application/rss+xml" href="/api/sitemap.xml" />
@@ -44,7 +44,7 @@ export default function Document() {
               '@context': 'https://schema.org/',
               '@type': 'Organization',
               name: 'RAPID',
-              description: 'Direct access to 1,500+ sellers and 3M+ products via Sugargoo',
+              description: 'Direct access to 100+ sellers via Sugargoo, with new items indexed daily',
               url: 'https://rapid.market',
               logo: 'https://rapid.market/assets/logo.png',
               contactPoint: {

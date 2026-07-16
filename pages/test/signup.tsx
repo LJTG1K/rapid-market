@@ -88,7 +88,7 @@ export default function SugargooSignUpTest() {
     <>
       <Head>
         <title>Access Exclusive Sellers - RAPID × Sugargoo</title>
-        <meta name="description" content="Get instant access to 1,500+ verified sellers on Sugargoo" />
+        <meta name="description" content="Get instant access to 100+ verified sellers on Sugargoo" />
       </Head>
 
       <div className="bg-white min-h-screen flex flex-col">
@@ -142,7 +142,7 @@ export default function SugargooSignUpTest() {
                 <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6">
                   {/* Seller Count */}
                   <div className="bg-gray-50 rounded-lg p-4 text-center border border-gray-200">
-                    <p className="text-2xl md:text-3xl font-black text-black">1,500+</p>
+                    <p className="text-2xl md:text-3xl font-black text-black">100+</p>
                     <p className="text-xs md:text-sm text-gray-600 font-semibold mt-1">Verified Sellers</p>
                   </div>
                   
@@ -190,7 +190,7 @@ export default function SugargooSignUpTest() {
                     </div>
                   </div>
                   <p className="text-green-700 font-semibold mb-4 text-sm md:text-base">
-                    Ready to browse 1,500+ sellers!
+                    Ready to browse 100+ sellers!
                   </p>
                   <a
                     href="https://www.sugargoo.com"
@@ -278,7 +278,7 @@ export default function SugargooSignUpTest() {
                     </li>
                     <li className="flex gap-3">
                       <span className="text-lg">🛍️</span>
-                      <span>Browse 1,500+ sellers right after signup</span>
+                      <span>Browse 100+ sellers right after signup</span>
                     </li>
                     <li className="flex gap-3">
                       <span className="text-lg">⏱️</span>

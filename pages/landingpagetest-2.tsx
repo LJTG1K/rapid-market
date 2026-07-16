@@ -83,7 +83,7 @@ export default function LandingPageTest2({ topBrands = [] }: { topBrands: Brand[
   return (
     <>
       <Head>
-        <title>RAPID. - Discover 1500+ Verified Sellers</title>
+        <title>RAPID. - Discover 100+ Verified Sellers</title>
         <meta name="description" content="Authentic brands at factory prices. No middleman. No markup." />
       </Head>
 

@@ -31,7 +31,7 @@ export default function Footer() {
               RAPID<span className="text-stamp">.</span>
             </p>
             <p className="text-stone/70 max-w-sm leading-relaxed">
-              Your gateway to 1,500+ independent Chinese sellers, indexed and
+              Your gateway to 100+ independent Chinese sellers, indexed and
               made ready to ship — no middleman, no markup.
             </p>
           </div>

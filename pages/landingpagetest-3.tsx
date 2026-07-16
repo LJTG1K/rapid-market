@@ -99,7 +99,7 @@ export default function LandingPageTest3({
   return (
     <>
       <Head>
-        <title>RAPID. - Discover 1500+ Verified Sellers</title>
+        <title>RAPID. - Discover 100+ Verified Sellers</title>
         <meta name="description" content="Authentic brands at factory prices. No middleman. No markup." />
       </Head>
 
@@ -210,7 +210,7 @@ export default function LandingPageTest3({
             Featured Brands
           </h2>
           <p className="text-center text-gray-600 mb-16 text-lg">
-            Browse 1500+ authentic products from verified sellers
+            Browse new items indexed daily from 100+ verified sellers
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -274,7 +274,7 @@ export default function LandingPageTest3({
               <div className="text-6xl font-black mb-4" style={{ fontFamily: 'Jaro' }}>1</div>
               <h3 className="text-2xl font-black mb-3 uppercase" style={{ fontFamily: 'Jaro' }}>Find & Buy</h3>
               <p className="text-gray-700" style={{ fontFamily: 'Staatliches' }}>
-                Browse 1500+ sellers. See ratings & reviews.
+                Browse 100+ sellers. See ratings & reviews.
               </p>
             </div>
 

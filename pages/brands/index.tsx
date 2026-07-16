@@ -60,7 +60,7 @@ export default function BrandsDirectory({ brands }: { brands: Brand[] }) {
     <>
       <Head>
         <title>Seller Index — RAPID Marketplace</title>
-        <meta name="description" content="Browse all 1,500+ featured sellers on RAPID" />
+        <meta name="description" content="Browse all 100+ featured sellers on RAPID" />
         <link rel="canonical" href="https://rapid.market/brands" />
         <script
           type="application/ld+json"
@@ -69,7 +69,7 @@ export default function BrandsDirectory({ brands }: { brands: Brand[] }) {
               '@context': 'https://schema.org/',
               '@type': 'CollectionPage',
               name: 'RAPID Seller Index',
-              description: 'Explore 1,500+ featured sellers with exclusive products',
+              description: 'Explore 100+ featured sellers with exclusive products',
               url: 'https://rapid.market/brands',
               mainEntity: {
                 '@type': 'ItemList',

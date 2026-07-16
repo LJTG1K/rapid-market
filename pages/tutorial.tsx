@@ -93,8 +93,8 @@ export default function Tutorial() {
             <span className="font-mono text-sm text-stamp">02</span>
             <h3 className="font-display font-black text-2xl mt-3 mb-3">Browse our index</h3>
             <p className="text-ink/75 leading-relaxed mb-5">
-              Explore 1,500+ sellers and 3 million products, organised by category
-              so you can actually find what you&apos;re after.
+              Explore 100+ sellers, organised by category, with new items
+              indexed daily so you can actually find what you&apos;re after.
             </p>
             <Link href="/fashion-listings" className="btn-secondary">View listings</Link>
           </div>

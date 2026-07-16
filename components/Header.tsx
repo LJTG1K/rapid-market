@@ -76,7 +76,7 @@ export default function Header() {
             <div className="flex items-center gap-5">
               <span className="hidden xl:flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-muted">
                 <span className="w-1.5 h-1.5 rounded-full bg-stamp motion-safe:animate-pulse" aria-hidden="true" />
-                1,500+ sellers live
+                100+ sellers live
               </span>
               <Link href="/signup" className="hidden sm:inline-flex btn-primary">
                 Sign Up

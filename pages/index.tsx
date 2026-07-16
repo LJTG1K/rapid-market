@@ -60,7 +60,7 @@ function FeaturedBrand() {
     <Reveal as="section" className="container-edit py-20 md:py-28">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         <div className="lg:col-span-6 order-2 lg:order-1">
-          <span className="eyebrow block mb-5">Featured Seller — 01 of 1,500</span>
+          <span className="eyebrow block mb-5">Featured Seller — 01 of 100+</span>
           <h2 className="font-display font-black text-ink text-5xl md:text-6xl tracking-tightest leading-[0.92] mb-6">
             {brand.brandName}
           </h2>
@@ -103,7 +103,7 @@ export default function Home() {
         <title>RAPID Marketplace — Your Gateway to Sugargoo</title>
         <meta
           name="description"
-          content="RAPID indexes 1,500+ independent Chinese sellers and 3 million products, routed through Sugargoo's consolidation warehouse into one simple checkout."
+          content="RAPID indexes 100+ independent Chinese sellers, with new items indexed daily, routed through Sugargoo's consolidation warehouse into one simple checkout."
         />
       </Head>
 
@@ -116,7 +116,7 @@ export default function Home() {
 
         <Reveal delay={80}>
           <h1 className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none whitespace-nowrap">
-            1,500 Sellers
+            100+ Sellers
           </h1>
         </Reveal>
 
@@ -150,14 +150,14 @@ export default function Home() {
         </Reveal>
 
         <h1 className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none mt-4 md:mt-8">
-          3M Products
+          New Items Daily
         </h1>
 
         <Reveal className="container-edit mt-12 md:mt-16 pb-20 md:pb-28">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
             <p className="lg:col-span-7 text-xl md:text-2xl leading-snug text-ink/90 max-w-2xl">
               RAPID indexes independent sellers across China and routes every order
-              through Sugargoo&apos;s consolidation warehouse — so 1,500+ shops become
+              through Sugargoo&apos;s consolidation warehouse — so 100+ shops become
               one simple checkout.
             </p>
             <div className="lg:col-span-5 flex flex-wrap gap-3 lg:justify-end">
@@ -203,7 +203,7 @@ export default function Home() {
             {
               n: '02',
               title: 'Browse our index',
-              body: '1,500+ sellers and 3 million products, hand-organised by category so you can actually find something.',
+              body: '100+ sellers, hand-organised by category, with new items indexed daily so you can actually find something.',
               cta: { href: '/fashion-listings', label: 'View listings' },
             },
             {
@@ -241,7 +241,7 @@ export default function Home() {
         <div className="flex items-baseline justify-between mb-12">
           <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest">The index</h2>
           <Link href="/brands" className="link-underline font-mono text-xs uppercase tracking-wide hidden sm:inline">
-            All 1,500 sellers →
+            All 100+ sellers →
           </Link>
         </div>
 

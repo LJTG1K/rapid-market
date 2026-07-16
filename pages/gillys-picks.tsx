@@ -179,7 +179,7 @@ export default function GillysPicks() {
         <div className="mt-20 pt-10 border-t border-line text-center">
           <h3 className="font-display font-black text-2xl md:text-3xl tracking-tightest mb-3">Want more?</h3>
           <p className="text-ink/70 max-w-xl mx-auto mb-6">
-            Browse the full fashion index — thousands of pieces from 1,500+ sellers.
+            Browse the full fashion index — thousands of pieces from 100+ sellers.
           </p>
           <Link href="/fashion-listings" className="btn-primary">
             Browse all listings

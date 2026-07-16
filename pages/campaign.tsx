@@ -38,7 +38,7 @@ const DIFFERENTIATORS = [
   {
     n: '01',
     title: 'One login',
-    body: 'Sign up once and buy from any of 1,500+ Chinese sellers without juggling separate accounts, apps, or currencies.',
+    body: 'Sign up once and buy from any of 100+ Chinese sellers without juggling separate accounts, apps, or currencies.',
   },
   {
     n: '02',
@@ -54,7 +54,7 @@ const DIFFERENTIATORS = [
 
 const STEPS = [
   { n: '01', title: 'Create your account', body: 'Free, instant Sugargoo account — no email verification.' },
-  { n: '02', title: 'Find what you want', body: '1,500+ sellers, organised by category, searchable by brand.' },
+  { n: '02', title: 'Find what you want', body: '100+ sellers, organised by category, searchable by brand.' },
   { n: '03', title: 'One box, one shipment', body: 'Everything consolidates at the warehouse and ships to you together.' },
 ];
 
@@ -168,10 +168,10 @@ export default function Campaign() {
   return (
     <>
       <Head>
-        <title>RAPID — Shop 1,500+ Chinese Sellers Through One Account</title>
+        <title>RAPID — Shop 100+ Chinese Sellers Through One Account</title>
         <meta
           name="description"
-          content="Free Sugargoo account, instant approval. Browse 1,500+ verified sellers and 3M+ products, QC'd before they ship, consolidated into one box."
+          content="Free Sugargoo account, instant approval. Browse 100+ verified sellers, new items indexed daily, QC'd before they ship, consolidated into one box."
         />
         <meta name="robots" content="noindex, follow" />
       </Head>
@@ -182,7 +182,7 @@ export default function Campaign() {
           <Reveal className="lg:col-span-7">
             <span className="eyebrow block mb-5">No Membership Fee · Free To Join</span>
             <h1 className="font-display font-black text-ink text-5xl sm:text-6xl md:text-7xl tracking-tightest leading-[0.92] mb-7">
-              One account. 1,500+ Chinese sellers. Zero markup.
+              One account. 100+ Chinese sellers. Zero markup.
             </h1>
             <p className="text-xl text-ink/80 leading-relaxed max-w-xl mb-8">
               RAPID plugs you into Sugargoo&apos;s warehouse network — every seller,
