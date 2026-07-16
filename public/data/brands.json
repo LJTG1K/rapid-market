@@ -1,18 +1,5 @@
 [
   {
-    "brandName": "1AM",
-    "slug": "1am",
-    "description": "Late-night inspired streetwear brand with edgy aesthetic and contemporary urban style.",
-    "aesthetic": [
-      "edgy",
-      "urban",
-      "contemporary",
-      "nocturnal"
-    ],
-    "targetCustomer": "Night-life and street culture followers aged 18-35",
-    "notes": "Late-night inspired streetwear pieces with edgy aesthetic and contemporary urban styling."
-  },
-  {
     "brandName": "22Doodle",
     "slug": "22doodle",
     "description": "Artistic streetwear brand featuring hand-drawn illustrations and playful doodle-inspired graphics on contemporary pieces.",
@@ -315,16 +302,6 @@
     "notes": "Profile details for this seller are being finalized."
   },
   {
-    "brandName": "Coupure",
-    "slug": "coupure",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
-    "aesthetic": [
-      "streetwear"
-    ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
-  },
-  {
     "brandName": "Crashbaggage",
     "slug": "crashbaggage",
     "description": "Functional travel gear with attitude. Pre-dented luggage and apparel that turns imperfections into signature style. For travelers who don't take themselves too seriously.",
@@ -364,16 +341,6 @@
     ],
     "targetCustomer": "Fashion romantics aged 18-35",
     "notes": "Focus on atmospheric design elements"
-  },
-  {
-    "brandName": "Dec Club",
-    "slug": "dec-club",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
-    "aesthetic": [
-      "streetwear"
-    ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "Detw",
@@ -497,19 +464,6 @@
     "notes": "Profile details for this seller are being finalized."
   },
   {
-    "brandName": "Fashion Express",
-    "slug": "fashion-express",
-    "description": "Fast-moving contemporary fashion with quick releases. Trend-responsive pieces at accessible prices. Good for chasing seasonal styles.",
-    "aesthetic": [
-      "fast-fashion",
-      "trendy",
-      "accessible",
-      "seasonal"
-    ],
-    "targetCustomer": "Budget-conscious fashion followers aged 18-30",
-    "notes": "Fast fashion approach with seasonal trend responsiveness. Mass-market distribution focused on contemporary accessibility."
-  },
-  {
     "brandName": "Fashion Studio",
     "slug": "fashion-studio",
     "description": "Design-centric brand creating contemporary fashion pieces with artistic approach and quality focus.",
@@ -521,20 +475,6 @@
     ],
     "targetCustomer": "Design enthusiasts and fashion-forward consumers aged 20-40",
     "notes": "Studio-based approach to fashion creation"
-  },
-  {
-    "brandName": "FIVEKOH",
-    "slug": "fivekoh",
-    "description": "Asian streetwear brand with modern design sensibility. Contemporary pieces with cultural sensitivity and clean execution. Quality-focused approach to modern fashion.",
-    "aesthetic": [
-      "contemporary",
-      "modern",
-      "asian-influenced",
-      "quality-driven",
-      "clean"
-    ],
-    "targetCustomer": "Young fashion enthusiasts aged 18-30 interested in contemporary Asian streetwear",
-    "notes": "Modern Asian streetwear with strong design perspective. Growing presence in contemporary fashion."
   },
   {
     "brandName": "Flyerrer",
@@ -599,16 +539,6 @@
     ],
     "targetCustomer": "Fashion-forward consumers interested in sci-fi aesthetics aged 18-35",
     "notes": "Unique futuristic design perspective with bold graphics. Contemporary pieces with experimental sci-fi aesthetic."
-  },
-  {
-    "brandName": "Good",
-    "slug": "good",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
-    "aesthetic": [
-      "streetwear"
-    ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "GpStudio",
@@ -810,20 +740,6 @@
     ],
     "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
     "notes": "Profile details for this seller are being finalized."
-  },
-  {
-    "brandName": "KUOYI",
-    "slug": "kuoyi",
-    "description": "Contemporary Asian streetwear with refined aesthetics. Quality construction paired with thoughtful design. Modern pieces honoring craftsmanship.",
-    "aesthetic": [
-      "contemporary",
-      "refined",
-      "quality-crafted",
-      "modern",
-      "asian-inspired"
-    ],
-    "targetCustomer": "Quality-conscious fashion enthusiasts aged 20-35",
-    "notes": "Emphasizes quality craftsmanship and refined design. Modern Asian streetwear."
   },
   {
     "brandName": "Kuroda",
@@ -1135,19 +1051,6 @@
     "notes": "High-quality focus with reduced aesthetic"
   },
   {
-    "brandName": "Nine Leather",
-    "slug": "nine-leather",
-    "description": "Contemporary fashion brand with focus on quality construction and modern silhouettes.",
-    "aesthetic": [
-      "contemporary",
-      "quality-driven",
-      "modern",
-      "minimalist"
-    ],
-    "targetCustomer": "Quality-conscious consumers aged 20-40",
-    "notes": "Premium positioning with focus on details"
-  },
-  {
     "brandName": "No E",
     "slug": "no-e",
     "description": "Newly added seller on the RAPID index — full profile coming soon.",
@@ -1426,16 +1329,6 @@
     "notes": "Statement-making brand with niche following"
   },
   {
-    "brandName": "Slight Vouge",
-    "slug": "slight-vouge",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
-    "aesthetic": [
-      "streetwear"
-    ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
-  },
-  {
     "brandName": "Smileandsad",
     "slug": "smileandsad",
     "description": "Newly added seller on the RAPID index — full profile coming soon.",
@@ -1547,16 +1440,6 @@
     ],
     "targetCustomer": "Trend-conscious consumers aged 18-30",
     "notes": "Produces contemporary fashion exploring current trends with quality construction and modern aesthetic."
-  },
-  {
-    "brandName": "Ueshima",
-    "slug": "ueshima",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
-    "aesthetic": [
-      "streetwear"
-    ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
   },
   {
     "brandName": "UUCSCC",
