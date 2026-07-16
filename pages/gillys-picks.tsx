@@ -135,7 +135,7 @@ export default function GillysPicks() {
 
         {loading ? (
           <div className="border-t border-line pt-12">
-            <ProductGridSkeleton />
+            <ProductGridSkeleton aspect="4:5" />
           </div>
         ) : filteredProducts.length === 0 ? (
           <p className="font-mono text-sm text-muted py-12">No picked items found yet. Check back soon!</p>
@@ -145,7 +145,7 @@ export default function GillysPicks() {
               {filteredProducts.map((product) => (
                 <div key={product.id} className="flex flex-col">
                   <Link href={`/product/${product.id}`} className="group">
-                    <div className="aspect-square bg-paper border border-line overflow-hidden mb-3">
+                    <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
                       <img
                         src={product.image}
                         alt={`${product.name} — picked by Gilly`}

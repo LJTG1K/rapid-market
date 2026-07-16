@@ -137,7 +137,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
           </h2>
 
           {loading ? (
-            <ProductGridSkeleton />
+            <ProductGridSkeleton aspect="4:5" />
           ) : filteredProducts.length === 0 ? (
             <div className="py-12">
               <p className="text-ink/70 mb-4">No products available from this seller yet.</p>
@@ -151,7 +151,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
                 {filteredProducts.map((product) => (
                   <div key={product.id} className="flex flex-col">
                     <Link href={`/product/${product.id}`} className="group">
-                      <div className="aspect-square bg-paper border border-line overflow-hidden mb-3">
+                      <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
                         <img src={product.image} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
                       </div>
                       <h3 className="font-semibold text-sm leading-snug mb-1 line-clamp-2 group-hover:text-stamp transition-colors">

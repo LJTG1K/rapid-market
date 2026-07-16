@@ -242,7 +242,7 @@ export default function FashionListings() {
           {/* Grid */}
           <div className="lg:col-span-3">
             {loading ? (
-              <ProductGridSkeleton />
+              <ProductGridSkeleton aspect="4:5" />
             ) : filteredProducts.length === 0 ? (
               <p className="font-mono text-sm text-muted py-12">
                 No products found. Try a different search or category.
@@ -252,7 +252,7 @@ export default function FashionListings() {
                 {filteredProducts.map((product) => (
                   <div key={product.id} className="flex flex-col">
                     <Link href={`/product/${product.id}?category=fashion`} className="group">
-                      <div className="aspect-square bg-paper border border-line overflow-hidden mb-3">
+                      <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
                         <img
                           src={product.image}
                           alt={product.name}

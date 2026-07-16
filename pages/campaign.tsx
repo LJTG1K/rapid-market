@@ -29,8 +29,8 @@ const CASCADE_IMAGES = [
 ];
 
 const STATS = [
-  { value: '150+', label: 'Verified sellers' },
-  { value: '3M+', label: 'Products indexed' },
+  { value: '100+', label: 'Verified sellers' },
+  { value: '', label: 'New items indexed daily' },
   { value: '4.8★', label: 'Average rating' },
 ];
 
@@ -106,13 +106,13 @@ function ProductHighlights() {
       </div>
 
       {loading ? (
-        <ProductGridSkeleton count={3} />
+        <ProductGridSkeleton count={3} aspect="4:5" />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-10">
           {products.map((p, i) => (
             <div key={p.id} className="flex flex-col">
               <Link href={`/product/${p.id}?category=fashion`} className="group">
-                <div className="aspect-square bg-paper border border-line overflow-hidden mb-3">
+                <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
                   <img src={p.image} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <span className="font-mono text-[11px] text-stamp mb-1.5 block">
@@ -210,10 +210,16 @@ export default function Campaign() {
         <div className="container-edit grid grid-cols-3 divide-x divide-line">
           {STATS.map((s) => (
             <div key={s.label} className="py-8 sm:py-10 text-center">
-              <p className="font-display font-black text-3xl sm:text-5xl tracking-tightest text-ink mb-1">
-                {s.value}
-              </p>
-              <p className="font-mono text-[11px] sm:text-xs uppercase tracking-wide text-muted">{s.label}</p>
+              {s.value ? (
+                <>
+                  <p className="font-display font-black text-3xl sm:text-5xl tracking-tightest text-ink mb-1">
+                    {s.value}
+                  </p>
+                  <p className="font-mono text-[11px] sm:text-xs uppercase tracking-wide text-muted">{s.label}</p>
+                </>
+              ) : (
+                <p className="font-mono text-sm sm:text-base uppercase tracking-wide text-ink/80">{s.label}</p>
+              )}
             </div>
           ))}
         </div>
