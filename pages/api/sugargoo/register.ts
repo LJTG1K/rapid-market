@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import crypto from 'crypto';
 import { getAccessToken } from '../../../lib/sugargoo/tokenManager';
 import { logSignupEvent } from '../../../lib/db/analytics';
+import { addSubscriberToMailerLite } from '../../../lib/mailerlite';
 
 interface RegistrationRequest {
   email: string;
@@ -210,7 +211,15 @@ export default async function handler(
           });
         });
       }
-      
+
+      // Capture the email locally for remarketing (both website and
+      // facebook-lead sources — unlike the analytics log above, this isn't
+      // about dedup, it's about building a complete list). Non-blocking:
+      // never let a MailerLite outage slow down or fail a real signup.
+      setImmediate(() => {
+        addSubscriberToMailerLite(email, name || email.split('@')[0]);
+      });
+
       return res.status(201).json({
         success: true,
         userId: data.data.userId,
