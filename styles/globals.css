@@ -81,6 +81,9 @@ select:focus-visible,
       transparent 13px
     );
     opacity: 0.35;
+    /* Invisible until components/PerforatedDivider.tsx's anime.js wipe draws
+       it in left-to-right; reduced-motion override above resets this. */
+    clip-path: inset(0 100% 0 0);
   }
 
   .btn {
@@ -123,21 +126,36 @@ select:focus-visible,
     );
   }
 
-  /* Scroll-reveal: hidden until .is-visible is toggled by the Reveal component */
-  .reveal {
+  /* Scroll-reveal: initial hidden state before anime.js's ScrollObserver
+     (see components/Reveal.tsx) animates it in. Prevents a flash of fully
+     visible content before JS runs. */
+  .reveal-init {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+
+  /* Stamp entrance: initial scaled-up state before the "stamp down" anime.js
+     animation (see components/Stamp.tsx) settles it to scale 1. */
+  .stamp-init {
+    transform: scale(1.15);
   }
+
+  /* Hero headline text-split entrance (see components/SplitHeadline.tsx) */
+  .split-init {
+    opacity: 0;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .reveal {
+    .reveal-init,
+    .split-init {
       opacity: 1;
       transform: none;
-      transition: none;
+    }
+    .stamp-init {
+      transform: none;
+    }
+    .perforated {
+      clip-path: none;
     }
   }
 }

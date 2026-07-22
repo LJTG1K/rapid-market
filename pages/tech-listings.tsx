@@ -197,7 +197,7 @@ export default function TechListings() {
                 No products found. Try a different search or category.
               </p>
             ) : (
-              <Reveal className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
+              <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
                 {filteredProducts.map((product) => (
                   <div key={product.id} className="flex flex-col">
                     <Link href={`/product/${product.id}?category=tech`} className="group">

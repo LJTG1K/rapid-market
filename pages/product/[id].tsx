@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Stars from '@/components/Stars';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
+import PerforatedDivider from '@/components/PerforatedDivider';
 
 interface Product {
   id: string;
@@ -183,7 +184,9 @@ export default function ProductPage() {
         </Reveal>
 
         {more.length > 0 && (
-          <Reveal as="section" className="mt-24 pt-14 border-t border-line">
+          <>
+            <PerforatedDivider className="mt-24" />
+            <Reveal as="section" className="pt-14">
             <h2 className="font-display font-black text-2xl md:text-3xl tracking-tightest mb-10">
               More in {product.category}
             </h2>
@@ -200,7 +203,8 @@ export default function ProductPage() {
                 </Link>
               ))}
             </div>
-          </Reveal>
+            </Reveal>
+          </>
         )}
       </div>
     </>

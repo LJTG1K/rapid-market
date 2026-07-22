@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import Reveal from '@/components/Reveal';
+import Stamp from '@/components/Stamp';
 
 interface SignupResponse {
   success?: boolean;
@@ -97,6 +98,14 @@ export default function SugargooSignUp() {
 
           {success ? (
             <div className="card p-8 text-center">
+              <Stamp
+                size={56}
+                spin={false}
+                centerText="OK"
+                sub="Verified"
+                ringText="Sugargoo · Account Created ·"
+                className="mx-auto mb-4"
+              />
               <p className="eyebrow text-stamp mb-4">Account created</p>
               <div className="bg-stone/60 border border-line p-4 mb-6 text-left">
                 <p className="font-mono text-xs uppercase tracking-wide text-muted mb-2">Your login credentials</p>

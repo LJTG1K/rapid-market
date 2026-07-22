@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import PerforatedDivider from '@/components/PerforatedDivider';
 
 declare global {
   interface Window {
@@ -133,15 +134,17 @@ export default function GillysPicks() {
           </div>
         </div>
 
+        <PerforatedDivider />
+
         {loading ? (
-          <div className="border-t border-line pt-12">
+          <div className="pt-12">
             <ProductGridSkeleton aspect="4:5" />
           </div>
         ) : filteredProducts.length === 0 ? (
           <p className="font-mono text-sm text-muted py-12">No picked items found yet. Check back soon!</p>
         ) : (
-          <div className="border-t border-line pt-12">
-            <Reveal className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
+          <div className="pt-12">
+            <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
               {filteredProducts.map((product) => (
                 <div key={product.id} className="flex flex-col">
                   <Link href={`/product/${product.id}`} className="group">
@@ -176,7 +179,8 @@ export default function GillysPicks() {
           </div>
         )}
 
-        <div className="mt-20 pt-10 border-t border-line text-center">
+        <PerforatedDivider className="mt-20" />
+        <div className="pt-10 text-center">
           <h3 className="font-display font-black text-2xl md:text-3xl tracking-tightest mb-3">Want more?</h3>
           <p className="text-ink/70 max-w-xl mx-auto mb-6">
             Browse the full fashion index — thousands of pieces from 100+ sellers.

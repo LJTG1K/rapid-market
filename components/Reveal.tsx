@@ -1,49 +1,51 @@
-import { useEffect, useRef, useState, ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { animate, stagger as animeStagger } from 'animejs';
+import { useAnimeScope } from '@/hooks/useAnimeScope';
+import { scrollTrigger } from '@/lib/motion/scrollTrigger';
 
 interface RevealProps {
   children: ReactNode;
   className?: string;
   delay?: number;
   as?: 'div' | 'section';
+  /** ms between items; when set, staggers direct children individually
+   *  instead of fading the wrapper as one block (used by product grids). */
+  stagger?: number;
 }
 
 /**
- * Fades/rises content in once it enters the viewport. Backed by the
- * .reveal / .is-visible CSS in globals.css, which is a no-op under
- * prefers-reduced-motion.
+ * Fades/rises content in once it enters the viewport, powered by anime.js's
+ * ScrollObserver. Backed by the .reveal-init CSS in globals.css, which is a
+ * no-op under prefers-reduced-motion.
  */
-export default function Reveal({ children, className = '', delay = 0, as = 'div' }: RevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
+export default function Reveal({ children, className = '', delay = 0, as = 'div', stagger }: RevealProps) {
+  const ref = useAnimeScope<HTMLElement>(
+    () => {
+      const el = ref.current;
+      if (!el) return;
+      const targets = stagger ? Array.from(el.children) : el;
+      animate(targets, {
+        opacity: [0, 1],
+        y: [18, 0],
+        duration: 700,
+        ease: 'outExpo',
+        delay: stagger ? animeStagger(stagger, { start: delay }) : delay,
+        autoplay: scrollTrigger(el),
+      });
+    },
+    {
+      deps: [stagger, delay],
+      onReducedMotion: (el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
       },
-      // threshold: 0 — fires as soon as any part of the element is on screen.
-      // A percentage threshold breaks on tall wrapped content (e.g. a grid of
-      // 100+ product cards): a % of a very tall element may never be
-      // simultaneously visible in one viewport, so it would never reveal.
-      { threshold: 0, rootMargin: '0px 0px -40px 0px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+    }
+  );
 
-  const Tag = as;
+  const Tag = as as any;
 
   return (
-    <Tag
-      ref={ref as any}
-      className={`reveal ${visible ? 'is-visible' : ''} ${className}`}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
-    >
+    <Tag ref={ref} className={`${stagger ? '' : 'reveal-init'} ${className}`}>
       {children}
     </Tag>
   );

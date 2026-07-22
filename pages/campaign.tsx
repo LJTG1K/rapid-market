@@ -6,6 +6,9 @@ import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import CascadeStack from '@/components/CascadeStack';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import CountUp from '@/components/CountUp';
+import PerforatedDivider from '@/components/PerforatedDivider';
+import SplitHeadline from '@/components/SplitHeadline';
 
 interface HighlightProduct {
   id: string;
@@ -108,7 +111,7 @@ function ProductHighlights() {
       {loading ? (
         <ProductGridSkeleton count={3} aspect="4:5" />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-10">
+        <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-10">
           {products.map((p, i) => (
             <div key={p.id} className="flex flex-col">
               <Link href={`/product/${p.id}?category=fashion`} className="group">
@@ -135,7 +138,7 @@ function ProductHighlights() {
               </div>
             </div>
           ))}
-        </div>
+        </Reveal>
       )}
     </Reveal>
   );
@@ -179,31 +182,43 @@ export default function Campaign() {
       {/* ---------- Hero ---------- */}
       <section className="container-edit pt-14 md:pt-20 pb-16 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-          <Reveal className="lg:col-span-7">
-            <span className="eyebrow block mb-5">No Membership Fee · Free To Join</span>
-            <h1 className="font-display font-black text-ink text-5xl sm:text-6xl md:text-7xl tracking-tightest leading-[0.92] mb-7">
+          <div className="lg:col-span-7">
+            <Reveal>
+              <span className="eyebrow block mb-5">No Membership Fee · Free To Join</span>
+            </Reveal>
+            <SplitHeadline
+              as="h1"
+              by="words"
+              className="font-display font-black text-ink text-5xl sm:text-6xl md:text-7xl tracking-tightest leading-[0.92] mb-7"
+            >
               One account. 100+ Chinese sellers. Zero markup.
-            </h1>
-            <p className="text-xl text-ink/80 leading-relaxed max-w-xl mb-8">
-              RAPID plugs you into Sugargoo&apos;s warehouse network — every seller,
-              every category, one checkout, one box home.
-            </p>
-            <div className="flex flex-wrap items-center gap-6">
-              <Link href="/signup" className="btn-stamp text-sm !px-8 !py-4">
-                Create free account →
-              </Link>
-              <div className="flex items-center gap-2.5">
-                <Stars />
-                <span className="font-mono text-sm text-muted">4.8/5 · 47,000+ hauls shipped</span>
+            </SplitHeadline>
+            <Reveal delay={120}>
+              <p className="text-xl text-ink/80 leading-relaxed max-w-xl mb-8">
+                RAPID plugs you into Sugargoo&apos;s warehouse network — every seller,
+                every category, one checkout, one box home.
+              </p>
+              <div className="flex flex-wrap items-center gap-6">
+                <Link href="/signup" className="btn-stamp text-sm !px-8 !py-4">
+                  Create free account →
+                </Link>
+                <div className="flex items-center gap-2.5">
+                  <Stars />
+                  <span className="font-mono text-sm text-muted">4.8/5 · 47,000+ hauls shipped</span>
+                </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
 
           <div className="hidden lg:block lg:col-span-5">
             <CascadeStack images={CASCADE_IMAGES} />
           </div>
         </div>
       </section>
+
+      <div className="container-edit">
+        <PerforatedDivider />
+      </div>
 
       {/* ---------- Proof strip ---------- */}
       <Reveal as="section" className="bg-paper border-y border-line">
@@ -213,7 +228,7 @@ export default function Campaign() {
               {s.value ? (
                 <>
                   <p className="font-display font-black text-3xl sm:text-5xl tracking-tightest text-ink mb-1">
-                    {s.value}
+                    <CountUp value={s.value} />
                   </p>
                   <p className="font-mono text-[11px] sm:text-xs uppercase tracking-wide text-muted">{s.label}</p>
                 </>

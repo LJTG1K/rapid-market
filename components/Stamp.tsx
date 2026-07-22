@@ -1,3 +1,7 @@
+import { animate } from 'animejs';
+import { useAnimeScope } from '@/hooks/useAnimeScope';
+import { scrollTrigger } from '@/lib/motion/scrollTrigger';
+
 interface StampProps {
   ringText?: string;
   centerText?: string;
@@ -23,9 +27,33 @@ export default function Stamp({
   const id = `stamp-ring-${centerText}-${sub}`.replace(/\s+/g, '-').toLowerCase();
   const r = 46;
 
+  const ref = useAnimeScope<HTMLDivElement>(
+    () => {
+      const el = ref.current;
+      if (!el) return;
+      animate(el, {
+        scale: [1.15, 1],
+        duration: 550,
+        ease: 'outBack(1.8)',
+        autoplay: scrollTrigger(el),
+        onComplete: () => {
+          // Ink-bleed pulse right after impact
+          animate(el, { opacity: [0.55, 1], duration: 260, ease: 'outQuad' });
+        },
+      });
+    },
+    {
+      onReducedMotion: (el) => {
+        el.style.transform = 'none';
+        el.style.opacity = '1';
+      },
+    }
+  );
+
   return (
     <div
-      className={`relative inline-flex items-center justify-center shrink-0 text-stamp ${className}`}
+      ref={ref}
+      className={`stamp-init relative inline-flex items-center justify-center shrink-0 text-stamp ${className}`}
       style={{ width: size, height: size }}
     >
       <svg

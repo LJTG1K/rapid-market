@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import PerforatedDivider from '@/components/PerforatedDivider';
 import { productMatchesBrand } from '@/lib/brandMatch';
 
 interface Brand {
@@ -131,7 +132,8 @@ export default function BrandPage({ brand }: { brand: Brand }) {
           </div>
         )}
 
-        <div className="border-t border-line pt-12">
+        <PerforatedDivider />
+        <div className="pt-12">
           <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest mb-10">
             Featured products
           </h2>
@@ -147,7 +149,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
             </div>
           ) : (
             <>
-              <Reveal className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
+              <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
                 {filteredProducts.map((product) => (
                   <div key={product.id} className="flex flex-col">
                     <Link href={`/product/${product.id}`} className="group">

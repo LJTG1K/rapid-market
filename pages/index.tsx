@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import Stamp from '@/components/Stamp';
 import Stars from '@/components/Stars';
 import Reveal from '@/components/Reveal';
+import CountUp from '@/components/CountUp';
+import PerforatedDivider from '@/components/PerforatedDivider';
+import SplitHeadline from '@/components/SplitHeadline';
 import { productMatchesBrand } from '@/lib/brandMatch';
 
 interface BrandProduct {
@@ -114,11 +117,9 @@ export default function Home() {
           <span className="eyebrow hidden sm:inline">Fashion / Tech / Accessories</span>
         </Reveal>
 
-        <Reveal delay={80}>
-          <h1 className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none whitespace-nowrap">
-            100+ Sellers
-          </h1>
-        </Reveal>
+        <h1 className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none whitespace-nowrap">
+          <CountUp value="100+" className="tabular-nums" /> <SplitHeadline as="span" by="chars" className="inline">Sellers</SplitHeadline>
+        </h1>
 
         <Reveal delay={160} className="container-edit mt-10 md:mt-14 pb-6">
           <div className="relative pb-10 sm:pb-16 md:pb-20">
@@ -149,9 +150,13 @@ export default function Home() {
           </div>
         </Reveal>
 
-        <h1 className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none mt-4 md:mt-8">
+        <SplitHeadline
+          as="h1"
+          by="words"
+          className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none mt-4 md:mt-8"
+        >
           New Items Daily
-        </h1>
+        </SplitHeadline>
 
         <Reveal className="container-edit mt-12 md:mt-16 pb-20 md:pb-28">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
@@ -174,16 +179,18 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-10 py-7 border-y border-line">
           <div className="flex items-center gap-3 shrink-0">
             <Stars />
-            <span className="font-mono text-sm text-ink">4.8 / 5 average seller rating</span>
+            <span className="font-mono text-sm text-ink">
+              <CountUp value="4.8" /> / 5 average seller rating
+            </span>
           </div>
           <div className="hidden sm:block w-px h-8 bg-line shrink-0" />
           <p className="font-mono text-sm text-muted">
-            47,000+ hauls shipped · 100+ verified sellers · buyer protection on every order
+            <CountUp value="47,000+" /> hauls shipped · <CountUp value="100+" /> verified sellers · buyer protection on every order
           </p>
         </div>
       </Reveal>
 
-      <div className="perforated" />
+      <PerforatedDivider />
 
       {/* ---------- Process ---------- */}
       <Reveal as="section" className="container-edit py-20 md:py-28">
@@ -230,11 +237,11 @@ export default function Home() {
         </div>
       </Reveal>
 
-      <div className="perforated" />
+      <PerforatedDivider />
 
       <FeaturedBrand />
 
-      <div className="perforated" />
+      <PerforatedDivider />
 
       {/* ---------- Category index ---------- */}
       <Reveal as="section" className="container-edit py-20 md:py-28">
