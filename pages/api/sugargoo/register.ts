@@ -214,11 +214,17 @@ export default async function handler(
 
       // Capture the email locally for remarketing (both website and
       // facebook-lead sources — unlike the analytics log above, this isn't
-      // about dedup, it's about building a complete list). Non-blocking:
-      // never let a MailerLite outage slow down or fail a real signup.
-      setImmediate(() => {
-        addSubscriberToMailerLite(email, name || email.split('@')[0]);
-      });
+      // about dedup, it's about building a complete list). Awaited (not
+      // setImmediate) with its own bounded timeout — same reasoning as
+      // sendToZapier above: Vercel freezes the function once the response
+      // is sent, so real async work fired via setImmediate never gets to
+      // finish. addSubscriberToMailerLite never throws, so this can't fail
+      // the signup even if MailerLite is down.
+      try {
+        await addSubscriberToMailerLite(email, name || email.split('@')[0]);
+      } catch (mailerLiteErr) {
+        console.error(`❌ addSubscriberToMailerLite threw error:`, mailerLiteErr instanceof Error ? mailerLiteErr.message : mailerLiteErr);
+      }
 
       return res.status(201).json({
         success: true,

@@ -1,9 +1,16 @@
 /**
  * Adds a signup to MailerLite at the moment of RAPID account creation,
- * instead of relying solely on Sugargoo's weekly email export. Non-blocking
- * by design — call this via setImmediate() from the signup handler, never
- * await it inline, so a MailerLite outage or slowdown can never affect the
- * actual signup response.
+ * instead of relying solely on Sugargoo's weekly email export.
+ *
+ * Must be awaited directly from the signup handler, NOT fired via
+ * setImmediate() — Vercel freezes a serverless function's execution
+ * context as soon as the HTTP response is sent, so any real async work
+ * (this does a network fetch) scheduled via setImmediate silently never
+ * completes once the response has gone out. This mirrors the existing
+ * sendToZapier() pattern in pages/api/sugargoo/register.ts, which hit the
+ * exact same issue and is why it's awaited with a bounded timeout instead
+ * of fired-and-forgotten. This function never throws, and the timeout
+ * below bounds how much latency a MailerLite outage can add to signup.
  */
 // Strips whitespace and accidental surrounding quotes — a common copy-paste
 // artifact when a value is grabbed from a JSON response (e.g. "123") and
@@ -13,7 +20,7 @@ function sanitizeEnvValue(value: string): string {
   return value.trim().replace(/^['"]|['"]$/g, '');
 }
 
-export async function addSubscriberToMailerLite(email: string, name?: string): Promise<void> {
+export async function addSubscriberToMailerLite(email: string, name?: string, timeoutMs: number = 5000): Promise<void> {
   const rawApiKey = process.env.MAILERLITE_API_KEY;
   const rawGroupId = process.env.MAILERLITE_GROUP_ID;
 
@@ -33,6 +40,9 @@ export async function addSubscriberToMailerLite(email: string, name?: string): P
   }
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
     const response = await fetch('https://connect.mailerlite.com/api/subscribers', {
       method: 'POST',
       headers: {
@@ -44,7 +54,10 @@ export async function addSubscriberToMailerLite(email: string, name?: string): P
         fields: name ? { name } : undefined,
         groups: [groupId],
       }),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const body = await response.text();
