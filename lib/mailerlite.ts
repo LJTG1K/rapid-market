@@ -5,12 +5,30 @@
  * await it inline, so a MailerLite outage or slowdown can never affect the
  * actual signup response.
  */
-export async function addSubscriberToMailerLite(email: string, name?: string): Promise<void> {
-  const apiKey = process.env.MAILERLITE_API_KEY;
-  const groupId = process.env.MAILERLITE_GROUP_ID;
+// Strips whitespace and accidental surrounding quotes — a common copy-paste
+// artifact when a value is grabbed from a JSON response (e.g. "123") and
+// pasted verbatim into an env var field, which MailerLite's API then
+// rejects as "not numeric" since the quote characters are part of the string.
+function sanitizeEnvValue(value: string): string {
+  return value.trim().replace(/^['"]|['"]$/g, '');
+}
 
-  if (!apiKey || !groupId) {
+export async function addSubscriberToMailerLite(email: string, name?: string): Promise<void> {
+  const rawApiKey = process.env.MAILERLITE_API_KEY;
+  const rawGroupId = process.env.MAILERLITE_GROUP_ID;
+
+  if (!rawApiKey || !rawGroupId) {
     console.warn('⚠️ MailerLite not configured (MAILERLITE_API_KEY/MAILERLITE_GROUP_ID) — skipping');
+    return;
+  }
+
+  const apiKey = sanitizeEnvValue(rawApiKey);
+  const groupId = sanitizeEnvValue(rawGroupId);
+
+  if (!/^\d+$/.test(groupId)) {
+    console.error(
+      `⚠️ MailerLite skipped: MAILERLITE_GROUP_ID doesn't look like a plain numeric ID after sanitizing (got ${JSON.stringify(groupId)}, length ${groupId.length}). Check the Vercel env var value for stray quotes/whitespace.`
+    );
     return;
   }
 
