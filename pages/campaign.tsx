@@ -6,6 +6,7 @@ import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import CascadeStack from '@/components/CascadeStack';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import LoadingMessage, { MANIFEST_MESSAGES } from '@/components/LoadingMessage';
 import CountUp from '@/components/CountUp';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import SplitHeadline from '@/components/SplitHeadline';
@@ -109,7 +110,10 @@ function ProductHighlights() {
       </div>
 
       {loading ? (
-        <ProductGridSkeleton count={3} aspect="4:5" />
+        <>
+          <LoadingMessage messages={MANIFEST_MESSAGES} className="mb-6" />
+          <ProductGridSkeleton count={3} aspect="4:5" />
+        </>
       ) : (
         <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-10">
           {products.map((p, i) => (

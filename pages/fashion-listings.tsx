@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import { productMatchesBrand } from '@/lib/brandMatch';
 
@@ -243,7 +244,10 @@ export default function FashionListings() {
           {/* Grid */}
           <div className="lg:col-span-3">
             {loading ? (
-              <ProductGridSkeleton aspect="4:5" />
+              <>
+                <LoadingMessage messages={CATEGORY_MESSAGES.fashion} className="mb-6" />
+                <ProductGridSkeleton aspect="4:5" />
+              </>
             ) : filteredProducts.length === 0 ? (
               <p className="font-mono text-sm text-muted py-12">
                 No products found. Try a different search or category.

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 
@@ -139,6 +140,7 @@ export default function GillysPicks() {
 
         {loading ? (
           <div className="pt-12">
+            <LoadingMessage messages={CATEGORY_MESSAGES.gillys} className="mb-6" />
             <ProductGridSkeleton aspect="4:5" />
           </div>
         ) : filteredProducts.length === 0 ? (

@@ -63,7 +63,7 @@ export default function BlogIndex({ posts }: { posts: BlogPost[] }) {
             {sortedPosts.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group block py-10 border-b border-line">
                 <div className="flex flex-wrap gap-3 items-center mb-4 font-mono text-xs uppercase tracking-wide text-muted">
-                  {post.featured && <span className="tag !border-stamp !text-stamp">Featured</span>}
+                  {post.featured && <span className="tag !bg-stamp !border-stamp !text-paper">Featured</span>}
                   <span>{formatDate(post.publishedAt)}</span>
                   <span>·</span>
                   <span>{post.readTime} min read</span>

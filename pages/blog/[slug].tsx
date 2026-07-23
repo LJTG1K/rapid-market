@@ -79,7 +79,7 @@ export default function BlogPost({ post, content }: { post: BlogPost; content: s
         </Link>
 
         <div className="mt-8 mb-14 max-w-3xl">
-          <span className="tag !border-stamp !text-stamp mb-6 inline-block">{post.category}</span>
+          <span className="tag !bg-stamp !border-stamp !text-paper mb-6 inline-block">{post.category}</span>
           <h1 className="font-display font-black text-ink text-5xl md:text-6xl tracking-tightest leading-[0.9] mb-6">
             {post.title}
           </h1>

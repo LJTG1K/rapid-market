@@ -14,6 +14,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Subtle crossfade for rotating loading messages (components/LoadingMessage.tsx).
+   Applied via motion-safe: so reduced-motion users get an instant swap. */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -123,7 +130,7 @@ select:focus-visible,
   }
 
   .tag {
-    @apply inline-block font-mono text-xs uppercase tracking-wide border border-accent px-2.5 py-1 text-accent;
+    @apply inline-block font-mono text-xs uppercase tracking-wide bg-accent border border-accent px-2.5 py-1 text-paper;
   }
 
   /* Consistent hatch fill for image placeholders site-wide */

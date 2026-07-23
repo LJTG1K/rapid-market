@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import LoadingMessage, { MANIFEST_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import { productMatchesBrand } from '@/lib/brandMatch';
@@ -140,7 +141,10 @@ export default function BrandPage({ brand }: { brand: Brand }) {
           </h2>
 
           {loading ? (
-            <ProductGridSkeleton aspect="4:5" />
+            <>
+              <LoadingMessage messages={MANIFEST_MESSAGES} className="mb-6" />
+              <ProductGridSkeleton aspect="4:5" />
+            </>
           ) : filteredProducts.length === 0 ? (
             <div className="py-12">
               <p className="text-ink/70 mb-4">No products available from this seller yet.</p>
