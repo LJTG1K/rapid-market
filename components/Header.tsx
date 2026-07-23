@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const NAV = [
   { href: '/fashion-listings', label: 'Fashion' },
@@ -16,6 +17,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
+  const { user } = useAuth();
   const isCampaign = router.pathname === '/campaign';
 
   useEffect(() => {
@@ -78,9 +80,30 @@ export default function Header() {
                 <span className="w-1.5 h-1.5 rounded-full bg-stamp motion-safe:animate-pulse" aria-hidden="true" />
                 100+ sellers live
               </span>
-              <Link href="/signup" className="hidden sm:inline-flex btn-primary">
-                Sign Up
-              </Link>
+              {user ? (
+                <Link
+                  href="/account"
+                  className="hidden sm:inline-flex items-center gap-2 font-mono text-[13px] font-medium uppercase tracking-wide text-ink/70 hover:text-ink transition-colors"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-4 h-4">
+                    <circle cx="12" cy="8" r="3.5" />
+                    <path d="M5 20a7 7 0 0 1 14 0" strokeLinecap="round" />
+                  </svg>
+                  {user.name || 'Account'}
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="hidden sm:inline-flex font-mono text-[13px] font-medium uppercase tracking-wide text-ink/70 hover:text-ink transition-colors"
+                  >
+                    Log in
+                  </Link>
+                  <Link href="/signup" className="hidden sm:inline-flex btn-primary">
+                    Sign Up
+                  </Link>
+                </>
+              )}
 
               {/* Mobile Menu Button */}
               <button
@@ -121,13 +144,32 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/signup"
-              className="btn-primary mt-5 w-full"
-              onClick={() => setIsOpen(false)}
-            >
-              Sign Up
-            </Link>
+            {user ? (
+              <Link
+                href="/account"
+                className="btn-primary mt-5 w-full"
+                onClick={() => setIsOpen(false)}
+              >
+                {user.name ? `${user.name} — Account` : 'My Account'}
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="btn-secondary mt-5 w-full"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="btn-primary mt-3 w-full"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       )}

@@ -1,8 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import { getAccessToken } from '../../../lib/sugargoo/tokenManager';
 import { logSignupEvent } from '../../../lib/db/analytics';
 import { addSubscriberToMailerLite } from '../../../lib/mailerlite';
+import { createUser } from '../../../lib/auth/users';
+import { setSessionCookie } from '../../../lib/auth/session';
 
 interface RegistrationRequest {
   email: string;
@@ -224,6 +227,29 @@ export default async function handler(
         await addSubscriberToMailerLite(email, name || email.split('@')[0]);
       } catch (mailerLiteErr) {
         console.error(`❌ addSubscriberToMailerLite threw error:`, mailerLiteErr instanceof Error ? mailerLiteErr.message : mailerLiteErr);
+      }
+
+      // Create the persistent RAPID account (reuses the Sugargoo login) and, for
+      // browser signups, log the user in immediately by setting the session
+      // cookie. Wrapped in try/catch that never throws — same non-blocking
+      // discipline as MailerLite above: a Supabase outage must not break the
+      // Sugargoo signup or change the response. The row is created for both
+      // sources so facebook-lead users can log in later, but only the website
+      // (browser) source gets a cookie — the Facebook webhook is a server-to-
+      // server caller with no browser to receive it.
+      try {
+        const passwordHash = await bcrypt.hash(data.data.password, 10);
+        const user = await createUser({
+          email,
+          passwordHash,
+          name: name || email.split('@')[0],
+          sugargooUserId: data.data.userId,
+        });
+        if (source === 'website' && user) {
+          setSessionCookie(res, user.id);
+        }
+      } catch (acctErr) {
+        console.error('⚠️ RAPID account create failed (non-blocking):', acctErr instanceof Error ? acctErr.message : acctErr);
       }
 
       return res.status(201).json({

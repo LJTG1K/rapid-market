@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 
 declare global {
@@ -146,7 +147,8 @@ export default function GillysPicks() {
           <div className="pt-12">
             <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
               {filteredProducts.map((product) => (
-                <div key={product.id} className="flex flex-col">
+                <div key={product.id} className="flex flex-col relative">
+                  <WishlistButton productId={product.id} category="fashion" className="absolute top-2 right-2 z-10" />
                   <Link href={`/product/${product.id}`} className="group">
                     <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
                       <img

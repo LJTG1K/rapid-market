@@ -8,6 +8,7 @@ import CountUp from '@/components/CountUp';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import SplitHeadline from '@/components/SplitHeadline';
 import { productMatchesBrand } from '@/lib/brandMatch';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface BrandProduct {
   id: string;
@@ -100,6 +101,8 @@ function FeaturedBrand() {
 }
 
 export default function Home() {
+  const { user } = useAuth();
+
   return (
     <>
       <Head>
@@ -112,6 +115,22 @@ export default function Home() {
 
       {/* ---------- Hero ---------- */}
       <section className="pt-10 md:pt-14">
+        {user && (
+          <div className="container-edit mb-6">
+            <Link
+              href="/account"
+              className="flex items-center justify-between gap-3 bg-paper border border-line px-4 py-3 hover:border-ink transition-colors group"
+            >
+              <span className="font-mono text-xs sm:text-sm uppercase tracking-wide text-ink">
+                Welcome back{user.name ? `, ${user.name}` : ''}
+              </span>
+              <span className="font-mono text-xs uppercase tracking-wide text-muted group-hover:text-stamp transition-colors">
+                View your wishlist →
+              </span>
+            </Link>
+          </div>
+        )}
+
         <Reveal className="container-edit flex items-center justify-between mb-6 md:mb-10">
           <span className="eyebrow">N° 001 — Sourced Direct</span>
           <span className="eyebrow hidden sm:inline">Fashion / Tech / Accessories</span>
@@ -166,7 +185,11 @@ export default function Home() {
               one simple checkout.
             </p>
             <div className="lg:col-span-5 flex flex-wrap gap-3 lg:justify-end">
-              <Link href="/signup" className="btn-stamp">Create Account</Link>
+              {user ? (
+                <Link href="/account" className="btn-stamp">Your account</Link>
+              ) : (
+                <Link href="/signup" className="btn-stamp">Create Account</Link>
+              )}
               <Link href="/fashion-listings" className="btn-secondary">Browse Fashion</Link>
               <Link href="/tutorial" className="btn-secondary">View Tutorial</Link>
             </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Reveal from '@/components/Reveal';
 import Stamp from '@/components/Stamp';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SignupResponse {
   success?: boolean;
@@ -93,6 +94,7 @@ export default function SugargooSignUp() {
   const [generatedPassword, setGeneratedPassword] = useState('');
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [copied, setCopied] = useState(false);
+  const { refresh } = useAuth();
 
   const handleCopyPassword = async () => {
     try {
@@ -153,6 +155,10 @@ export default function SugargooSignUp() {
       setGeneratedPassword(data.password || '');
       setEmail('');
       setName('');
+
+      // The register API set the session cookie — sync the auth context so the
+      // header immediately reflects the logged-in state.
+      refresh();
     } catch (err) {
       setError('Network error. Please try again.');
       console.error('Signup error:', err);

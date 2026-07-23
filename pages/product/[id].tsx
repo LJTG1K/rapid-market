@@ -6,6 +6,7 @@ import Stars from '@/components/Stars';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import PerforatedDivider from '@/components/PerforatedDivider';
+import WishlistButton from '@/components/WishlistButton';
 
 interface Product {
   id: string;
@@ -153,15 +154,18 @@ export default function ProductPage() {
 
             <p className="font-mono text-3xl text-ink mb-8">{product.price}</p>
 
-            <a
-              href={product.sugargooLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={trackClick}
-              className="btn-stamp w-full sm:w-auto !px-10 mb-8"
-            >
-              Buy on Sugargoo →
-            </a>
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <a
+                href={product.sugargooLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={trackClick}
+                className="btn-stamp w-full sm:w-auto !px-10"
+              >
+                Buy on Sugargoo →
+              </a>
+              <WishlistButton productId={product.id} category={cat} showLabel />
+            </div>
 
             <div className="border-t border-line pt-6 space-y-3">
               <p className="text-sm text-ink/70 leading-relaxed">
