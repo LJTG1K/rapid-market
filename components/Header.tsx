@@ -1,21 +1,31 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
-const NAV = [
+// Primary links stay flat in the bar (with their 01–03 numerals).
+const PRIMARY = [
   { href: '/fashion-listings', label: 'Fashion' },
   { href: '/tech-listings', label: 'Tech' },
   { href: '/brands', label: 'Brands' },
+];
+
+// Secondary links are grouped under the "More" dropdown to de-clutter the bar.
+const MORE = [
   { href: '/gillys-picks', label: "Gilly's Picks" },
   { href: '/tutorial', label: 'Tutorial' },
   { href: '/blog', label: 'Journal' },
 ];
 
+// Full list (used by the mobile menu, which shows everything inline).
+const ALL_NAV = [...PRIMARY, ...MORE];
+
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { user } = useAuth();
   const isCampaign = router.pathname === '/campaign';
@@ -27,10 +37,36 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Close the "More" dropdown on outside-click or Escape.
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setMoreOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMoreOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [moreOpen]);
+
+  // Close the dropdown whenever navigation occurs.
+  useEffect(() => {
+    setMoreOpen(false);
+  }, [router.asPath]);
+
+  const moreActive = MORE.some((m) => router.pathname.startsWith(m.href));
+
   return (
     <header
       className={`sticky top-0 z-50 bg-stone/95 backdrop-blur-sm transition-shadow duration-300 ${
-        scrolled ? 'shadow-[0_1px_0_0_rgba(32,30,25,0.12)]' : ''
+        scrolled ? 'shadow-[0_1px_0_0_rgba(27,26,20,0.12)]' : ''
       }`}
     >
       <div
@@ -56,7 +92,7 @@ export default function Header() {
           <>
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center">
-              {NAV.map((item, i) => (
+              {PRIMARY.map((item, i) => (
                 <span key={item.href} className="flex items-center">
                   {i > 0 && <span className="w-px h-3 bg-line mx-4 xl:mx-5" aria-hidden="true" />}
                   <Link
@@ -72,14 +108,57 @@ export default function Header() {
                   </Link>
                 </span>
               ))}
+
+              {/* More dropdown */}
+              <span className="flex items-center">
+                <span className="w-px h-3 bg-line mx-4 xl:mx-5" aria-hidden="true" />
+                <div className="relative" ref={moreRef}>
+                  <button
+                    type="button"
+                    onClick={() => setMoreOpen((v) => !v)}
+                    aria-haspopup="true"
+                    aria-expanded={moreOpen}
+                    className={`group inline-flex items-center gap-1.5 py-2 font-mono text-[13px] font-medium uppercase tracking-wide transition-colors ${
+                      moreActive || moreOpen ? 'text-ink' : 'text-ink/70 hover:text-ink'
+                    }`}
+                  >
+                    More
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className={`w-3 h-3 transition-transform duration-200 ${moreOpen ? 'rotate-180' : ''}`}
+                      aria-hidden="true"
+                    >
+                      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+
+                  {moreOpen && (
+                    <div
+                      role="menu"
+                      className="absolute right-0 top-full mt-2 min-w-[190px] bg-paper border border-line shadow-[0_12px_30px_-12px_rgba(27,26,20,0.35)] py-1.5 z-50"
+                    >
+                      {MORE.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          role="menuitem"
+                          onClick={() => setMoreOpen(false)}
+                          className="block px-4 py-2.5 font-mono text-[13px] uppercase tracking-wide text-ink/75 hover:text-ink hover:bg-stone/60 transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </span>
             </nav>
 
-            {/* Right meta + CTA */}
-            <div className="flex items-center gap-5">
-              <span className="hidden xl:flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-muted">
-                <span className="w-1.5 h-1.5 rounded-full bg-stamp motion-safe:animate-pulse" aria-hidden="true" />
-                100+ sellers live
-              </span>
+            {/* Right side: CTAs */}
+            <div className="flex items-center gap-4">
               {user ? (
                 <Link
                   href="/account"
@@ -133,7 +212,7 @@ export default function Header() {
       {!isCampaign && isOpen && (
         <nav className="lg:hidden bg-stone border-b border-line">
           <div className="container-edit flex flex-col py-4">
-            {NAV.map((item, i) => (
+            {ALL_NAV.map((item, i) => (
               <Link
                 key={item.href}
                 href={item.href}

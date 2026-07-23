@@ -28,8 +28,19 @@ html {
 
 body {
   font-family: 'Inter Tight', 'Inter', sans-serif;
-  background: #DAD5C8;
-  color: #201E19;
+  background: #E7E1D1;
+  color: #1B1A14;
+}
+
+/* iOS auto-zooms a field on focus when its font-size is < 16px. Several inputs
+   use text-sm (13px), so force a 16px floor for form controls on small screens
+   to prevent the unwanted zoom. Larger viewports keep their intended sizing. */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
 h1, h2, h3, h4, .display {
@@ -50,7 +61,7 @@ select:focus-visible,
 }
 
 ::selection {
-  background: #201E19;
+  background: #1B1A14;
   color: #F3F0E8;
 }
 
@@ -75,8 +86,8 @@ select:focus-visible,
     width: 100%;
     background-image: repeating-linear-gradient(
       to right,
-      #201E19 0,
-      #201E19 6px,
+      #1B1A14 0,
+      #1B1A14 6px,
       transparent 6px,
       transparent 13px
     );
@@ -104,7 +115,7 @@ select:focus-visible,
   }
 
   .link-underline {
-    @apply underline decoration-line decoration-1 underline-offset-4 hover:decoration-stamp transition-colors;
+    @apply underline decoration-line decoration-1 underline-offset-4 hover:decoration-accent transition-colors;
   }
 
   .card {
@@ -112,15 +123,15 @@ select:focus-visible,
   }
 
   .tag {
-    @apply inline-block font-mono text-xs uppercase tracking-wide border border-line px-2.5 py-1 text-muted;
+    @apply inline-block font-mono text-xs uppercase tracking-wide border border-accent px-2.5 py-1 text-accent;
   }
 
   /* Consistent hatch fill for image placeholders site-wide */
   .placeholder-media {
     background-image: repeating-linear-gradient(
       45deg,
-      rgba(32, 30, 25, 0.07) 0,
-      rgba(32, 30, 25, 0.07) 1px,
+      rgba(27, 26, 20, 0.07) 0,
+      rgba(27, 26, 20, 0.07) 1px,
       transparent 1px,
       transparent 11px
     );

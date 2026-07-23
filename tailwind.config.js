@@ -8,16 +8,19 @@ module.exports = {
     extend: {
       colors: {
         // RAPID Marketplace design tokens — warm industrial / customs-manifest palette
-        stone: '#DAD5C8',   // page background
+        // "Dual Stamp" refresh: lighter/creamier ground, deeper ink, + a disciplined
+        // second accent (customs-ink teal) for tags & links. Red stays reserved for CTAs.
+        stone: '#E7E1D1',   // page background (lighter, creamier)
         paper: '#F3F0E8',   // card / surface background
-        ink: '#201E19',     // primary text, display type
+        ink: '#1B1A14',     // primary text, display type (deeper)
         muted: '#69614F',   // secondary text
         line: '#C3BAA6',    // hairlines, rules, borders
-        stamp: '#BC3A1D',   // single accent — customs-stamp red
-        dusk: '#17160F',    // dark section background (footer)
+        stamp: '#BC3A1D',   // primary accent — customs-stamp red (CTAs)
+        accent: '#155E58',  // secondary accent — customs-ink teal (tags, links)
+        dusk: '#14140E',    // dark section background (footer)
         // legacy aliases kept for any un-migrated components
         rapid: {
-          black: '#201E19',
+          black: '#1B1A14',
           white: '#F3F0E8',
         },
       },
@@ -47,8 +50,8 @@ module.exports = {
         widest: '0.18em',
       },
       boxShadow: {
-        card: '0 1px 0 0 rgba(32,30,25,0.06)',
-        stamp: '0 12px 30px -12px rgba(32,30,25,0.35)',
+        card: '0 1px 0 0 rgba(27,26,20,0.06)',
+        stamp: '0 12px 30px -12px rgba(27,26,20,0.35)',
       },
       transitionTimingFunction: {
         stamp: 'cubic-bezier(0.16, 1, 0.3, 1)',

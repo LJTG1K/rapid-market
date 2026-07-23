@@ -16,22 +16,30 @@
   {
     "brandName": "99club",
     "slug": "99club",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Club-coded streetwear built on bold numerals and members-only graphic energy — hype-driven drops with a nightlife edge.",
     "aesthetic": [
+      "hype",
+      "graphic",
+      "club-culture",
+      "bold",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Hype-conscious young shoppers aged 16-28",
+    "notes": "Graphic-led label leaning on limited-run, collectible drops and strong logo presence."
   },
   {
     "brandName": "A Square Root",
     "slug": "a-square-root",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Concept-driven label taking a mathematical, geometric approach to streetwear — clean lines, considered proportion and quietly intellectual graphics.",
     "aesthetic": [
-      "streetwear"
+      "conceptual",
+      "geometric",
+      "minimalist",
+      "contemporary",
+      "clean-design"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Design-conscious consumers aged 20-35",
+    "notes": "Cerebral, proportion-focused pieces with restrained, systematic graphic work."
   },
   {
     "brandName": "Aberdeen",
@@ -50,12 +58,16 @@
   {
     "brandName": "Andlife",
     "slug": "andlife",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Lifestyle-first label built around easy, everyday pieces — relaxed staples that fold into daily wardrobes rather than shout.",
     "aesthetic": [
-      "streetwear"
+      "lifestyle",
+      "everyday",
+      "relaxed",
+      "contemporary",
+      "casual"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Everyday shoppers aged 18-35 wanting easy staples",
+    "notes": "Wearable, low-key essentials with a comfortable, live-in feel."
   },
   {
     "brandName": "Antiphase",
@@ -100,12 +112,16 @@
   {
     "brandName": "Arrow Of Cocoon",
     "slug": "arrow-of-cocoon",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Poetic label themed on transformation and cocooning — soft, layered pieces with an organic sense of comfort and metamorphosis.",
     "aesthetic": [
-      "streetwear"
+      "poetic",
+      "nature-inspired",
+      "layered",
+      "artistic",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Expressive individuals aged 18-32",
+    "notes": "Soft-layered silhouettes and cocoon-like comfort with an artful, narrative angle."
   },
   {
     "brandName": "AsentDboom",
@@ -151,12 +167,16 @@
   {
     "brandName": "Beft",
     "slug": "beft",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Understated contemporary label trading on restraint — pared-back silhouettes and a quiet, logo-light approach.",
     "aesthetic": [
-      "streetwear"
+      "minimalist",
+      "understated",
+      "clean-design",
+      "contemporary",
+      "modern"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Minimalist dressers aged 20-38",
+    "notes": "Quiet, essentials-adjacent pieces with careful cuts and minimal branding."
   },
   {
     "brandName": "Beliefyao",
@@ -284,22 +304,30 @@
   {
     "brandName": "Chill High",
     "slug": "chill-high",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Laid-back label built for comfort — elevated loungewear and easy fits with a mellow, take-it-slow attitude.",
     "aesthetic": [
+      "relaxed",
+      "laid-back",
+      "comfort-focused",
+      "casual",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Comfort-first young adults aged 16-30",
+    "notes": "Elevated loungewear and soft, oversized fits with a mellow graphic sensibility."
   },
   {
     "brandName": "Cinder Vein",
     "slug": "cinder-vein",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Dark, industrial streetwear in ash and ember tones — distressed textures and a smouldering, post-industrial mood.",
     "aesthetic": [
-      "streetwear"
+      "dark",
+      "industrial",
+      "grunge",
+      "techwear",
+      "monochrome"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Dark-aesthetic and techwear fans aged 18-32",
+    "notes": "Distressed, ashen palette with industrial hardware and a moody, grunge-leaning edge."
   },
   {
     "brandName": "Crashbaggage",
@@ -345,12 +373,16 @@
   {
     "brandName": "Detw",
     "slug": "detw",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Graphic-led streetwear with a stripped, coded wordmark aesthetic — minimal branding and statement placement.",
     "aesthetic": [
-      "streetwear"
+      "graphic",
+      "minimalist",
+      "contemporary",
+      "streetwear",
+      "modern"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Graphic-tee shoppers aged 16-30",
+    "notes": "Coded lettering and clean placement graphics over a restrained base."
   },
   {
     "brandName": "DL",
@@ -368,12 +400,16 @@
   {
     "brandName": "Doomsdayvanguard",
     "slug": "doomsdayvanguard",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Apocalyptic techwear label — utilitarian, armoured silhouettes and a dystopian vanguard aesthetic for the end-times crowd.",
     "aesthetic": [
-      "streetwear"
+      "techwear",
+      "apocalyptic",
+      "dark",
+      "utilitarian",
+      "avant-garde"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Techwear and functional-fashion fans aged 18-35",
+    "notes": "Straps, pockets and armoured detailing in a dark, dystopian techwear register."
   },
   {
     "brandName": "Dreamband",
@@ -405,12 +441,16 @@
   {
     "brandName": "Enthusiast Creativity",
     "slug": "enthusiast-creativity",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Art-forward label celebrating creative enthusiasm — expressive prints and playful, hand-made-feeling graphics.",
     "aesthetic": [
-      "streetwear"
+      "artistic",
+      "expressive",
+      "playful",
+      "graphic",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Creative individuals and artists aged 18-32",
+    "notes": "Print-heavy, expressive pieces with an energetic, DIY-art spirit."
   },
   {
     "brandName": "EODUP",
@@ -456,12 +496,16 @@
   {
     "brandName": "Fanvan",
     "slug": "fanvan",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Playful casual label with a road-trip, easygoing spirit — fun graphics and relaxed everyday fits.",
     "aesthetic": [
-      "streetwear"
+      "playful",
+      "casual",
+      "graphic",
+      "streetwear",
+      "relaxed"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Casual young shoppers aged 16-28",
+    "notes": "Lighthearted graphics and comfortable, everyday silhouettes."
   },
   {
     "brandName": "Fashion Studio",
@@ -479,12 +523,16 @@
   {
     "brandName": "Flyerrer",
     "slug": "flyerrer",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Print-culture streetwear channelling club flyers and rave graphics — loud, poster-style prints and bold type.",
     "aesthetic": [
+      "graphic",
+      "rave-culture",
+      "bold",
+      "print-led",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Music and nightlife fans aged 18-30",
+    "notes": "Flyer- and poster-inspired prints with heavy type and high-contrast colour."
   },
   {
     "brandName": "Fourth3Ex",
@@ -556,12 +604,16 @@
   {
     "brandName": "Gray Dreams",
     "slug": "gray-dreams",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Muted, monochrome label built on greyscale dreamscapes — soft, hazy graphics and a quiet, moody palette.",
     "aesthetic": [
-      "streetwear"
+      "muted",
+      "monochrome",
+      "minimalist",
+      "dreamy",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Minimal, tonal dressers aged 18-34",
+    "notes": "Greyscale palette with soft, atmospheric graphics and a subdued mood."
   },
   {
     "brandName": "Guiba",
@@ -594,12 +646,16 @@
   {
     "brandName": "H76w",
     "slug": "h76w",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Coded, alphanumeric label with an industrial techwear lean — utilitarian pieces and a machine-shop wordmark.",
     "aesthetic": [
-      "streetwear"
+      "techwear",
+      "industrial",
+      "coded",
+      "minimalist",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Techwear and utility-fashion fans aged 18-33",
+    "notes": "Functional detailing and a cryptic alphanumeric identity over clean bases."
   },
   {
     "brandName": "Heatseeking",
@@ -685,12 +741,16 @@
   {
     "brandName": "Joinboy",
     "slug": "joinboy",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Youthful, playful streetwear with a join-the-crew energy — casual fits and cheerful, cartoon-leaning graphics.",
     "aesthetic": [
+      "youthful",
+      "playful",
+      "casual",
+      "graphic",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Young streetwear shoppers aged 15-26",
+    "notes": "Friendly, character-driven graphics with an approachable, crew-culture vibe."
   },
   {
     "brandName": "JZ Jewelry",
@@ -734,12 +794,16 @@
   {
     "brandName": "Klick Clak",
     "slug": "klick-clak",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Pop-leaning label with a playful, onomatopoeic identity — toy-like graphics and bold, snap-together colour.",
     "aesthetic": [
+      "playful",
+      "pop",
+      "graphic",
+      "bold",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Playful, colour-loving shoppers aged 16-28",
+    "notes": "Toy- and pop-inspired graphics with punchy, high-energy colour blocking."
   },
   {
     "brandName": "Kuroda",
@@ -770,12 +834,16 @@
   {
     "brandName": "Lhhomme",
     "slug": "lhhomme",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Refined menswear-minded label — clean, homme-focused tailoring and understated contemporary staples.",
     "aesthetic": [
-      "streetwear"
+      "refined",
+      "minimalist",
+      "menswear",
+      "contemporary",
+      "clean-design"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Style-minded men aged 22-40",
+    "notes": "Tailored, grown-up staples with a quiet, considered menswear sensibility."
   },
   {
     "brandName": "LOOX GZ",
@@ -793,12 +861,16 @@
   {
     "brandName": "Losecontroledge",
     "slug": "losecontroledge",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Edgy, high-energy label built on losing control — chaotic graphics, distressed detailing and a rebellious streak.",
     "aesthetic": [
+      "edgy",
+      "grunge",
+      "expressive",
+      "bold",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Bold, rebellious dressers aged 16-30",
+    "notes": "Distressed finishes and chaotic, high-contrast graphics with attitude."
   },
   {
     "brandName": "Loselos",
@@ -816,12 +888,16 @@
   {
     "brandName": "Luuucam",
     "slug": "luuucam",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Quirky graphic label with a playful, camera-roll sensibility — candid prints and lighthearted everyday pieces.",
     "aesthetic": [
+      "quirky",
+      "playful",
+      "graphic",
+      "contemporary",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Playful, image-conscious shoppers aged 16-28",
+    "notes": "Snapshot-style graphics and offbeat, personality-driven prints."
   },
   {
     "brandName": "MadeExtreme",
@@ -934,12 +1010,16 @@
   {
     "brandName": "Moon Baby",
     "slug": "moon-baby",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Dreamy, celestial-leaning label — soft palettes, lunar motifs and a gentle, baby-soft take on streetwear.",
     "aesthetic": [
+      "dreamy",
+      "celestial",
+      "soft",
+      "cute",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Soft-aesthetic shoppers aged 16-28",
+    "notes": "Pastel and celestial motifs with a cute, tender graphic language."
   },
   {
     "brandName": "MPF",
@@ -957,22 +1037,30 @@
   {
     "brandName": "Mr Grid",
     "slug": "mr-grid",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Grid-obsessed minimalist label — geometric layouts, structured lines and a precise, monochrome design language.",
     "aesthetic": [
-      "streetwear"
+      "geometric",
+      "minimalist",
+      "structured",
+      "monochrome",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Minimal, design-led dressers aged 20-38",
+    "notes": "Grid systems and geometric precision expressed through clean, structured pieces."
   },
   {
     "brandName": "Mr Nearly",
     "slug": "mr-nearly",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Wry, understated label built on the 'nearly' idea — imperfect-by-design graphics and low-key everyday staples.",
     "aesthetic": [
-      "streetwear"
+      "witty",
+      "understated",
+      "minimalist",
+      "graphic",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Understated, wit-appreciating shoppers aged 18-34",
+    "notes": "Deadpan, imperfect-by-design graphics over quiet, wearable basics."
   },
   {
     "brandName": "MSX",
@@ -1016,12 +1104,16 @@
   {
     "brandName": "Nietpxfo",
     "slug": "nietpxfo",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Cryptic, experimental label with a glitch-coded identity — abstract graphics and an anti-legible, avant-garde streak.",
     "aesthetic": [
+      "experimental",
+      "glitch",
+      "avant-garde",
+      "graphic",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Experimental fashion fans aged 18-32",
+    "notes": "Glitchy, abstract graphics and a deliberately illegible, coded wordmark."
   },
   {
     "brandName": "Nihaohao",
@@ -1053,12 +1145,16 @@
   {
     "brandName": "No E",
     "slug": "no-e",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Concept-minimal label trading on absence — stripped graphics, negative space and a quietly contrarian wordmark.",
     "aesthetic": [
-      "streetwear"
+      "minimalist",
+      "conceptual",
+      "clean-design",
+      "contemporary",
+      "modern"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Minimalist, concept-led dressers aged 20-36",
+    "notes": "Negative-space graphics and pared-back pieces built on restraint."
   },
   {
     "brandName": "Nomaniai",
@@ -1091,12 +1187,16 @@
   {
     "brandName": "Okaythxbye",
     "slug": "okaythxbye",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Internet-native label with a sign-off-and-leave attitude — sarcastic slogans, meme-literate graphics and Gen-Z irony.",
     "aesthetic": [
+      "ironic",
+      "internet-native",
+      "playful",
+      "graphic",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Online, meme-fluent shoppers aged 15-26",
+    "notes": "Slogan- and meme-driven graphics with a sarcastic, terminally-online voice."
   },
   {
     "brandName": "Original",
@@ -1129,12 +1229,16 @@
   {
     "brandName": "Paiki",
     "slug": "paiki",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Soft, casual label with a cute, character-friendly feel — easy fits and gentle, playful graphics.",
     "aesthetic": [
+      "cute",
+      "casual",
+      "playful",
+      "contemporary",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Casual, cute-leaning shoppers aged 15-26",
+    "notes": "Character-friendly graphics and soft, comfortable everyday pieces."
   },
   {
     "brandName": "Peoplesense",
@@ -1153,12 +1257,16 @@
   {
     "brandName": "Personsoul",
     "slug": "personsoul",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Introspective label built around individuality and soul — expressive, art-leaning graphics with an emotional undercurrent.",
     "aesthetic": [
-      "streetwear"
+      "introspective",
+      "artistic",
+      "expressive",
+      "graphic",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Expressive, individualist shoppers aged 18-32",
+    "notes": "Emotive, art-driven graphics themed on identity and inner life."
   },
   {
     "brandName": "PI0NEER",
@@ -1177,22 +1285,30 @@
   {
     "brandName": "Pickle Club",
     "slug": "pickle-club",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Playful graphic club with a tongue-in-cheek mascot spirit — quirky prints and bold, collectible-feeling drops.",
     "aesthetic": [
+      "playful",
+      "quirky",
+      "graphic",
+      "bold",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Playful, graphic-loving shoppers aged 16-28",
+    "notes": "Mascot-led, humorous prints with a fun, collectible drop cadence."
   },
   {
     "brandName": "Plain",
     "slug": "plain",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Essentials-first label doing exactly what the name says — clean blanks and quietly perfected basics with no logo noise.",
     "aesthetic": [
-      "streetwear"
+      "minimalist",
+      "essentials",
+      "clean-design",
+      "understated",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Basics-focused shoppers aged 18-40",
+    "notes": "Logo-free blanks and everyday essentials with a focus on fit and fabric."
   },
   {
     "brandName": "POPProject",
@@ -1237,22 +1353,30 @@
   {
     "brandName": "Regen",
     "slug": "regen",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Utility-minded label with a regenerate-and-repeat ethos — functional, hard-wearing pieces and a stripped, technical look.",
     "aesthetic": [
-      "streetwear"
+      "utilitarian",
+      "techwear",
+      "functional",
+      "minimalist",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Function-first shoppers aged 18-35",
+    "notes": "Durable, technical staples with practical detailing and a clean utility aesthetic."
   },
   {
     "brandName": "Rogic Logic",
     "slug": "rogic-logic",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Systems-minded label built on 'logic' — geometric graphics, modular detailing and a clean, engineered aesthetic.",
     "aesthetic": [
-      "streetwear"
+      "conceptual",
+      "geometric",
+      "techwear",
+      "minimalist",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Design- and tech-minded shoppers aged 20-35",
+    "notes": "Modular, engineered detailing and systematic, logic-themed graphics."
   },
   {
     "brandName": "RollingMoney",
@@ -1284,12 +1408,16 @@
   {
     "brandName": "Sanslaws",
     "slug": "sanslaws",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Rule-breaking label built on a no-laws attitude — punk-leaning graphics, bold statements and unapologetic edge.",
     "aesthetic": [
+      "rebellious",
+      "punk",
+      "bold",
+      "graphic",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Rebellious, statement-making shoppers aged 16-30",
+    "notes": "Punk-influenced graphics and defiant slogans with a raw, DIY edge."
   },
   {
     "brandName": "Saylam",
@@ -1307,12 +1435,16 @@
   {
     "brandName": "Seasons",
     "slug": "seasons",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Season-led label built for layering — versatile pieces that shift with the calendar and a nature-tuned palette.",
     "aesthetic": [
-      "streetwear"
+      "seasonal",
+      "nature-inspired",
+      "versatile",
+      "layered",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Versatile, layering-minded shoppers aged 18-36",
+    "notes": "Layerable, transitional pieces built around a natural, seasonal palette."
   },
   {
     "brandName": "Sick it Rain",
@@ -1331,22 +1463,30 @@
   {
     "brandName": "Smileandsad",
     "slug": "smileandsad",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Mood-driven label built on the smile/sad duality — emotive slogans and graphics that swing between joy and melancholy.",
     "aesthetic": [
+      "emotional",
+      "expressive",
+      "graphic",
+      "contemporary",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Expressive, mood-driven shoppers aged 15-27",
+    "notes": "Emotive, contrast-heavy graphics themed on the highs and lows of feeling."
   },
   {
     "brandName": "Taak",
     "slug": "taak",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Terse, minimalist label — structured silhouettes, a clipped wordmark and a pared-down, no-frills design language.",
     "aesthetic": [
-      "streetwear"
+      "minimalist",
+      "structured",
+      "contemporary",
+      "clean-design",
+      "understated"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Minimalist, structure-led dressers aged 20-38",
+    "notes": "Clean, structured pieces with a clipped identity and no excess detail."
   },
   {
     "brandName": "Taofengchao",
@@ -1472,22 +1612,30 @@
   {
     "brandName": "Ve2",
     "slug": "ve2",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Future-facing label with a versioned, techwear lean — sporty, functional pieces and a clean, next-gen identity.",
     "aesthetic": [
-      "streetwear"
+      "futuristic",
+      "techwear",
+      "sporty",
+      "minimalist",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Tech- and sport-minded shoppers aged 18-32",
+    "notes": "Sporty, functional silhouettes with a clean, forward-looking design language."
   },
   {
     "brandName": "Wassup Happy",
     "slug": "wassup-happy",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Feel-good label built on cheerful energy — bright colour, friendly graphics and an unapologetically happy attitude.",
     "aesthetic": [
+      "cheerful",
+      "playful",
+      "colourful",
+      "casual",
       "streetwear"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Upbeat, colour-loving shoppers aged 15-26",
+    "notes": "Bright, positive graphics and friendly, high-spirit everyday pieces."
   },
   {
     "brandName": "Watch Out For Cuffs",
@@ -1546,32 +1694,44 @@
   {
     "brandName": "Wulien",
     "slug": "wulien",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Refined, artisanal label with a considered, craft-led feel — textural fabrics and quietly contemporary silhouettes.",
     "aesthetic": [
-      "streetwear"
+      "artisanal",
+      "refined",
+      "contemporary",
+      "minimalist",
+      "textural"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Craft-appreciating dressers aged 22-40",
+    "notes": "Textural, craft-led pieces with a refined, understated contemporary hand."
   },
   {
     "brandName": "Xanvas",
     "slug": "xanvas",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Art-school label treating garments as canvas — painterly graphics, hand-finished detailing and an expressive, gallery-wall feel.",
     "aesthetic": [
-      "streetwear"
+      "artistic",
+      "painterly",
+      "expressive",
+      "graphic",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Art-driven, expressive shoppers aged 18-32",
+    "notes": "Painterly, hand-finished graphics that treat each piece as a canvas."
   },
   {
     "brandName": "Xiao Guwan",
     "slug": "xiao-guwan",
-    "description": "Newly added seller on the RAPID index — full profile coming soon.",
+    "description": "Heritage-leaning label with a 'little curio' spirit — vintage-inspired detailing and a modern take on traditional Chinese motifs.",
     "aesthetic": [
-      "streetwear"
+      "heritage",
+      "vintage-inspired",
+      "oriental-modern",
+      "artistic",
+      "contemporary"
     ],
-    "targetCustomer": "RAPID shoppers exploring the latest seller additions.",
-    "notes": "Profile details for this seller are being finalized."
+    "targetCustomer": "Heritage- and detail-minded shoppers aged 20-38",
+    "notes": "Curio- and antique-inspired detailing blending traditional motifs with modern cuts."
   },
   {
     "brandName": "XMYB",

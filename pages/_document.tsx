@@ -10,7 +10,7 @@ export default function Document() {
         <link rel="icon" href="/favicon.ico" />
         <link rel="sitemap" href="/api/sitemap.xml" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#DAD5C8" />
+        <meta name="theme-color" content="#E7E1D1" />
         <meta name="description" content="RAPID - Access 100+ sellers, with new items indexed daily, through Sugargoo" />
 
         {/* Preload fonts */}

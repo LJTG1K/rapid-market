@@ -104,6 +104,35 @@ function categorizeTechProduct(name: string, description: string): string {
   return 'Other';
 }
 
+// Category-aware fallback copy for products whose Sheet row has no description,
+// so an undescribed hoodie doesn't read the same as an undescribed keyboard.
+// Kept short and in RAPID's editorial voice.
+const fallbackCopyByCategory: { [category: string]: string } = {
+  // Fashion
+  'T-Shirts': 'Everyday tee from a verified seller — check the listing photos for fit and print detail.',
+  Hoodies: 'Cozy fleece-weight piece from a verified seller — see the seller photos for fit and colour.',
+  Jackets: 'Layer-ready jacket from a verified seller — review the listing shots for cut and materials.',
+  Outerwear: 'Weather-ready outerwear from a verified seller — check the photos for insulation and fit.',
+  Pants: 'Versatile bottoms from a verified seller — see the listing for sizing and fabric detail.',
+  Bags: 'Carry piece from a verified seller — check the photos for size, hardware and finish.',
+  Accessories: 'Finishing-touch accessory from a verified seller — see the listing photos for detail.',
+  // Tech
+  Gaming: 'Gaming gear from a verified seller — check the listing for specs and compatibility.',
+  'Phone Accessories': 'Phone accessory from a verified seller — confirm your model in the listing photos.',
+  Lighting: 'Ambient lighting piece from a verified seller — see the listing for size and setup.',
+  Audio: 'Audio gear from a verified seller — check the listing for specs and connectivity.',
+  'Desk Setup': 'Desk-setup piece from a verified seller — review the photos for dimensions and finish.',
+  'Skins & Wraps': 'Skin / wrap from a verified seller — confirm your device and finish in the listing.',
+  'Decor & Keychains': 'Collectible decor piece from a verified seller — see the photos for size and detail.',
+};
+
+function fallbackDescription(category: string): string {
+  return (
+    fallbackCopyByCategory[category] ||
+    'Sourced from a verified seller — check the listing photos and details before ordering.'
+  );
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Product[]>
@@ -227,16 +256,18 @@ export default async function handler(
         continue;
       }
 
+      const productCategory = categoryFunc(name, description || '');
+
       const product: Product = {
         id: productId.toString(),
         name: name.trim(),
         image: image.startsWith('http') ? image : 'https://via.placeholder.com/400x400?text=Product',
         description: description && description !== 'DESCRIPTION' && description !== ''
           ? description.trim()
-          : 'Premium quality product from verified seller',
+          : fallbackDescription(productCategory),
         price: `$${priceStr}`,
         sugargooLink: link.trim(),
-        category: categoryFunc(name, description || ''),
+        category: productCategory,
         verified: true,
       };
 
