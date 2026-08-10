@@ -43,7 +43,7 @@ function FeaturedBrand() {
   useEffect(() => {
     fetch('/data/brands.json')
       .then((r) => r.json())
-      .then((brands) => setBrand(brands.find((b: any) => b.brandName === 'Blankin')))
+      .then((brands) => setBrand(brands.find((b: any) => b.brandName === 'Gray Dreams')))
       .catch(() => {});
   }, []);
 
