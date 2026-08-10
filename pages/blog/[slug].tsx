@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
@@ -54,12 +53,6 @@ export async function getStaticPaths() {
 }
 
 export default function BlogPost({ post, content }: { post: BlogPost; content: string }) {
-  const [contentHtml, setContentHtml] = useState('');
-
-  useEffect(() => {
-    setContentHtml(content);
-  }, [content]);
-
   if (!post) return null;
 
   const formatDate = (d: string) =>
@@ -68,7 +61,7 @@ export default function BlogPost({ post, content }: { post: BlogPost; content: s
   return (
     <>
       <Head>
-        <title>{post.title} — RAPID Journal</title>
+        <title>{`${post.title} — RAPID Journal`}</title>
         <meta name="description" content={post.excerpt} />
         <link rel="canonical" href={`https://rapid.market/blog/${post.slug}`} />
       </Head>
@@ -111,6 +104,16 @@ export default function BlogPost({ post, content }: { post: BlogPost; content: s
                 a: ({ href, children }) => (
                   <a href={href} className="link-underline font-semibold">{children}</a>
                 ),
+                img: ({ src, alt }) => (
+                  <figure className="mb-8">
+                    <img src={src} alt={alt} loading="lazy" className="w-full border border-line" />
+                    {alt && (
+                      <figcaption className="mt-2 font-mono text-xs uppercase tracking-wide text-muted">
+                        {alt}
+                      </figcaption>
+                    )}
+                  </figure>
+                ),
                 code: ({ children }) => (
                   <code className="bg-paper border border-line px-1.5 py-0.5 font-mono text-sm">{children}</code>
                 ),
@@ -120,7 +123,7 @@ export default function BlogPost({ post, content }: { post: BlogPost; content: s
                 hr: () => <hr className="my-10 border-t border-line" />,
               }}
             >
-              {contentHtml}
+              {content}
             </ReactMarkdown>
           </div>
         </article>

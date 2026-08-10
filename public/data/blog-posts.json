@@ -9,5 +9,16 @@
     "readTime": 5,
     "category": "Getting Started",
     "featured": true
+  },
+  {
+    "id": "the-case-for-greyscale",
+    "slug": "the-case-for-greyscale",
+    "title": "The Case for Greyscale: Why Monochrome Is Quietly Taking Over Streetwear",
+    "excerpt": "Gray Dreams bets that stripping the palette down to black, charcoal, and washed grey works just as well as turning the volume up. Inside the drop, and why tonal wardrobes age better than colourway chasing.",
+    "author": "RAPID",
+    "publishedAt": "2026-08-10",
+    "readTime": 3,
+    "category": "Style Guide",
+    "featured": false
   }
 ]

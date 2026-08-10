@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -25,16 +24,11 @@ export async function getStaticProps() {
 }
 
 export default function BlogIndex({ posts }: { posts: BlogPost[] }) {
-  const [sortedPosts, setSortedPosts] = useState<BlogPost[]>([]);
-
-  useEffect(() => {
-    const sorted = [...posts].sort((a, b) => {
-      if (a.featured && !b.featured) return -1;
-      if (!a.featured && b.featured) return 1;
-      return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-    });
-    setSortedPosts(sorted);
-  }, [posts]);
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
 
   const formatDate = (d: string) =>
     new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
