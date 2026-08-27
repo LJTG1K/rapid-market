@@ -1,0 +1,61 @@
+{
+  "iso2": "US",
+  "lastVerified": "2026-08-11",
+  "lines": [
+    {
+      "id": "sugargoo-us-fast-line",
+      "agent": "sugargoo",
+      "name": "US Fast Line (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 55, "continuedWeightGrams": 500, "continuedWeightPrice": 55 },
+      "billing": { "basis": "greater", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 20000, "maxGirthCm": 240 },
+      "delivery": { "minDays": 12, "maxDays": 20 },
+      "characteristics": ["Cost-effective"],
+      "restrictions": ["No batteries", "No liquids"]
+    },
+    {
+      "id": "sugargoo-us-tax-free-actual",
+      "agent": "sugargoo",
+      "name": "US Tax Free (Actual Weight) (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 99, "continuedWeightGrams": 500, "continuedWeightPrice": 85 },
+      "billing": { "basis": "actual", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 30000 },
+      "delivery": { "minDays": 14, "maxDays": 20 },
+      "characteristics": ["Actual Weight", "Tax included"],
+      "restrictions": []
+    },
+    {
+      "id": "sugargoo-us-express",
+      "agent": "sugargoo",
+      "name": "US Express (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 180, "continuedWeightGrams": 500, "continuedWeightPrice": 150 },
+      "billing": { "basis": "greater", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 25000 },
+      "delivery": { "minDays": 4, "maxDays": 7 },
+      "characteristics": ["Fastest"],
+      "restrictions": ["No batteries"]
+    },
+    {
+      "id": "sugargoo-us-sea-1kg",
+      "agent": "sugargoo",
+      "name": "US Sea Line 1kg Step (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 1000, "firstWeightPrice": 70, "continuedWeightGrams": 1000, "continuedWeightPrice": 60 },
+      "billing": { "basis": "actual", "volumetricDivisor": 8000 },
+      "limits": { "minWeightGrams": 500, "maxWeightGrams": 50000 },
+      "delivery": { "minDays": 30, "maxDays": 45 },
+      "characteristics": ["Cheapest for heavy hauls", "1kg increments"],
+      "restrictions": ["No electronics"]
+    },
+    {
+      "id": "sugargoo-us-bulky-volumetric",
+      "agent": "sugargoo",
+      "name": "US Bulky Volumetric (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 65, "continuedWeightGrams": 500, "continuedWeightPrice": 58 },
+      "billing": { "basis": "volumetric", "volumetricDivisor": 6000 },
+      "limits": { "maxSingleSideCm": 90 },
+      "delivery": { "minDays": 15, "maxDays": 22 },
+      "characteristics": ["Best for light, bulky boxes (shoes, bags)"],
+      "restrictions": ["No liquids", "No powders"]
+    }
+  ]
+}

@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "build:shipping-index": "node scripts/build-shipping-index.mjs",
+    "build:world-paths": "node scripts/build-world-paths.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
@@ -30,8 +33,13 @@
     "@types/react": "^18.2.0",
     "@types/uuid": "^9.0.0",
     "autoprefixer": "^10.4.0",
+    "d3-geo": "^3.1.1",
+    "i18n-iso-countries": "^7.14.0",
     "postcss": "^8.4.0",
+    "sharp": "^0.35.3",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5.3.0"
+    "topojson-client": "^3.1.0",
+    "typescript": "^5.3.0",
+    "world-atlas": "^2.0.2"
   }
 }

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import fs from 'fs';
 import path from 'path';
 import { useState, useEffect } from 'react';
+import ProductImage from '@/components/ProductImage';
 
 interface Brand {
   brandName: string;
@@ -174,14 +175,7 @@ export default function LandingPageTest2({ topBrands = [] }: { topBrands: Brand[
                     {/* Image Section */}
                     {productImage && (
                       <div className="w-full bg-gray-100 flex items-center justify-center flex-shrink-0" style={{ height: '200px' }}>
-                        <img
-                          src={productImage}
-                          alt={brand.brandName}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                          }}
-                        />
+                        <ProductImage src={productImage} alt={brand.brandName} />
                       </div>
                     )}
                     

@@ -10,6 +10,8 @@ import LoadingMessage, { MANIFEST_MESSAGES } from '@/components/LoadingMessage';
 import CountUp from '@/components/CountUp';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import SplitHeadline from '@/components/SplitHeadline';
+import ProductImage from '@/components/ProductImage';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 interface HighlightProduct {
   id: string;
@@ -26,10 +28,10 @@ const HIGHLIGHT_NAMES = [
 ];
 
 const CASCADE_IMAGES = [
-  { src: '/assets/campaign/cascade-1.png', alt: 'Seller product photograph 1' },
-  { src: '/assets/campaign/cascade-2.png', alt: 'Seller product photograph 2' },
-  { src: '/assets/campaign/cascade-3.png', alt: 'Seller product photograph 3' },
-  { src: '/assets/campaign/cascade-4.png', alt: 'Seller product photograph 4' },
+  { src: '/assets/campaign/cascade-1.webp', alt: 'Seller product photograph 1' },
+  { src: '/assets/campaign/cascade-2.webp', alt: 'Seller product photograph 2' },
+  { src: '/assets/campaign/cascade-3.webp', alt: 'Seller product photograph 3' },
+  { src: '/assets/campaign/cascade-4.webp', alt: 'Seller product photograph 4' },
 ];
 
 const STATS = [
@@ -120,7 +122,7 @@ function ProductHighlights() {
             <div key={p.id} className="flex flex-col">
               <Link href={`/product/${p.id}?category=fashion`} className="group">
                 <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
-                  <img src={p.image} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
+                  <ProductImage src={p.image} alt={p.name} />
                 </div>
                 <span className="font-mono text-[11px] text-stamp mb-1.5 block">
                   {String(i + 1).padStart(2, '0')}
@@ -172,6 +174,9 @@ function StickyCTA() {
 }
 
 export default function Campaign() {
+  // Matches the `lg:` breakpoint the cascade column is shown at.
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+
   return (
     <>
       <Head>
@@ -214,8 +219,12 @@ export default function Campaign() {
             </Reveal>
           </div>
 
+          {/* Gated on the media query, not just `hidden lg:block`: the CSS alone
+              leaves the images in the DOM on mobile, where they're never shown.
+              The frames are already JS-gated for display (Reveal starts them at
+              opacity 0), so deferring the fetch to hydration costs nothing. */}
           <div className="hidden lg:block lg:col-span-5">
-            <CascadeStack images={CASCADE_IMAGES} />
+            {isDesktop && <CascadeStack images={CASCADE_IMAGES} />}
           </div>
         </div>
       </section>

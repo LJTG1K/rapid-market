@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import ProductImage from '@/components/ProductImage';
 
 declare global {
   interface Window {
@@ -193,15 +194,16 @@ export default function ProductDetail() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
             {/* Product Image */}
             <div className="flex items-center justify-center bg-gray-100 rounded-lg p-8" style={{ minHeight: '400px' }}>
-              <img
+              {/* LCP for this route. naturalAspect because the height here comes
+                  from the image's own ratio, not a fixed-aspect wrapper. */}
+              <ProductImage
                 src={product.image}
                 alt={`${product.name} - ${product.category} from ${product.brand || 'RAPID'}`}
-                loading="lazy"
+                variant="detail"
+                priority
+                naturalAspect
                 className="w-full h-auto object-contain max-h-96"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://via.placeholder.com/400x400?text=Product';
-                }}
+                placeholderLabel={product.name}
               />
             </div>
 
@@ -281,14 +283,12 @@ export default function ProductDetail() {
                       className="card bg-white border-2 border-black hover:shadow-2xl transition-shadow shadow-lg flex flex-col"
                     >
                       <div className="mb-4 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center w-full" style={{ minHeight: '150px' }}>
-                        <img
+                        <ProductImage
                           src={relProduct.image}
                           alt={relProduct.name}
+                          naturalAspect
                           className="w-full h-auto object-contain"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src =
-                              'https://via.placeholder.com/300x300?text=Product';
-                          }}
+                          placeholderLabel={relProduct.name}
                         />
                       </div>
                       <h3 className="font-black text-sm mb-2">{relProduct.name}</h3>

@@ -1,0 +1,29 @@
+{
+  "iso2": "DE",
+  "lastVerified": "2026-08-11",
+  "lines": [
+    {
+      "id": "sugargoo-de-standard",
+      "agent": "sugargoo",
+      "name": "EU Standard Line (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 58, "continuedWeightGrams": 500, "continuedWeightPrice": 50 },
+      "billing": { "basis": "greater", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 20000 },
+      "delivery": { "minDays": 14, "maxDays": 22 },
+      "characteristics": ["Cost-effective"],
+      "restrictions": ["No batteries"]
+    },
+    {
+      "id": "sugargoo-de-vat-included",
+      "agent": "sugargoo",
+      "name": "EU VAT-Included Express (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 190, "continuedWeightGrams": 500, "continuedWeightPrice": 160 },
+      "billing": { "basis": "actual", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 20000 },
+      "delivery": { "minDays": 6, "maxDays": 10 },
+      "characteristics": ["VAT included", "Tracked"],
+      "restrictions": [],
+      "notes": "Reflects the EU's removal of the duty-free exemption under EUR150 parcels."
+    }
+  ]
+}

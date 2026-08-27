@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
+import ProductImage from '@/components/ProductImage';
 import { productMatchesBrand } from '@/lib/brandMatch';
 
 interface Brand {
@@ -139,7 +140,9 @@ export default function BrandsDirectory({ brands }: { brands: Brand[] }) {
                   </div>
                   {featured && (
                     <div className="hidden sm:block w-20 h-24 bg-paper border border-line shrink-0 overflow-hidden">
-                      <img src={featured.image} alt="" className="w-full h-full object-cover" />
+                      {/* alt="" is deliberate: the sibling <h2> already names
+                          the brand, so this thumbnail is decorative. */}
+                      <ProductImage src={featured.image} alt="" variant="thumb" />
                     </div>
                   )}
                 </Link>

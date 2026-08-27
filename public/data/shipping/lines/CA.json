@@ -1,0 +1,28 @@
+{
+  "iso2": "CA",
+  "lastVerified": "2026-08-11",
+  "lines": [
+    {
+      "id": "sugargoo-ca-standard",
+      "agent": "sugargoo",
+      "name": "CA Standard Line (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 62, "continuedWeightGrams": 500, "continuedWeightPrice": 54 },
+      "billing": { "basis": "greater", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 20000 },
+      "delivery": { "minDays": 14, "maxDays": 22 },
+      "characteristics": ["Cost-effective"],
+      "restrictions": ["No batteries"]
+    },
+    {
+      "id": "sugargoo-ca-express",
+      "agent": "sugargoo",
+      "name": "CA Express (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 210, "continuedWeightGrams": 500, "continuedWeightPrice": 180 },
+      "billing": { "basis": "actual", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 20000 },
+      "delivery": { "minDays": 5, "maxDays": 9 },
+      "characteristics": ["Tracked"],
+      "restrictions": []
+    }
+  ]
+}

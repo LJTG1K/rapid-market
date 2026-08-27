@@ -7,6 +7,7 @@ import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import { productMatchesBrand } from '@/lib/brandMatch';
+import ProductImage from '@/components/ProductImage';
 
 interface Product {
   id: string;
@@ -259,12 +260,7 @@ export default function FashionListings() {
                     <WishlistButton productId={product.id} category="fashion" className="absolute top-2 right-2 z-10" />
                     <Link href={`/product/${product.id}?category=fashion`} className="group">
                       <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          loading="lazy"
-                          className="w-full h-full object-cover"
-                        />
+                        <ProductImage src={product.image} alt={product.name} />
                       </div>
                       <span className="font-mono text-[11px] uppercase tracking-wide text-muted mb-1 block">
                         {product.category}

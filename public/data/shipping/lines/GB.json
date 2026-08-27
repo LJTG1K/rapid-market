@@ -1,0 +1,39 @@
+{
+  "iso2": "GB",
+  "lastVerified": "2026-08-11",
+  "lines": [
+    {
+      "id": "sugargoo-gb-standard",
+      "agent": "sugargoo",
+      "name": "UK Standard Line (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 60, "continuedWeightGrams": 500, "continuedWeightPrice": 52 },
+      "billing": { "basis": "greater", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 20000 },
+      "delivery": { "minDays": 12, "maxDays": 18 },
+      "characteristics": ["Cost-effective"],
+      "restrictions": ["No batteries"]
+    },
+    {
+      "id": "sugargoo-gb-tracked-express",
+      "agent": "sugargoo",
+      "name": "UK Tracked Express (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 165, "continuedWeightGrams": 500, "continuedWeightPrice": 140 },
+      "billing": { "basis": "actual", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 20000 },
+      "delivery": { "minDays": 5, "maxDays": 9 },
+      "characteristics": ["Fully tracked", "Tax included"],
+      "restrictions": []
+    },
+    {
+      "id": "sugargoo-gb-economy-sea",
+      "agent": "sugargoo",
+      "name": "UK Economy Sea (MOCK)",
+      "pricing": { "currency": "USD", "firstWeightGrams": 500, "firstWeightPrice": 40, "continuedWeightGrams": 500, "continuedWeightPrice": 35 },
+      "billing": { "basis": "actual", "volumetricDivisor": 6000 },
+      "limits": { "maxWeightGrams": 40000 },
+      "delivery": { "minDays": 35, "maxDays": 50 },
+      "characteristics": ["Cheapest option"],
+      "restrictions": ["No batteries", "No liquids", "No branded goods"]
+    }
+  ]
+}

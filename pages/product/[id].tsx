@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Stars from '@/components/Stars';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
+import ProductImage from '@/components/ProductImage';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import WishlistButton from '@/components/WishlistButton';
 
@@ -127,7 +128,8 @@ export default function ProductPage() {
           {/* Image */}
           <div className="relative">
             <div className="aspect-square bg-paper border border-line overflow-hidden">
-              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+              {/* LCP for this route — eager + high priority. */}
+              <ProductImage src={product.image} alt={product.name} variant="detail" priority />
             </div>
             {product.verified && (
               <div className="absolute -top-4 -left-4 hidden sm:block">
@@ -198,7 +200,7 @@ export default function ProductPage() {
               {more.map((p) => (
                 <Link key={p.id} href={`/product/${p.id}?category=${cat}`} className="flex flex-col group">
                   <div className="aspect-square bg-paper border border-line overflow-hidden mb-3">
-                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
+                    <ProductImage src={p.image} alt={p.name} />
                   </div>
                   <h3 className="font-semibold text-sm leading-snug mb-1 line-clamp-2 group-hover:text-stamp transition-colors">
                     {p.name}

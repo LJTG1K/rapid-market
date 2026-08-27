@@ -5,6 +5,17 @@ import Reveal from '@/components/Reveal';
 import Stamp from '@/components/Stamp';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import { useAuth } from '@/contexts/AuthContext';
+import ProductImage from '@/components/ProductImage';
+import StyleQuiz from '@/components/StyleQuiz';
+import ProductMatchGrid from '@/components/ProductMatchGrid';
+import {
+  matchProducts,
+  type QuizAnswers,
+  type Product as MatchableProduct,
+  type Brand,
+  type MatchedProduct,
+} from '@/lib/styleMatch';
+import { getAnswers, saveAnswers, type StoredQuizAnswers } from '@/lib/styleQuizStorage';
 
 interface SignupResponse {
   success?: boolean;
@@ -57,7 +68,7 @@ function SignupProductPicks() {
             <div key={p.id} className="flex flex-col">
               <Link href={`/product/${p.id}?category=fashion`} className="group">
                 <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
-                  <img src={p.image} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
+                  <ProductImage src={p.image} alt={p.name} />
                 </div>
                 <span className="font-mono text-[11px] text-stamp mb-1.5 block">
                   {String(i + 1).padStart(2, '0')}
@@ -81,6 +92,87 @@ function SignupProductPicks() {
           ))}
         </Reveal>
       )}
+    </Reveal>
+  );
+}
+
+function trackQuizEvent(type: string) {
+  fetch('/api/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type }),
+  }).catch(() => {});
+}
+
+/**
+ * Additive post-signup section: the existing credentials/"what happens next"
+ * card above this is untouched. While the quiz hasn't been answered yet, the
+ * random SignupProductPicks stays exactly as it was; once answered, matched
+ * picks supersede it so the screen doesn't carry two redundant product grids.
+ */
+function PostSignupExtras() {
+  const [answers, setAnswers] = useState<StoredQuizAnswers | null | undefined>(undefined);
+  const [matched, setMatched] = useState<MatchedProduct[]>([]);
+  const [loadingMatches, setLoadingMatches] = useState(false);
+
+  useEffect(() => {
+    setAnswers(getAnswers());
+  }, []);
+
+  useEffect(() => {
+    if (!answers) return;
+    setLoadingMatches(true);
+    Promise.all([
+      fetch('/api/products?category=fashion').then((r) => r.json()) as Promise<MatchableProduct[]>,
+      fetch('/data/brands.json').then((r) => r.json()) as Promise<Brand[]>,
+    ])
+      .then(([products, brands]) => setMatched(matchProducts(products, brands, answers)))
+      .catch(() => setMatched([]))
+      .finally(() => setLoadingMatches(false));
+  }, [answers]);
+
+  const handleComplete = (newAnswers: QuizAnswers) => {
+    const stored = saveAnswers(newAnswers);
+    setAnswers(stored);
+    fetch('/api/style-quiz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newAnswers),
+    }).catch(() => {});
+    trackQuizEvent('style-quiz-completed');
+  };
+
+  // Still checking localStorage — render nothing for a tick rather than flashing the quiz.
+  if (answers === undefined) return null;
+
+  if (!answers) {
+    return (
+      <>
+        <SignupProductPicks />
+        <Reveal as="section" className="container-edit py-12 md:py-16 border-t border-line">
+          <div className="flex items-baseline justify-between mb-10">
+            <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest max-w-xl">
+              Get picks built around you
+            </h2>
+            <span className="eyebrow hidden sm:inline">3 Questions</span>
+          </div>
+          <StyleQuiz compact onComplete={handleComplete} />
+        </Reveal>
+      </>
+    );
+  }
+
+  return (
+    <Reveal as="section" className="container-edit py-12 md:py-16 border-t border-line mt-16">
+      <div className="flex items-baseline justify-between mb-10">
+        <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest max-w-xl">
+          Your picks
+        </h2>
+        <Link href="/style-quiz" className="eyebrow hidden sm:inline link-underline">
+          Refine →
+        </Link>
+      </div>
+      <ProductMatchGrid products={matched} loading={loadingMatches} />
     </Reveal>
   );
 }
@@ -336,7 +428,7 @@ export default function SugargooSignUp() {
         </Reveal>
       </div>
 
-      {success && <SignupProductPicks />}
+      {success && <PostSignupExtras />}
     </>
   );
 }

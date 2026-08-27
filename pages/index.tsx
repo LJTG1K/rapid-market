@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import Stamp from '@/components/Stamp';
 import Stars from '@/components/Stars';
@@ -9,6 +10,7 @@ import PerforatedDivider from '@/components/PerforatedDivider';
 import SplitHeadline from '@/components/SplitHeadline';
 import { productMatchesBrand } from '@/lib/brandMatch';
 import { useAuth } from '@/contexts/AuthContext';
+import ProductImage from '@/components/ProductImage';
 
 interface BrandProduct {
   id: string;
@@ -84,7 +86,7 @@ function FeaturedBrand() {
         <div className="lg:col-span-6 order-1 lg:order-2 relative">
           <div className="aspect-[4/5] bg-paper border border-line overflow-hidden">
             {productImage ? (
-              <img src={productImage} alt={brand.brandName} className="w-full h-full object-cover" />
+              <ProductImage src={productImage} alt={brand.brandName} variant="detail" />
             ) : (
               <div className="w-full h-full placeholder-media flex items-center justify-center font-mono text-xs uppercase tracking-wide text-muted text-center px-8">
                 [ Product photograph — {brand.brandName} ]
@@ -142,18 +144,23 @@ export default function Home() {
 
         <Reveal delay={160} className="container-edit mt-10 md:mt-14 pb-6">
           <div className="relative pb-10 sm:pb-16 md:pb-20">
-            <div className="aspect-[16/10] md:aspect-[21/9] overflow-hidden border border-line bg-paper">
-              <img
-                src="/assets/hero-main.png"
+            <div className="relative aspect-[16/10] md:aspect-[21/9] overflow-hidden border border-line bg-paper">
+              <Image
+                src="/assets/hero-main.webp"
                 alt="Streetwear sourced via RAPID sellers"
-                className="w-full h-full object-cover"
+                fill
+                priority
+                sizes="(min-width: 1400px) 1240px, 100vw"
+                className="object-cover"
               />
             </div>
             <div className="absolute bottom-0 right-2 sm:right-6 md:right-14 w-[46%] sm:w-[34%] md:w-[26%] aspect-[3/4] overflow-hidden border-4 border-stone shadow-stamp bg-paper">
-              <img
-                src="/assets/hero-detail.png"
+              <Image
+                src="/assets/hero-detail.webp"
                 alt="Detail shot — RAPID seller network"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(min-width: 768px) 26vw, (min-width: 640px) 34vw, 46vw"
+                className="object-cover"
               />
             </div>
             <div

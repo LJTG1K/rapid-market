@@ -7,6 +7,7 @@ import WishlistButton from '@/components/WishlistButton';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useWishlist } from '@/contexts/WishlistContext';
+import ProductImage from '@/components/ProductImage';
 
 interface Product {
   id: string;
@@ -167,7 +168,7 @@ export default function Account() {
                   />
                   <Link href={`/product/${product.id}?category=${product.savedCategory}`} className="group">
                     <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
-                      <img src={product.image} alt={product.name} loading="lazy" className="w-full h-full object-cover" />
+                      <ProductImage src={product.image} alt={product.name} />
                     </div>
                     <h3 className="font-semibold text-sm leading-snug mb-1 line-clamp-2 group-hover:text-stamp transition-colors">
                       {product.name}

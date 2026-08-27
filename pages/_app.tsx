@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import StyleQuizBanner from '@/components/StyleQuizBanner';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { WishlistProvider } from '@/contexts/WishlistContext';
 import '@/styles/globals.css';
@@ -11,6 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <WishlistProvider>
         <div className="min-h-screen flex flex-col">
           <Header />
+          <StyleQuizBanner />
           <main className="flex-1">
             <Component {...pageProps} />
           </main>

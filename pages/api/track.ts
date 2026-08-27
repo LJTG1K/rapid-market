@@ -4,7 +4,14 @@ import path from 'path';
 
 interface TrackingEvent {
   timestamp: string;
-  type: 'product-click' | 'signup-click' | 'page-view';
+  type:
+    | 'product-click'
+    | 'signup-click'
+    | 'page-view'
+    | 'style-quiz-started'
+    | 'style-quiz-completed'
+    | 'style-quiz-banner-dismissed'
+    | 'style-quiz-pick-click';
   productId?: string;
   productName?: string;
   url?: string;

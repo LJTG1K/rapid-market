@@ -261,7 +261,10 @@ export default async function handler(
       const product: Product = {
         id: productId.toString(),
         name: name.trim(),
-        image: image.startsWith('http') ? image : 'https://via.placeholder.com/400x400?text=Product',
+        // Empty rather than a third-party placeholder URL: ProductImage renders
+        // the local hatch placeholder for a falsy src, so a missing sheet image
+        // costs no request to an outside service.
+        image: image.startsWith('http') ? image : '',
         description: description && description !== 'DESCRIPTION' && description !== ''
           ? description.trim()
           : fallbackDescription(productCategory),

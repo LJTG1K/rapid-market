@@ -35,7 +35,14 @@ const ORDER_STEPS = [
 const FAQS = [
   {
     q: 'How long does shipping take?',
-    a: 'Shipping from individual sellers to Sugargoo typically takes 5–15 days. International shipping from the warehouse then takes a further 7–21 days depending on your location.',
+    a: (
+      <>
+        Shipping from individual sellers to Sugargoo typically takes 5–15 days. International shipping from the
+        warehouse then takes a further 7–21 days depending on your location — use our{' '}
+        <Link href="/tools/shipping" className="link-underline">shipping calculator</Link> to compare exact line
+        options and delivery times for your country.
+      </>
+    ),
   },
   {
     q: "What if I'm not happy with the QC photos?",

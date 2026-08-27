@@ -31,6 +31,16 @@ function generateSiteMap(products: any[], brands: any[]) {
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
+  <url>
+    <loc>${BASE_URL}/tools</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>${BASE_URL}/tools/shipping</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
   <!-- Product Pages -->
   ${products
     .map(({ slug }: { slug: string }) => {

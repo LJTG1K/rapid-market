@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
+import ProductImage from '@/components/ProductImage';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import LoadingMessage, { MANIFEST_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
@@ -160,7 +161,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
                     <WishlistButton productId={product.id} category="fashion" className="absolute top-2 right-2 z-10" />
                     <Link href={`/product/${product.id}`} className="group">
                       <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
-                        <img src={product.image} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
+                        <ProductImage src={product.image} alt={product.name} />
                       </div>
                       <h3 className="font-semibold text-sm leading-snug mb-1 line-clamp-2 group-hover:text-stamp transition-colors">
                         {product.name}

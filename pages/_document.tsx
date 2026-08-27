@@ -13,6 +13,12 @@ export default function Document() {
         <meta name="theme-color" content="#E7E1D1" />
         <meta name="description" content="RAPID - Access 100+ sellers, with new items indexed daily, through Sugargoo" />
 
+        {/* Every product photograph is client-fetched from the sellers' CDN
+            after /api/products resolves, so the DNS+TCP+TLS handshake would
+            otherwise be discovered late. Front-load it during HTML parse. */}
+        <link rel="preconnect" href="https://img.alicdn.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://img.alicdn.com" />
+
         {/* Preload fonts */}
         <link
           href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..900&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap"

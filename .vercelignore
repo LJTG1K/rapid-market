@@ -1,0 +1,4 @@
+# Full-resolution photograph masters. Kept in the repo so the WebPs under
+# public/assets can be regenerated at different sizes (npm run optimize:images),
+# but never needed by the build or the deployment.
+design-assets

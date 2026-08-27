@@ -15,6 +15,7 @@ const PRIMARY = [
 const MORE = [
   { href: '/gillys-picks', label: "Gilly's Picks" },
   { href: '/tutorial', label: 'Tutorial' },
+  { href: '/tools', label: 'Tools' },
   { href: '/blog', label: 'Journal' },
 ];
 

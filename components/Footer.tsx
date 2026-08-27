@@ -53,6 +53,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li><Link href="/signup" className="hover:text-stamp transition-colors">Create Account</Link></li>
               <li><Link href="/tutorial" className="hover:text-stamp transition-colors">Ordering Guide</Link></li>
+              <li><Link href="/tools/shipping" className="hover:text-stamp transition-colors">Shipping Calculator</Link></li>
               <li><Link href="/blog" className="hover:text-stamp transition-colors">Journal</Link></li>
               <li><Link href="/campaign" className="hover:text-stamp transition-colors">Campaign</Link></li>
               <li><Link href="/privacy" className="hover:text-stamp transition-colors">Privacy Policy</Link></li>

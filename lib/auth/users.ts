@@ -25,6 +25,12 @@ export interface WishlistRow {
   category: string;
 }
 
+export interface StyleQuizRow {
+  styles: string[];
+  budget: string;
+  fit: string;
+}
+
 export function toPublicUser(u: DbUser): PublicUser {
   return { id: u.id, email: u.email, name: u.name };
 }
@@ -117,6 +123,34 @@ export async function removeWishlistItem(
     .eq('user_id', userId)
     .eq('product_id', productId)
     .eq('category', category);
+
+  if (error) throw error;
+}
+
+export async function getStyleQuizResponse(userId: string): Promise<StyleQuizRow | null> {
+  const { data, error } = await getSupabase()
+    .from('style_quiz_responses')
+    .select('styles, budget, fit')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return (data as StyleQuizRow) ?? null;
+}
+
+export async function saveStyleQuizResponse(userId: string, response: StyleQuizRow): Promise<void> {
+  const { error } = await getSupabase()
+    .from('style_quiz_responses')
+    .upsert(
+      {
+        user_id: userId,
+        styles: response.styles,
+        budget: response.budget,
+        fit: response.fit,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id' }
+    );
 
   if (error) throw error;
 }
