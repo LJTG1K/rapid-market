@@ -180,16 +180,16 @@ export default function SugargooSignUp() {
       <div className="container-edit py-16 md:py-24">
         {success ? (
           <Reveal className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-14 items-start">
-              <div className="max-w-md mx-auto lg:mx-0 w-full">
-                <span className="eyebrow block text-center lg:text-left mb-3">Step 01 — Create Account</span>
-                <h1 className="font-display font-black text-ink text-5xl md:text-6xl tracking-tightest text-center lg:text-left leading-[0.9] mb-4">
-                  Join RAPID
-                </h1>
-                <p className="text-ink/70 text-center lg:text-left mb-12">
-                  Instant Sugargoo account creation. No email verification needed.
-                </p>
+            <span className="eyebrow block text-center mb-3">Step 02 — Choose Your Style</span>
+            <h1 className="font-display font-black text-ink text-5xl md:text-6xl tracking-tightest text-center leading-[0.9] mb-4">
+              You&apos;re now signed up!
+            </h1>
+            <p className="text-ink/70 text-center mb-12 max-w-xl mx-auto">
+              Fill out this quick quiz to find the pieces on RAPID most suited to you.
+            </p>
 
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-14 items-start">
+              <div className="w-full">
                 <div className="card p-8 text-center">
               <Stamp
                 size={56}

@@ -80,14 +80,13 @@ export default function StyleQuiz({ onComplete, compact = false }: StyleQuizProp
         ))}
       </div>
 
-      <span className="eyebrow block text-center mb-2">Step {String(step + 1).padStart(2, '0')} of 03</span>
       <h2 className="font-display font-black text-ink text-3xl md:text-4xl tracking-tightest text-center leading-[0.95] mb-2">
         {STEP_TITLES[step]}
       </h2>
       <p className="text-ink/60 text-sm text-center mb-8">{STEP_SUB[step]}</p>
 
       {step === 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+        <div className="flex flex-col gap-3 mb-8">
           {STYLE_OPTIONS.map((opt) => (
             <Tile key={opt.key} active={styles.includes(opt.key)} label={opt.label} onClick={() => toggleStyle(opt.key)} />
           ))}
@@ -97,7 +96,7 @@ export default function StyleQuiz({ onComplete, compact = false }: StyleQuizProp
       {step === 1 && (
         <div className="flex flex-col gap-3 mb-8">
           {BUDGET_OPTIONS.map((opt) => (
-            <Tile key={opt.key} active={budget === opt.key} label={opt.label} sub={opt.sub} onClick={() => setBudget(opt.key)} />
+            <Tile key={opt.key} active={budget === opt.key} label={opt.label} onClick={() => setBudget(opt.key)} />
           ))}
         </div>
       )}

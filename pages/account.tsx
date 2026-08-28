@@ -137,10 +137,6 @@ export default function Account() {
         </Reveal>
 
         <Reveal as="section" className="border-t border-line pt-10 mb-16">
-          <StyleQuizSection />
-        </Reveal>
-
-        <Reveal as="section" className="border-t border-line pt-10">
           <div className="flex items-baseline justify-between mb-10">
             <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest">
               Your wishlist
@@ -194,6 +190,10 @@ export default function Account() {
               ))}
             </div>
           )}
+        </Reveal>
+
+        <Reveal as="section" className="border-t border-line pt-10">
+          <StyleQuizSection />
         </Reveal>
       </div>
     </>

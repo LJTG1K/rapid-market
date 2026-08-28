@@ -50,10 +50,10 @@ export const STYLE_OPTIONS: { key: StyleKey; label: string }[] = [
   { key: 'avantgarde', label: 'Runway / Avant Garde' },
 ];
 
-export const BUDGET_OPTIONS: { key: BudgetKey; label: string; sub?: string }[] = [
+export const BUDGET_OPTIONS: { key: BudgetKey; label: string }[] = [
   { key: 'staples', label: 'Budget Staples' },
   { key: 'statement', label: 'Statement Pieces' },
-  { key: 'blowMeAway', label: 'Blow Me Away', sub: 'Any price is fine' },
+  { key: 'blowMeAway', label: 'Any Price is Fine' },
 ];
 
 export const FIT_OPTIONS: { key: FitKey; label: string }[] = [
