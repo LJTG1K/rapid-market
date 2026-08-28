@@ -192,9 +192,9 @@ export default async function handler(
       }
     }
 
-    // Fetch data from the sheet. Columns G ("Store Description") is unused by
-    // this app; H ("Style Tags") and I ("Fit") are the manual quiz-tag columns.
-    const range = encodeURIComponent(`${sheetName}!A:I`);
+    // Fetch data from the sheet. G ("Style Tags") and H ("Fit") are the manual
+    // quiz-tag columns.
+    const range = encodeURIComponent(`${sheetName}!A:H`);
     const dataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
 
     const dataResponse = await fetch(dataUrl);
@@ -266,8 +266,8 @@ export default async function handler(
 
       const productCategory = categoryFunc(name, description || '');
 
-      const styleTagsRaw = (row[7] || '').toString().trim();
-      const fitRaw = (row[8] || '').toString().trim();
+      const styleTagsRaw = (row[6] || '').toString().trim();
+      const fitRaw = (row[7] || '').toString().trim();
       const styleTagsParsed = normalizeStyleTagsInput(styleTagsRaw);
       const fitParsed = normalizeFitInput(fitRaw);
 
