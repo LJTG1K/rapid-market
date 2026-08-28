@@ -6,16 +6,7 @@ import Stamp from '@/components/Stamp';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import ProductImage from '@/components/ProductImage';
-import StyleQuiz from '@/components/StyleQuiz';
-import ProductMatchGrid from '@/components/ProductMatchGrid';
-import {
-  matchProducts,
-  type QuizAnswers,
-  type Product as MatchableProduct,
-  type Brand,
-  type MatchedProduct,
-} from '@/lib/styleMatch';
-import { getAnswers, saveAnswers, type StoredQuizAnswers } from '@/lib/styleQuizStorage';
+import StyleQuizSection from '@/components/StyleQuizSection';
 
 interface SignupResponse {
   success?: boolean;
@@ -96,87 +87,6 @@ function SignupProductPicks() {
   );
 }
 
-function trackQuizEvent(type: string) {
-  fetch('/api/track', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type }),
-  }).catch(() => {});
-}
-
-/**
- * Additive post-signup section: the existing credentials/"what happens next"
- * card above this is untouched. While the quiz hasn't been answered yet, the
- * random SignupProductPicks stays exactly as it was; once answered, matched
- * picks supersede it so the screen doesn't carry two redundant product grids.
- */
-function PostSignupExtras() {
-  const [answers, setAnswers] = useState<StoredQuizAnswers | null | undefined>(undefined);
-  const [matched, setMatched] = useState<MatchedProduct[]>([]);
-  const [loadingMatches, setLoadingMatches] = useState(false);
-
-  useEffect(() => {
-    setAnswers(getAnswers());
-  }, []);
-
-  useEffect(() => {
-    if (!answers) return;
-    setLoadingMatches(true);
-    Promise.all([
-      fetch('/api/products?category=fashion').then((r) => r.json()) as Promise<MatchableProduct[]>,
-      fetch('/data/brands.json').then((r) => r.json()) as Promise<Brand[]>,
-    ])
-      .then(([products, brands]) => setMatched(matchProducts(products, brands, answers)))
-      .catch(() => setMatched([]))
-      .finally(() => setLoadingMatches(false));
-  }, [answers]);
-
-  const handleComplete = (newAnswers: QuizAnswers) => {
-    const stored = saveAnswers(newAnswers);
-    setAnswers(stored);
-    fetch('/api/style-quiz', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newAnswers),
-    }).catch(() => {});
-    trackQuizEvent('style-quiz-completed');
-  };
-
-  // Still checking localStorage — render nothing for a tick rather than flashing the quiz.
-  if (answers === undefined) return null;
-
-  if (!answers) {
-    return (
-      <>
-        <SignupProductPicks />
-        <Reveal as="section" className="container-edit py-12 md:py-16 border-t border-line">
-          <div className="flex items-baseline justify-between mb-10">
-            <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest max-w-xl">
-              Get picks built around you
-            </h2>
-            <span className="eyebrow hidden sm:inline">3 Questions</span>
-          </div>
-          <StyleQuiz compact onComplete={handleComplete} />
-        </Reveal>
-      </>
-    );
-  }
-
-  return (
-    <Reveal as="section" className="container-edit py-12 md:py-16 border-t border-line mt-16">
-      <div className="flex items-baseline justify-between mb-10">
-        <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest max-w-xl">
-          Your picks
-        </h2>
-        <Link href="/style-quiz" className="eyebrow hidden sm:inline link-underline">
-          Refine →
-        </Link>
-      </div>
-      <ProductMatchGrid products={matched} loading={loadingMatches} />
-    </Reveal>
-  );
-}
-
 export default function SugargooSignUp() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -186,6 +96,7 @@ export default function SugargooSignUp() {
   const [generatedPassword, setGeneratedPassword] = useState('');
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [copied, setCopied] = useState(false);
+  const [hasQuizAnswers, setHasQuizAnswers] = useState(false);
   const { refresh } = useAuth();
 
   const handleCopyPassword = async () => {
@@ -267,17 +178,19 @@ export default function SugargooSignUp() {
       </Head>
 
       <div className="container-edit py-16 md:py-24">
-        <Reveal className="max-w-md mx-auto">
-          <span className="eyebrow block text-center mb-3">Step 01 — Create Account</span>
-          <h1 className="font-display font-black text-ink text-5xl md:text-6xl tracking-tightest text-center leading-[0.9] mb-4">
-            Join RAPID
-          </h1>
-          <p className="text-ink/70 text-center mb-12">
-            Instant Sugargoo account creation. No email verification needed.
-          </p>
+        {success ? (
+          <Reveal className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-14 items-start">
+              <div className="max-w-md mx-auto lg:mx-0 w-full">
+                <span className="eyebrow block text-center lg:text-left mb-3">Step 01 — Create Account</span>
+                <h1 className="font-display font-black text-ink text-5xl md:text-6xl tracking-tightest text-center lg:text-left leading-[0.9] mb-4">
+                  Join RAPID
+                </h1>
+                <p className="text-ink/70 text-center lg:text-left mb-12">
+                  Instant Sugargoo account creation. No email verification needed.
+                </p>
 
-          {success ? (
-            <div className="card p-8 text-center">
+                <div className="card p-8 text-center">
               <Stamp
                 size={56}
                 spin={false}
@@ -354,81 +267,99 @@ export default function SugargooSignUp() {
               >
                 Create another account
               </button>
-            </div>
-          ) : (
-            <>
-              {error && (
-                <div className="mb-6 p-4 border-l-2 border-stamp bg-paper">
-                  <p className="text-ink text-sm">{error}</p>
                 </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-5 mb-10">
-                <div>
-                  <label htmlFor="email" className="eyebrow block mb-2">Email address *</label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="w-full px-4 py-3 bg-paper border border-line focus:outline-none focus:border-ink text-sm"
-                    required
-                    disabled={loading}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="name" className="eyebrow block mb-2">Username</label>
-                  <input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="john_doe"
-                    className="w-full px-4 py-3 bg-paper border border-line focus:outline-none focus:border-ink text-sm"
-                    disabled={loading}
-                  />
-                </div>
-
-                <p className="font-mono text-xs text-muted">
-                  Your password is auto-generated and shown after signup.
-                </p>
-
-                <button type="submit" disabled={loading} className="btn-stamp w-full disabled:opacity-50">
-                  {loading ? 'Creating account…' : 'Create account'}
-                </button>
-              </form>
-
-              <div className="border-t border-line pt-8">
-                <p className="eyebrow mb-4">What happens next</p>
-                <ul className="space-y-3 text-sm text-ink/75">
-                  <li className="flex gap-3">
-                    <span className="font-mono text-stamp shrink-0">01</span>
-                    <span>Your Sugargoo account is created instantly — no email verification.</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-mono text-stamp shrink-0">02</span>
-                    <span>Your password is generated and shown on this screen right away.</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-mono text-stamp shrink-0">03</span>
-                    <span>Sign in at Sugargoo and start shopping the RAPID index immediately.</span>
-                  </li>
-                </ul>
               </div>
-            </>
-          )}
 
-          <div className="text-center mt-12">
-            <Link href="/" className="link-underline font-mono text-xs uppercase tracking-wide">
-              ← Back home
-            </Link>
-          </div>
-        </Reveal>
+              <StyleQuizSection className="card p-8" onAnswersChange={setHasQuizAnswers} />
+            </div>
+
+            <div className="text-center mt-12">
+              <Link href="/" className="link-underline font-mono text-xs uppercase tracking-wide">
+                ← Back home
+              </Link>
+            </div>
+          </Reveal>
+        ) : (
+          <Reveal className="max-w-md mx-auto">
+            <span className="eyebrow block text-center mb-3">Step 01 — Create Account</span>
+            <h1 className="font-display font-black text-ink text-5xl md:text-6xl tracking-tightest text-center leading-[0.9] mb-4">
+              Join RAPID
+            </h1>
+            <p className="text-ink/70 text-center mb-12">
+              Instant Sugargoo account creation. No email verification needed.
+            </p>
+
+            {error && (
+              <div className="mb-6 p-4 border-l-2 border-stamp bg-paper">
+                <p className="text-ink text-sm">{error}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5 mb-10">
+              <div>
+                <label htmlFor="email" className="eyebrow block mb-2">Email address *</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full px-4 py-3 bg-paper border border-line focus:outline-none focus:border-ink text-sm"
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="name" className="eyebrow block mb-2">Username</label>
+                <input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="john_doe"
+                  className="w-full px-4 py-3 bg-paper border border-line focus:outline-none focus:border-ink text-sm"
+                  disabled={loading}
+                />
+              </div>
+
+              <p className="font-mono text-xs text-muted">
+                Your password is auto-generated and shown after signup.
+              </p>
+
+              <button type="submit" disabled={loading} className="btn-stamp w-full disabled:opacity-50">
+                {loading ? 'Creating account…' : 'Create account'}
+              </button>
+            </form>
+
+            <div className="border-t border-line pt-8">
+              <p className="eyebrow mb-4">What happens next</p>
+              <ul className="space-y-3 text-sm text-ink/75">
+                <li className="flex gap-3">
+                  <span className="font-mono text-stamp shrink-0">01</span>
+                  <span>Your Sugargoo account is created instantly — no email verification.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-mono text-stamp shrink-0">02</span>
+                  <span>Your password is generated and shown on this screen right away.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-mono text-stamp shrink-0">03</span>
+                  <span>Sign in at Sugargoo and start shopping the RAPID index immediately.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="text-center mt-12">
+              <Link href="/" className="link-underline font-mono text-xs uppercase tracking-wide">
+                ← Back home
+              </Link>
+            </div>
+          </Reveal>
+        )}
       </div>
 
-      {success && <PostSignupExtras />}
+      {success && !hasQuizAnswers && <SignupProductPicks />}
     </>
   );
 }

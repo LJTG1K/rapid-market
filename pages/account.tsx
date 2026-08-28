@@ -8,6 +8,7 @@ import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import ProductImage from '@/components/ProductImage';
+import StyleQuizSection from '@/components/StyleQuizSection';
 
 interface Product {
   id: string;
@@ -133,6 +134,10 @@ export default function Account() {
               Log out
             </button>
           </div>
+        </Reveal>
+
+        <Reveal as="section" className="border-t border-line pt-10 mb-16">
+          <StyleQuizSection />
         </Reveal>
 
         <Reveal as="section" className="border-t border-line pt-10">
