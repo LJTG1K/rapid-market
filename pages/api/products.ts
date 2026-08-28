@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { normalizeStyleTagsInput, normalizeFitInput, type StyleKey, type FitKey } from '../../lib/styleMatch';
 
 interface Product {
   id: string;
@@ -9,6 +10,12 @@ interface Product {
   sugargooLink: string;
   category: string;
   verified?: boolean;
+  // From the Sheet's manual STYLE TAGS / FIT columns (H/I) — optional because
+  // most rows aren't tagged yet. See lib/styleMatch.ts for how these override
+  // the brand/keyword heuristic once present.
+  manualStyleTags?: StyleKey[];
+  manualFit?: FitKey | null;
+  excludeFromQuiz?: boolean;
 }
 
 const fashionCategoryMap: { [key: string]: string } = {
@@ -185,8 +192,9 @@ export default async function handler(
       }
     }
 
-    // Fetch data from the sheet
-    const range = encodeURIComponent(`${sheetName}!A:F`);
+    // Fetch data from the sheet. Columns G ("Store Description") is unused by
+    // this app; H ("Style Tags") and I ("Fit") are the manual quiz-tag columns.
+    const range = encodeURIComponent(`${sheetName}!A:I`);
     const dataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
 
     const dataResponse = await fetch(dataUrl);
@@ -258,6 +266,11 @@ export default async function handler(
 
       const productCategory = categoryFunc(name, description || '');
 
+      const styleTagsRaw = (row[7] || '').toString().trim();
+      const fitRaw = (row[8] || '').toString().trim();
+      const styleTagsParsed = normalizeStyleTagsInput(styleTagsRaw);
+      const fitParsed = normalizeFitInput(fitRaw);
+
       const product: Product = {
         id: productId.toString(),
         name: name.trim(),
@@ -272,6 +285,9 @@ export default async function handler(
         sugargooLink: link.trim(),
         category: productCategory,
         verified: true,
+        manualStyleTags: styleTagsParsed.tags,
+        manualFit: fitParsed.fit,
+        excludeFromQuiz: styleTagsParsed.exclude || fitParsed.exclude,
       };
 
       products.push(product);
