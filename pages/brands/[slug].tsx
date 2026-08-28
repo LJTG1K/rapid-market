@@ -74,6 +74,18 @@ export default function BrandPage({ brand }: { brand: Brand }) {
     }
   }, [products, brand]);
 
+  // Feeds the "clicked brand, never clicked through to Sugargoo" behavioral
+  // nudge — see lib/db/behaviorEvents.ts. Fires once per page load, only
+  // meaningful once `brand` is resolved.
+  useEffect(() => {
+    if (!brand) return;
+    fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'brand-view', brand: brand.brandName }),
+    }).catch((error) => console.error('Error tracking brand view:', error));
+  }, [brand]);
+
   const trackClick = async (productId: string, productName: string) => {
     try {
       await fetch('/api/track', {

@@ -36,6 +36,16 @@ Next.js 14 (**pages router**, not app router), TypeScript, Tailwind CSS, hosted 
 - **Meta Pixel / Conversions API** — ad tracking on key funnel events.
 - **Local analytics log** (SQLite) — lightweight signup-event logging, plus an admin dashboard to view it.
 
+## Behavioral email automations
+
+Three MailerLite automations react to on-site behavior, all triggered by "subscriber joins group" on a dedicated group (same pattern as the existing Post-Signup Onboard Flow):
+
+- **Brand Nudge** — a logged-in user views a brand page but never clicks through to Sugargoo within 24h. Tracked via `behavior_events` (Supabase, `lib/db/behaviorEvents.ts`), evaluated hourly by `pages/api/cron/brand-nudge.ts`. Throttled to **at most one nudge per user per calendar week** (`lib/periodKey.ts`'s `isoWeekKey`) — a user who left several brands stale gets one email for the oldest/most-overdue brand, not one per brand.
+- **Wishlist Digest** — digest of similar items (`lib/wishlistDigest.ts`, aesthetic-tag overlap against wishlisted brands), evaluated by `pages/api/cron/wishlist-digest.ts`. Throttled to **once per user per fortnight** (`isoBiweekKey`) via `automation_triggers` — the cron itself still runs weekly (see `vercel.json`), the fortnightly cadence lives entirely in the dedupe key since "every 2 weeks" isn't cleanly expressible in cron schedule syntax.
+- **Post-Signup Friction Remover** — content is drafted in MailerLite (automation "Post-Signup Friction Remover") but sits on a standalone holding group, **not yet wired to real signups**. MailerLite's API has no way to insert a `workflow_activity` condition step into an existing automation, so gating this on "didn't open the welcome email in 24h" requires a manual edit in the MailerLite visual editor: open "Post-Signup Onboard Flow", after the welcome email add a 24h delay → condition (welcome email opened?) → No branch → paste this automation's email content in. Once wired, the standalone automation/group can be deleted.
+
+Both cron routes require `Authorization: Bearer $CRON_SECRET` (Vercel's cron convention — see `vercel.json`'s `crons` and `lib/cronAuth.ts`) and target `MAILERLITE_BRAND_NUDGE_GROUP_ID` / `MAILERLITE_WISHLIST_DIGEST_GROUP_ID`. Both stage merge-field data via `upsertSubscriberFields` before calling `addSubscriberToGroup` (which fires the automation), then record `automation_triggers` so reruns are idempotent.
+
 ## Important notes for future agents
 
 - **Vercel serverless functions freeze right after the HTTP response is sent.** Any "fire and forget" background work that does real async I/O (a `fetch` call fired via `setImmediate` and not awaited) can silently never complete — this has caused real, hard-to-diagnose bugs here. If an API route needs to call an external service, `await` it directly with a bounded timeout rather than deferring it.

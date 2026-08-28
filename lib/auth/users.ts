@@ -86,6 +86,13 @@ export async function createUser(params: {
   return data as DbUser;
 }
 
+/** Distinct user IDs with at least one saved item — the candidate pool for the wishlist-digest cron. */
+export async function getUsersWithWishlistItems(): Promise<string[]> {
+  const { data, error } = await getSupabase().from('wishlist_items').select('user_id');
+  if (error) throw error;
+  return Array.from(new Set((data as { user_id: string }[]).map((r) => r.user_id)));
+}
+
 export async function getWishlist(userId: string): Promise<WishlistRow[]> {
   const { data, error } = await getSupabase()
     .from('wishlist_items')

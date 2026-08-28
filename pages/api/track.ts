@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
+import { getUserIdFromRequest } from '../../lib/auth/session';
+import { logBrandView, logSugargooClick } from '../../lib/db/behaviorEvents';
+import { productMatchesBrand } from '../../lib/brandMatch';
+import { loadBrands } from '../../lib/brandsData';
 
 interface TrackingEvent {
   timestamp: string;
@@ -8,6 +12,7 @@ interface TrackingEvent {
     | 'product-click'
     | 'signup-click'
     | 'page-view'
+    | 'brand-view'
     | 'style-quiz-started'
     | 'style-quiz-completed'
     | 'style-quiz-banner-dismissed'
@@ -19,6 +24,48 @@ interface TrackingEvent {
   ip?: string;
 }
 
+/** Resolves a brand slug from an explicit brand name (exact) or a product name (heuristic). */
+function resolveBrandSlug(brandName?: string, productName?: string): string | null {
+  const brands = loadBrands();
+  if (brandName) {
+    const exact = brands.find((b) => b.brandName.toLowerCase() === brandName.toLowerCase());
+    if (exact) return exact.slug;
+  }
+  if (productName) {
+    const match = brands.find((b) => productMatchesBrand(productName, b.brandName));
+    if (match) return match.slug;
+  }
+  return null;
+}
+
+/**
+ * Mirrors qualifying events into durable, user-scoped Supabase storage for the
+ * behavioral email automations (brand nudge). Best-effort and silent for
+ * anonymous visitors — email automations need a known recipient, and this
+ * must never affect the response to the (much higher-volume) anonymous
+ * click-logging this endpoint otherwise handles.
+ */
+async function mirrorBehaviorEvent(
+  req: NextApiRequest,
+  type: string,
+  body: { brand?: string; productName?: string; productId?: string }
+): Promise<void> {
+  const userId = getUserIdFromRequest(req);
+  if (!userId) return;
+
+  try {
+    if (type === 'brand-view') {
+      const slug = resolveBrandSlug(body.brand, body.productName);
+      if (slug) await logBrandView(userId, slug);
+    } else if (type === 'product-click') {
+      const slug = resolveBrandSlug(body.brand, body.productName);
+      await logSugargooClick(userId, { brandSlug: slug, productId: body.productId ?? null });
+    }
+  } catch (error) {
+    console.error('⚠️ Behavior event mirror failed (non-blocking):', error instanceof Error ? error.message : error);
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -28,7 +75,7 @@ export default async function handler(
   }
 
   try {
-    const { productId, productName, type, url } = req.body;
+    const { productId, productName, type, url, brand } = req.body;
 
     // Create tracking event
     const ip = Array.isArray(req.headers['x-forwarded-for'])
@@ -65,6 +112,12 @@ export default async function handler(
       // TODO: Implement production analytics
       // await sendToAnalyticsService(event);
     }
+
+    // Awaited directly (not setImmediate) — Vercel freezes the function's
+    // execution context as soon as the response is sent, so deferred async
+    // work here would silently never complete. See lib/mailerlite.ts for the
+    // same reasoning applied to the signup flow.
+    await mirrorBehaviorEvent(req, event.type, { brand, productName, productId });
 
     res.status(200).json({ success: true });
   } catch (error) {
