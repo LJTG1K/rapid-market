@@ -8,7 +8,6 @@
 import type { QuizAnswers } from './styleMatch';
 
 const ANSWERS_KEY = 'rapid_style_quiz_v1';
-const DISMISSED_KEY = 'rapid_style_quiz_banner_dismissed';
 
 export interface StoredQuizAnswers extends QuizAnswers {
   completedAt: string;
@@ -48,24 +47,6 @@ export function clearAnswers(): void {
   if (!isBrowser()) return;
   try {
     window.localStorage.removeItem(ANSWERS_KEY);
-  } catch {
-    // Ignore.
-  }
-}
-
-export function isDismissed(): boolean {
-  if (!isBrowser()) return false;
-  try {
-    return window.localStorage.getItem(DISMISSED_KEY) === '1';
-  } catch {
-    return false;
-  }
-}
-
-export function dismissBanner(): void {
-  if (!isBrowser()) return;
-  try {
-    window.localStorage.setItem(DISMISSED_KEY, '1');
   } catch {
     // Ignore.
   }

@@ -1,25 +1,21 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { getAnswers, isDismissed, dismissBanner } from '@/lib/styleQuizStorage';
+import { useState } from 'react';
 
-// Routes where the quiz is already front-and-center (or nav itself is stripped) —
-// the banner would just be noise here.
-const HIDDEN_ON = ['/style-quiz', '/signup', '/campaign'];
+// Constant/sitewide by design — shown on every route, including /signup and
+// /campaign, except the quiz's own page (redundant there). Not gated on
+// localStorage (dismissed/already-answered) so it never silently disappears;
+// dismissing only hides it for the current page view, not future ones.
+const HIDDEN_ON = ['/style-quiz'];
 
 export default function StyleQuizBanner() {
   const router = useRouter();
-  const [visible, setVisible] = useState(false);
+  const [dismissedThisView, setDismissedThisView] = useState(false);
 
-  useEffect(() => {
-    setVisible(!getAnswers() && !isDismissed());
-  }, []);
-
-  if (!visible || HIDDEN_ON.includes(router.pathname)) return null;
+  if (dismissedThisView || HIDDEN_ON.includes(router.pathname)) return null;
 
   const handleDismiss = () => {
-    dismissBanner();
-    setVisible(false);
+    setDismissedThisView(true);
     fetch('/api/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
