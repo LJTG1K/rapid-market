@@ -8,6 +8,7 @@ import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import { productMatchesBrand } from '@/lib/brandMatch';
 import ProductImage from '@/components/ProductImage';
+import { STYLE_OPTIONS, type StyleKey } from '@/lib/styleMatch';
 
 interface Product {
   id: string;
@@ -18,6 +19,7 @@ interface Product {
   sugargooLink: string;
   category: string;
   verified?: boolean;
+  manualStyleTags?: StyleKey[];
 }
 
 interface Brand {
@@ -56,6 +58,7 @@ export default function FashionListings() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedStyle, setSelectedStyle] = useState<StyleKey | 'All'>('All');
   const [selectedBrand, setSelectedBrand] = useState('All');
   const [selectedSort, setSelectedSort] = useState('Newest');
   const [searchTerm, setSearchTerm] = useState('');
@@ -99,6 +102,9 @@ export default function FashionListings() {
     if (selectedCategory !== 'All') {
       filtered = filtered.filter((p) => p.category === selectedCategory);
     }
+    if (selectedStyle !== 'All') {
+      filtered = filtered.filter((p) => p.manualStyleTags?.includes(selectedStyle));
+    }
     if (selectedBrand !== 'All') {
       filtered = filtered.filter((p) => productMatchesBrand(p.name, selectedBrand));
     }
@@ -123,7 +129,7 @@ export default function FashionListings() {
     }
 
     setFilteredProducts(filtered);
-  }, [products, selectedCategory, selectedBrand, selectedSort, searchTerm]);
+  }, [products, selectedCategory, selectedStyle, selectedBrand, selectedSort, searchTerm]);
 
   return (
     <>
@@ -185,6 +191,47 @@ export default function FashionListings() {
                 className="w-full px-3 py-2.5 bg-paper border border-line text-sm"
               >
                 {FASHION_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+
+            <div className="mb-8 hidden lg:block">
+              <h3 className="eyebrow mb-3">Style</h3>
+              <ul>
+                <li>
+                  <button
+                    onClick={() => setSelectedStyle('All')}
+                    className={`block w-full text-left py-1.5 text-sm transition-colors ${
+                      selectedStyle === 'All' ? 'text-stamp font-semibold' : 'text-ink/70 hover:text-ink'
+                    }`}
+                  >
+                    All
+                  </button>
+                </li>
+                {STYLE_OPTIONS.map((style) => (
+                  <li key={style.key}>
+                    <button
+                      onClick={() => setSelectedStyle(style.key)}
+                      className={`block w-full text-left py-1.5 text-sm transition-colors ${
+                        selectedStyle === style.key ? 'text-stamp font-semibold' : 'text-ink/70 hover:text-ink'
+                      }`}
+                    >
+                      {style.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mb-8 lg:hidden">
+              <label htmlFor="style" className="eyebrow block mb-2">Style</label>
+              <select
+                id="style"
+                value={selectedStyle}
+                onChange={(e) => setSelectedStyle(e.target.value as StyleKey | 'All')}
+                className="w-full px-3 py-2.5 bg-paper border border-line text-sm"
+              >
+                <option value="All">All</option>
+                {STYLE_OPTIONS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
               </select>
             </div>
 
