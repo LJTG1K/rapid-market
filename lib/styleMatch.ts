@@ -50,10 +50,10 @@ export interface MatchedProduct extends Product {
 }
 
 export const STYLE_OPTIONS: { key: StyleKey; label: string }[] = [
-  { key: 'minimal', label: 'Minimal / Clean' },
-  { key: 'streetwear', label: 'Heavy Streetwear / Distressed' },
-  { key: 'techwear', label: 'Functional / Techwear' },
-  { key: 'avantgarde', label: 'Runway / Avant Garde' },
+  { key: 'minimal', label: 'Minimal' },
+  { key: 'streetwear', label: 'Streetwear' },
+  { key: 'techwear', label: 'Techwear' },
+  { key: 'avantgarde', label: 'Runway' },
 ];
 
 export const BUDGET_OPTIONS: { key: BudgetKey; label: string }[] = [

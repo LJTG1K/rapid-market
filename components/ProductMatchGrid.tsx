@@ -5,7 +5,7 @@ import WishlistButton from './WishlistButton';
 import { ProductGridSkeleton } from './ProductCardSkeleton';
 import { STYLE_OPTIONS, type MatchedProduct } from '@/lib/styleMatch';
 
-const STYLE_LABELS = Object.fromEntries(STYLE_OPTIONS.map((o) => [o.key, o.label.split(' / ')[0]]));
+const STYLE_LABELS = Object.fromEntries(STYLE_OPTIONS.map((o) => [o.key, o.label]));
 
 function trackPickClick(productId: string) {
   fetch('/api/track', {
