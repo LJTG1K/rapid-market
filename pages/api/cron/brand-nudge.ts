@@ -17,6 +17,7 @@ import { upsertSubscriberFields, addSubscriberToGroup } from '../../../lib/maile
 import { loadBrands } from '../../../lib/brandsData';
 import { productMatchesBrand } from '../../../lib/brandMatch';
 import { isoWeekKey } from '../../../lib/periodKey';
+import { getSiteBaseUrl } from '../../../lib/siteUrl';
 
 interface Product {
   name: string;
@@ -25,8 +26,7 @@ interface Product {
 
 /** Brand pages (pages/brands/[slug].tsx) only ever show the fashion catalog — mirrored here. */
 async function fetchFashionProducts(req: NextApiRequest): Promise<Product[]> {
-  const protocol = req.headers.host?.includes('localhost') ? 'http' : 'https';
-  const response = await fetch(`${protocol}://${req.headers.host}/api/products?category=fashion`);
+  const response = await fetch(`${getSiteBaseUrl(req)}/api/products?category=fashion`);
   if (!response.ok) return [];
   return response.json();
 }

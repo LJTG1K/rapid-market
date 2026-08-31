@@ -16,10 +16,10 @@ import { upsertSubscriberFields, addSubscriberToGroup } from '../../../lib/maile
 import { loadBrands } from '../../../lib/brandsData';
 import { pickSimilarProducts, type DigestProduct } from '../../../lib/wishlistDigest';
 import { isoBiweekKey } from '../../../lib/periodKey';
+import { getSiteBaseUrl } from '../../../lib/siteUrl';
 
 async function fetchProducts(req: NextApiRequest, category: 'fashion' | 'tech'): Promise<DigestProduct[]> {
-  const protocol = req.headers.host?.includes('localhost') ? 'http' : 'https';
-  const res = await fetch(`${protocol}://${req.headers.host}/api/products?category=${category}`);
+  const res = await fetch(`${getSiteBaseUrl(req)}/api/products?category=${category}`);
   if (!res.ok) return [];
   return res.json();
 }
