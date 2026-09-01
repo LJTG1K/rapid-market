@@ -6,6 +6,10 @@
     "pages/api/**/*.ts": {
       "maxDuration": 30,
       "memory": 1024
+    },
+    "pages/api/cron/*.ts": {
+      "maxDuration": 300,
+      "memory": 1024
     }
   },
   "crons": [
