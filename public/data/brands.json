@@ -1,5 +1,19 @@
 [
   {
+    "brandName": "1AM",
+    "slug": "1am",
+    "description": "Late-night leather accessories — a crossbody bag and hand-woven cowhide leather piece.",
+    "aesthetic": [
+      "leather",
+      "accessories",
+      "crossbody",
+      "minimal",
+      "night-out"
+    ],
+    "targetCustomer": "Accessory shoppers aged 20-32",
+    "notes": "Only two listings so far, both leather goods."
+  },
+  {
     "brandName": "22Doodle",
     "slug": "22doodle",
     "description": "Artistic streetwear brand featuring hand-drawn illustrations and playful doodle-inspired graphics on contemporary pieces.",
@@ -12,6 +26,34 @@
     ],
     "targetCustomer": "Creative individuals and artists aged 18-35",
     "notes": "Art-focused approach with unique graphic designs and limited releases"
+  },
+  {
+    "brandName": "54A0",
+    "slug": "54a0",
+    "description": "Experimental graphic pants label naming pieces after animals and nature (Fox Fur, Shark, Echidna, Windmill) across a heavy pants-and-jacket range.",
+    "aesthetic": [
+      "experimental",
+      "animal-motif",
+      "graphic-pants",
+      "streetwear",
+      "avant-garde"
+    ],
+    "targetCustomer": "Shoppers after conversation-piece bottoms, aged 18-28",
+    "notes": "Almost entirely pants, each with a distinct creature/nature name rather than a shared print — worth watching for consistency."
+  },
+  {
+    "brandName": "76Street",
+    "slug": "76street",
+    "description": "Heavy-duty workwear denim — cargo jeans, patchwork panels and rivet detailing built for a rugged, industrial look.",
+    "aesthetic": [
+      "workwear",
+      "denim",
+      "patchwork",
+      "industrial",
+      "streetwear"
+    ],
+    "targetCustomer": "Workwear-denim shoppers aged 18-30",
+    "notes": "Consistently denim/cargo, several pieces explicitly patchwork or rivet-detailed."
   },
   {
     "brandName": "99club",
@@ -54,6 +96,34 @@
     ],
     "targetCustomer": "Mod enthusiasts and vintage fashion aficionados",
     "notes": "Boutique approach with physical presence in Aberdeen. Focuses on quality over quantity with clear design identity rooted in UK subculture."
+  },
+  {
+    "brandName": "Absom",
+    "slug": "absom",
+    "description": "An unusual footwear-and-outerwear mix — loafers, mules and boots alongside dragon and deer motif jackets.",
+    "aesthetic": [
+      "footwear",
+      "eastern-motif",
+      "loafers",
+      "graphic-outerwear",
+      "eclectic"
+    ],
+    "targetCustomer": "Shoppers after footwear plus statement jackets, aged 20-32",
+    "notes": "One of the few catalogue brands with a real footwear range (loafers, mules, boots) alongside apparel."
+  },
+  {
+    "brandName": "Acusa",
+    "slug": "acusa",
+    "description": "Basics-forward casualwear — solid-colour cotton shirts, cargo pants and puffer jackets built for everyday wear over standout graphics.",
+    "aesthetic": [
+      "basics",
+      "casualwear",
+      "solid-colour",
+      "cargo",
+      "everyday"
+    ],
+    "targetCustomer": "Everyday-basics shoppers aged 20-32",
+    "notes": "Most items are plain/solid-colour rather than graphic-led — a basics counterpart to the louder brands in this batch."
   },
   {
     "brandName": "Andlife",
@@ -137,6 +207,20 @@
     "notes": "Creates experimental contemporary streetwear with experimental design approach and modern cuts."
   },
   {
+    "brandName": "Astt",
+    "slug": "astt",
+    "description": "Patchwork and distressed basics — embroidered long sleeves and washed wide-leg denim in a compact range.",
+    "aesthetic": [
+      "patchwork",
+      "distressed",
+      "denim",
+      "streetwear",
+      "basics"
+    ],
+    "targetCustomer": "Distressed-basics shoppers aged 18-28",
+    "notes": "Small, denim-and-shirt range unified by patchwork/distressing rather than a distinct graphic."
+  },
+  {
     "brandName": "AVAVAVA",
     "slug": "avavava",
     "description": "Repetitive pattern-heavy brand playing with geometric and abstract designs. Maximalist approach to graphic placement—bold, unapologetic, built for visual impact. No minimalism here.",
@@ -163,6 +247,20 @@
     ],
     "targetCustomer": "Minimalist fashion enthusiasts aged 20-35 valuing quality construction",
     "notes": "Emphasizes fit and quality materials. Modern approach to essential pieces."
+  },
+  {
+    "brandName": "Beautiful Life",
+    "slug": "beautiful-life",
+    "description": "Easy wide-leg loungewear — nylon and distressed denim pants built for comfort over statement graphics.",
+    "aesthetic": [
+      "wide-leg",
+      "loungewear",
+      "nylon",
+      "comfort",
+      "casual"
+    ],
+    "targetCustomer": "Comfort-first casualwear shoppers aged 20-32",
+    "notes": "Small, pants-only range so far."
   },
   {
     "brandName": "Beft",
@@ -204,6 +302,20 @@
     ],
     "targetCustomer": "Design-conscious professionals aged 25-45",
     "notes": "Boutique brand with focus on timeless pieces and quality craftsmanship"
+  },
+  {
+    "brandName": "Bings Remake",
+    "slug": "bings-remake",
+    "description": "Anime and pop-culture referencing graphics — Berserk's Griffith, Overlord and Detroit-inspired prints on crewnecks and hoodies.",
+    "aesthetic": [
+      "anime-graphic",
+      "pop-culture",
+      "crewneck",
+      "streetwear",
+      "bootleg-style"
+    ],
+    "targetCustomer": "Anime/pop-culture streetwear fans aged 16-26",
+    "notes": "Named characters (Griffith, Gus, Terry) suggest bootleg-style anime/character graphics — flag if IP concerns matter for RAPID."
   },
   {
     "brandName": "Blacklists",
@@ -302,6 +414,20 @@
     "notes": "Creates bold, experimental contemporary streetwear with playful and energetic design approach."
   },
   {
+    "brandName": "Chawalandro",
+    "slug": "chawalandro",
+    "description": "Tailoring-adjacent pieces — suit pants, velvet and suede jackets, dress shirts — with embroidered detailing worked into more formal silhouettes.",
+    "aesthetic": [
+      "tailored",
+      "velvet",
+      "suede",
+      "embroidered",
+      "smart-casual"
+    ],
+    "targetCustomer": "Shoppers wanting streetwear with a dressier edge, aged 20-32",
+    "notes": "Mixes suiting pieces (suit pants, dress shirts, half coats) with embroidered jackets."
+  },
+  {
     "brandName": "Chill High",
     "slug": "chill-high",
     "description": "Laid-back label built for comfort — elevated loungewear and easy fits with a mellow, take-it-slow attitude.",
@@ -330,6 +456,48 @@
     "notes": "Distressed, ashen palette with industrial hardware and a moody, grunge-leaning edge."
   },
   {
+    "brandName": "Cindervein",
+    "slug": "cindervein",
+    "description": "Dark, heavily-treated denim label built around waxed finishes, buckle hardware and teeth/rune print graphics. Distressing is the whole point, not an afterthought.",
+    "aesthetic": [
+      "distressed-denim",
+      "gothic",
+      "waxed",
+      "dark-graphic",
+      "streetwear"
+    ],
+    "targetCustomer": "Denim-heavy streetwear fans aged 18-28 who want visibly worked-over pieces",
+    "notes": "Almost entirely jeans, jorts and denim jackets with teeth, rune and cursive print details."
+  },
+  {
+    "brandName": "Coldasia",
+    "slug": "coldasia",
+    "description": "Embroidered graphic denim and polos — skull, scorpion and music-note motifs worked into raw denim and knit polos.",
+    "aesthetic": [
+      "embroidered",
+      "graphic-denim",
+      "polo",
+      "skull-motif",
+      "streetwear"
+    ],
+    "targetCustomer": "Graphic-denim shoppers aged 18-28",
+    "notes": "Recurring skull/scorpion/music-note embroidery across both denim and polos."
+  },
+  {
+    "brandName": "Coupure",
+    "slug": "coupure",
+    "description": "Drapey wide-leg trousers specialist — washed denim, pleated and draped pants with an American-vintage streetwear lean.",
+    "aesthetic": [
+      "wide-leg",
+      "drapey",
+      "denim",
+      "vintage-streetwear",
+      "trousers"
+    ],
+    "targetCustomer": "Wide-leg/drape trouser shoppers aged 18-28",
+    "notes": "Almost entirely pants — a trouser-focused label rather than a full apparel range."
+  },
+  {
     "brandName": "Crashbaggage",
     "slug": "crashbaggage",
     "description": "Functional travel gear with attitude. Pre-dented luggage and apparel that turns imperfections into signature style. For travelers who don't take themselves too seriously.",
@@ -342,6 +510,20 @@
     ],
     "targetCustomer": "Adventurous travelers and alternative fashion enthusiasts aged 25-45",
     "notes": "International brand innovating travel fashion with unique pre-dented aesthetic. Functional design meets experimental approach to wear and patina."
+  },
+  {
+    "brandName": "D5ove",
+    "slug": "d5ove",
+    "description": "Boxy basics in corduroy and heavyweight cotton — straightforward shirts, sweats and hoodies without heavy graphics.",
+    "aesthetic": [
+      "boxy",
+      "corduroy",
+      "basics",
+      "heavyweight",
+      "streetwear"
+    ],
+    "targetCustomer": "Basics/boxy-fit shoppers aged 18-28",
+    "notes": "Named \"basic\" and \"fitted\" pieces suggest a fit-and-fabric focus over prints."
   },
   {
     "brandName": "DannyAndZee",
@@ -369,6 +551,20 @@
     ],
     "targetCustomer": "Fashion romantics aged 18-35",
     "notes": "Focus on atmospheric design elements"
+  },
+  {
+    "brandName": "Dec Club",
+    "slug": "dec-club",
+    "description": "Horrorcore-leaning graphic label — torture-tool prints, vampire portraits and distressed washes on shirts, hoodies and denim.",
+    "aesthetic": [
+      "horrorcore",
+      "distressed",
+      "dark-graphic",
+      "denim",
+      "streetwear"
+    ],
+    "targetCustomer": "Alt/horror-leaning streetwear fans aged 16-26",
+    "notes": "Explicit dark themes (torture, vampires, drop dead) — the most extreme graphic identity in the new batch."
   },
   {
     "brandName": "Detw",
@@ -576,6 +772,34 @@
     "notes": "Emerging brand with growing presence on social media and global platforms"
   },
   {
+    "brandName": "Fvvksans",
+    "slug": "fvvksans",
+    "description": "Irreverent graphic pants and tees leaning on country/rural imagery and blunt, attitude-forward names.",
+    "aesthetic": [
+      "graphic-tee",
+      "irreverent",
+      "rural-motif",
+      "streetwear",
+      "bold"
+    ],
+    "targetCustomer": "Shoppers after loud, attitude-driven graphics, aged 16-26",
+    "notes": "Stylised brand name and phrasing (Heartbreak, Positive, Subculture) suggest a deliberately provocative identity."
+  },
+  {
+    "brandName": "G Overshare",
+    "slug": "g-overshare",
+    "description": "Dark, goth-leaning accessories — rings, chains, belts and a jewellery box, heavier on hardware than fabric.",
+    "aesthetic": [
+      "accessories",
+      "goth",
+      "jewelry",
+      "hardware",
+      "dark"
+    ],
+    "targetCustomer": "Accessory-focused shoppers aged 18-28",
+    "notes": "Pure accessories range (rings, bracelets, belts, chains) — no apparel."
+  },
+  {
     "brandName": "Galaxor",
     "slug": "galaxor",
     "description": "Futuristic streetwear with space-age inspired design. Bold graphics and experimental aesthetics. For people interested in sci-fi fashion.",
@@ -587,6 +811,20 @@
     ],
     "targetCustomer": "Fashion-forward consumers interested in sci-fi aesthetics aged 18-35",
     "notes": "Unique futuristic design perspective with bold graphics. Contemporary pieces with experimental sci-fi aesthetic."
+  },
+  {
+    "brandName": "Gibigiana",
+    "slug": "gibigiana",
+    "description": "Knitwear built around an equestrian graphic — horse and warhorse motifs on polos, tanks and script sweats.",
+    "aesthetic": [
+      "equestrian-graphic",
+      "knitwear",
+      "polo",
+      "collegiate",
+      "streetwear"
+    ],
+    "targetCustomer": "Graphic-knitwear shoppers aged 18-28",
+    "notes": "Horse/warhorse imagery repeats across most of the range — a clear house motif."
   },
   {
     "brandName": "GpStudio",
@@ -737,6 +975,34 @@
     ],
     "targetCustomer": "Fashion-forward individuals aged 18-35 seeking confident pieces",
     "notes": "Strong design identity with confident approach. Bold modern fashion."
+  },
+  {
+    "brandName": "Jceaser",
+    "slug": "jceaser",
+    "description": "Small accessories label — a mummy-wrap bag and a vintage cracked-finish belt.",
+    "aesthetic": [
+      "accessories",
+      "vintage-finish",
+      "bag",
+      "belt",
+      "eclectic"
+    ],
+    "targetCustomer": "Accessory shoppers aged 18-28",
+    "notes": "Only two listings so far, both accessories with distinct, unrelated concepts (mummy bag, cracked belt)."
+  },
+  {
+    "brandName": "Jhyq",
+    "slug": "jhyq",
+    "description": "Thorn-motif knitwear — turtleneck zips, knit sweats and long sleeves built around a recurring thorn graphic.",
+    "aesthetic": [
+      "thorn-motif",
+      "knitwear",
+      "turtleneck",
+      "minimalist",
+      "streetwear"
+    ],
+    "targetCustomer": "Graphic-knitwear shoppers aged 18-26",
+    "notes": "Thorn print repeats across multiple pieces — the clearest house motif in a small range."
   },
   {
     "brandName": "Joinboy",
@@ -995,6 +1261,34 @@
     "notes": "Modern streetwear with emphasis on contemporary design. Consistent releases with clean aesthetic approach."
   },
   {
+    "brandName": "Mhae",
+    "slug": "mhae",
+    "description": "Vintage-inspired tees and denim — batik prints, western long sleeves and lake-green raw denim.",
+    "aesthetic": [
+      "vintage-inspired",
+      "denim",
+      "graphic-tee",
+      "western",
+      "streetwear"
+    ],
+    "targetCustomer": "Vintage-leaning shoppers aged 18-28",
+    "notes": "Small but consistent tee/denim range with a batik and western print thread."
+  },
+  {
+    "brandName": "Minbin",
+    "slug": "minbin",
+    "description": "Titanium steel jewellery — necklaces, rings and earrings built for daily wear, plus the occasional sunglasses or storage box.",
+    "aesthetic": [
+      "titanium",
+      "jewelry",
+      "accessories",
+      "minimal",
+      "everyday"
+    ],
+    "targetCustomer": "Jewellery-focused shoppers aged 18-30",
+    "notes": "Titanium steel is the recurring material claim across most pieces — durability-first jewellery."
+  },
+  {
     "brandName": "MIUB",
     "slug": "miub",
     "description": "Contemporary streetwear with unique design perspective. Quality-focused alternative to typical mass streetwear.",
@@ -1143,6 +1437,20 @@
     "notes": "High-quality focus with reduced aesthetic"
   },
   {
+    "brandName": "Nine Leather",
+    "slug": "nine-leather",
+    "description": "Straightforward leather goods — wallets, a large backpack and a tote, positioned on material and construction rather than graphics.",
+    "aesthetic": [
+      "leather-goods",
+      "accessories",
+      "minimal",
+      "everyday",
+      "utility"
+    ],
+    "targetCustomer": "Leather-accessory shoppers aged 20-35",
+    "notes": "Accessories-only label (bags/wallet), no apparel."
+  },
+  {
     "brandName": "No E",
     "slug": "no-e",
     "description": "Concept-minimal label trading on absence — stripped graphics, negative space and a quietly contrarian wordmark.",
@@ -1157,6 +1465,20 @@
     "notes": "Negative-space graphics and pared-back pieces built on restraint."
   },
   {
+    "brandName": "No1se",
+    "slug": "no1se",
+    "description": "Graphic tee label with a stylised \"NOISE\" name — western, resistance and \"peace n love\" prints alongside a velvet hoodie.",
+    "aesthetic": [
+      "graphic-tee",
+      "stylised-branding",
+      "streetwear",
+      "print-led",
+      "bold"
+    ],
+    "targetCustomer": "Graphic-tee shoppers aged 16-26",
+    "notes": "Tee-dominant with varied, loosely-political and pop-culture print themes."
+  },
+  {
     "brandName": "Nomaniai",
     "slug": "nomaniai",
     "description": "Experimental contemporary brand pushing design boundaries. Unconventional silhouettes and surprising material combinations. For fashion adventurers.",
@@ -1169,6 +1491,20 @@
     ],
     "targetCustomer": "Fashion experimenters aged 18-35 seeking unconventional pieces",
     "notes": "Pushes boundaries with experimental design. Unconventional approach to contemporary fashion."
+  },
+  {
+    "brandName": "Numbasia",
+    "slug": "numbasia",
+    "description": "Graphic tees and raw denim built around script, star and flag prints, rounded out with waffle-knit sweats.",
+    "aesthetic": [
+      "graphic-tee",
+      "raw-denim",
+      "script-print",
+      "streetwear",
+      "knitwear"
+    ],
+    "targetCustomer": "Graphic-tee shoppers aged 16-26",
+    "notes": "Tee-and-denim heavy with a recurring script/star print identity."
   },
   {
     "brandName": "NZPJ",
@@ -1197,6 +1533,20 @@
     ],
     "targetCustomer": "Online, meme-fluent shoppers aged 15-26",
     "notes": "Slogan- and meme-driven graphics with a sarcastic, terminally-online voice."
+  },
+  {
+    "brandName": "Ooohmygo",
+    "slug": "ooohmygo",
+    "description": "Distressed layering pieces — washed hoodies, faux two-piece long sleeves and dirty-dyed shirts built around a worn-in look.",
+    "aesthetic": [
+      "distressed",
+      "layering",
+      "washed",
+      "streetwear",
+      "faux-layered"
+    ],
+    "targetCustomer": "Distressed-streetwear shoppers aged 18-28",
+    "notes": "Several \"fake two piece\" items — a faux-layered construction technique repeated across the range."
   },
   {
     "brandName": "Original",
@@ -1365,6 +1715,20 @@
     "notes": "Durable, technical staples with practical detailing and a clean utility aesthetic."
   },
   {
+    "brandName": "Risebrand",
+    "slug": "risebrand",
+    "description": "Embroidery-forward workwear and denim, from collared polos to raw and studded jeans. Leans on visible stitch-work rather than prints.",
+    "aesthetic": [
+      "embroidered",
+      "workwear",
+      "denim",
+      "vintage-inspired",
+      "streetwear"
+    ],
+    "targetCustomer": "Workwear and denim-focused shoppers aged 20-32",
+    "notes": "Broad catalogue spanning polos, jerseys, bombers and denim, unified by heavy embroidery."
+  },
+  {
     "brandName": "Rogic Logic",
     "slug": "rogic-logic",
     "description": "Systems-minded label built on 'logic' — geometric graphics, modular detailing and a clean, engineered aesthetic.",
@@ -1447,6 +1811,34 @@
     "notes": "Layerable, transitional pieces built around a natural, seasonal palette."
   },
   {
+    "brandName": "Sgw",
+    "slug": "sgw",
+    "description": "Heavy patchwork and rivet-detailed outerwear — graphic-washed shirts and leather bombers with a distressed, worked-over finish.",
+    "aesthetic": [
+      "patchwork",
+      "rivet",
+      "distressed",
+      "outerwear",
+      "graphic"
+    ],
+    "targetCustomer": "Heavy-distressed outerwear shoppers aged 18-28",
+    "notes": "Jacket-heavy with recurring patchwork/rivet construction and graphic wash prints."
+  },
+  {
+    "brandName": "Siant Dee",
+    "slug": "siant-dee",
+    "description": "Small denim and outerwear label — washed jeans and a glossy jacket in a minimal two-piece range so far.",
+    "aesthetic": [
+      "denim",
+      "glossy",
+      "outerwear",
+      "minimal",
+      "streetwear"
+    ],
+    "targetCustomer": "Denim/jacket shoppers aged 18-28",
+    "notes": "Only two listings so far — watch for more pieces before treating the aesthetic as settled."
+  },
+  {
     "brandName": "Sick it Rain",
     "slug": "sick-it-rain",
     "description": "Bold, provocative streetwear brand with daring design and contemporary urban edge.",
@@ -1461,6 +1853,20 @@
     "notes": "Statement-making brand with niche following"
   },
   {
+    "brandName": "Slight Vouge",
+    "slug": "slight-vouge",
+    "description": "Elevated outerwear in mink wool, tencel and leather, with reversible jackets and puffer down pieces. Reads more premium than most of the catalogue.",
+    "aesthetic": [
+      "premium-outerwear",
+      "wool",
+      "leather",
+      "reversible",
+      "quiet-luxury"
+    ],
+    "targetCustomer": "Shoppers after a step up in material quality, aged 22-35",
+    "notes": "Material-led naming (mink wool, tencel, gipsy wool) suggests a focus on fabric over graphics."
+  },
+  {
     "brandName": "Smileandsad",
     "slug": "smileandsad",
     "description": "Mood-driven label built on the smile/sad duality — emotive slogans and graphics that swing between joy and melancholy.",
@@ -1473,6 +1879,48 @@
     ],
     "targetCustomer": "Expressive, mood-driven shoppers aged 15-27",
     "notes": "Emotive, contrast-heavy graphics themed on the highs and lows of feeling."
+  },
+  {
+    "brandName": "Sokonot",
+    "slug": "sokonot",
+    "description": "Laid-back tees and denim — navy prints, a linen pant and a straightforward denim jacket.",
+    "aesthetic": [
+      "laid-back",
+      "denim",
+      "graphic-tee",
+      "linen",
+      "streetwear"
+    ],
+    "targetCustomer": "Casual streetwear shoppers aged 18-28",
+    "notes": "Small, straightforward tee-and-denim range without a heavy signature motif."
+  },
+  {
+    "brandName": "Southpaw",
+    "slug": "southpaw",
+    "description": "Varsity-leaning outerwear — velvet zip-ups, leather-collar corduroy jackets and reversible bombers.",
+    "aesthetic": [
+      "varsity",
+      "bomber",
+      "leather-collar",
+      "outerwear",
+      "streetwear"
+    ],
+    "targetCustomer": "Varsity/bomber-jacket shoppers aged 18-28",
+    "notes": "Jacket-dominant range spanning velvet, leather and nylon construction."
+  },
+  {
+    "brandName": "Startexceedend",
+    "slug": "startexceedend",
+    "description": "Biker-leaning outerwear — motorcycle jackets, leather shoulder pads and skeleton-patchwork denim.",
+    "aesthetic": [
+      "biker",
+      "motorcycle",
+      "leather",
+      "patchwork",
+      "outerwear"
+    ],
+    "targetCustomer": "Moto/biker-style shoppers aged 20-30",
+    "notes": "Jacket and trouser heavy with a consistent motorcycle/biker thread."
   },
   {
     "brandName": "Taak",
@@ -1582,6 +2030,20 @@
     "notes": "Produces contemporary fashion exploring current trends with quality construction and modern aesthetic."
   },
   {
+    "brandName": "Ueshima",
+    "slug": "ueshima",
+    "description": "Retro Americana outerwear — fur-collar puffers, racing prints and vintage letter graphics on zip-ups and shirts.",
+    "aesthetic": [
+      "retro-americana",
+      "puffer",
+      "racing",
+      "fur-collar",
+      "streetwear"
+    ],
+    "targetCustomer": "Vintage-Americana shoppers aged 18-30",
+    "notes": "Puffer and zip-up heavy, with a recurring racing/motorsport print motif."
+  },
+  {
     "brandName": "UUCSCC",
     "slug": "uucscc",
     "description": "Tactical utility streetwear meets hip-hop culture. Oversized denim, wide-leg cuts, embroidered details. Built for movement and presence.",
@@ -1624,6 +2086,20 @@
     "notes": "Sporty, functional silhouettes with a clean, forward-looking design language."
   },
   {
+    "brandName": "Vnkw",
+    "slug": "vnkw",
+    "description": "Wide-leg workwear denim and pants, with deconstructed and dirty-dyed finishes plus the occasional wool sweater.",
+    "aesthetic": [
+      "wide-leg",
+      "workwear",
+      "denim",
+      "deconstructed",
+      "streetwear"
+    ],
+    "targetCustomer": "Wide-leg workwear shoppers aged 18-28",
+    "notes": "Pants-dominant, several explicitly deconstructed or dirty-dyed."
+  },
+  {
     "brandName": "Wassup Happy",
     "slug": "wassup-happy",
     "description": "Feel-good label built on cheerful energy — bright colour, friendly graphics and an unapologetically happy attitude.",
@@ -1649,6 +2125,34 @@
     ],
     "targetCustomer": "Fashion enthusiasts who appreciate design details aged 18-35",
     "notes": "Known for signature cuff styling approach"
+  },
+  {
+    "brandName": "Weave Studio",
+    "slug": "weave-studio",
+    "description": "Knitwear-focused studio label — wool-collar zips, turtlenecks and knit-collar shirts pitched as a step up in construction.",
+    "aesthetic": [
+      "knitwear",
+      "wool-collar",
+      "turtleneck",
+      "studio",
+      "elevated"
+    ],
+    "targetCustomer": "Knitwear-focused shoppers aged 20-32",
+    "notes": "\"Studio\" naming and \"luxury turtleneck\" listing suggest a more elevated positioning than most of this batch."
+  },
+  {
+    "brandName": "Welove",
+    "slug": "welove",
+    "description": "Graphic long sleeves — waffle knit, gothic lettering and lion prints on a compact long-sleeve-focused range.",
+    "aesthetic": [
+      "graphic-long-sleeve",
+      "waffle-knit",
+      "gothic-lettering",
+      "streetwear",
+      "print-led"
+    ],
+    "targetCustomer": "Graphic long-sleeve shoppers aged 18-26",
+    "notes": "Every item so far is a long sleeve — a single-category label rather than a full range."
   },
   {
     "brandName": "Wengzhu",
@@ -1759,6 +2263,34 @@
     ],
     "targetCustomer": "Creative individuals aged 18-35 seeking experimental pieces",
     "notes": "Uses typography and letters as design language. Experimental expression through fashion."
+  },
+  {
+    "brandName": "Yceltex",
+    "slug": "yceltex",
+    "description": "Denim and corduroy outerwear — suede leather jackets, corduroy bombers and cargo pants in workwear-adjacent cuts.",
+    "aesthetic": [
+      "denim",
+      "corduroy",
+      "workwear",
+      "outerwear",
+      "streetwear"
+    ],
+    "targetCustomer": "Denim/corduroy jacket shoppers aged 18-28",
+    "notes": "Jacket-and-cargo focused, mostly single-word product names (Freedom, Contrast, Dyed)."
+  },
+  {
+    "brandName": "Yizilingf",
+    "slug": "yizilingf",
+    "description": "Embroidered denim and leather accents — leopard-print shorts, rivet leather vests and a cross backpack alongside straightforward denim.",
+    "aesthetic": [
+      "embroidered",
+      "denim",
+      "leather-accent",
+      "streetwear",
+      "graphic"
+    ],
+    "targetCustomer": "Embroidered-denim shoppers aged 18-28",
+    "notes": "Mostly denim with occasional leather/accessory pieces (vest, backpack)."
   },
   {
     "brandName": "Yokosuka Heavy Industries",
