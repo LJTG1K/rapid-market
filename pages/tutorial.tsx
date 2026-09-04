@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
+import { fireMetaPixelEvent } from '@/lib/metaPixel';
 
 const ICONS: Record<string, JSX.Element> = {
   cart: (
@@ -59,6 +61,17 @@ const FAQS = [
 ];
 
 export default function Tutorial() {
+  useEffect(() => {
+    fetch('/api/qualified-lead', { method: 'POST' })
+      .then((r) => r.json())
+      .then((data: { qualified: boolean; eventId?: string }) => {
+        if (data.qualified && data.eventId) {
+          fireMetaPixelEvent('QualifiedLead', data.eventId);
+        }
+      })
+      .catch((error) => console.error('Error checking qualified-lead status:', error));
+  }, []);
+
   return (
     <>
       <Head>

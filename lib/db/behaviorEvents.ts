@@ -7,7 +7,7 @@
  */
 import { getSupabase } from '../supabase';
 
-export type BehaviorEventType = 'brand_view' | 'sugargoo_click';
+export type BehaviorEventType = 'brand_view' | 'sugargoo_click' | 'qualified_lead';
 export type AutomationKey = 'brand_nudge' | 'wishlist_digest';
 
 export async function logBrandView(userId: string, brandSlug: string): Promise<void> {
@@ -29,6 +29,14 @@ export async function logSugargooClick(
       brand_slug: params.brandSlug ?? null,
       product_id: params.productId ?? null,
     });
+  if (error) throw error;
+}
+
+/** Signup -> tutorial-visit qualified-intent signal — see pages/api/qualified-lead.ts. */
+export async function logQualifiedLead(userId: string): Promise<void> {
+  const { error } = await getSupabase()
+    .from('behavior_events')
+    .insert({ user_id: userId, event_type: 'qualified_lead' });
   if (error) throw error;
 }
 

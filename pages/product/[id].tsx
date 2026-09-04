@@ -8,6 +8,7 @@ import Reveal from '@/components/Reveal';
 import ProductImage from '@/components/ProductImage';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import WishlistButton from '@/components/WishlistButton';
+import { generateEventId, fireMetaPixelEvent } from '@/lib/metaPixel';
 
 interface Product {
   id: string;
@@ -48,11 +49,16 @@ export default function ProductPage() {
 
   const trackClick = async () => {
     if (!product) return;
+    const eventId = generateEventId();
+    fireMetaPixelEvent('ClickToSugargoo', eventId, {
+      content_ids: [product.id],
+      content_name: product.name,
+    });
     try {
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId: product.id, productName: product.name, type: 'product-click' }),
+        body: JSON.stringify({ productId: product.id, productName: product.name, type: 'product-click', eventId }),
       });
     } catch (error) {
       console.error('Error tracking click:', error);

@@ -8,7 +8,7 @@ interface SignupEvent {
   timestamp: string;
   source: 'website' | 'facebook-lead';
   email: string;
-  status: 'success' | 'duplicate' | 'error';
+  status: 'success' | 'duplicate' | 'error' | 'signup_then_tutorial';
   userId?: string;
   errorCode?: number;
   errorMsg?: string;
@@ -139,7 +139,7 @@ export function getDashboardStats(): DashboardStats {
           SUM(CASE WHEN source = 'website' THEN 1 ELSE 0 END) as website,
           SUM(CASE WHEN source = 'facebook-lead' THEN 1 ELSE 0 END) as facebook
         FROM signup_events
-        WHERE DATE(timestamp) = ?
+        WHERE DATE(timestamp) = ? AND status IN ('success', 'duplicate', 'error')
       `
       )
       .get(todayStart) as any;
@@ -152,7 +152,7 @@ export function getDashboardStats(): DashboardStats {
           COUNT(*) as total,
           SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) as success
         FROM signup_events
-        WHERE timestamp > ?
+        WHERE timestamp > ? AND status IN ('success', 'duplicate', 'error')
       `
       )
       .get(hourAgo) as any;

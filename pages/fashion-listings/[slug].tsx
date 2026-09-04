@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import ProductImage from '@/components/ProductImage';
+import { generateEventId, fireMetaPixelEvent } from '@/lib/metaPixel';
 
 declare global {
   interface Window {
@@ -90,11 +91,13 @@ export default function ProductDetail() {
     }
 
     // Log to backend
+    const eventId = generateEventId();
+    fireMetaPixelEvent('ClickToSugargoo', eventId, { content_ids: [productId], content_name: productName });
     try {
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, productName, type: 'product-click' }),
+        body: JSON.stringify({ productId, productName, type: 'product-click', eventId }),
       });
     } catch (error) {
       console.error('Error tracking click:', error);

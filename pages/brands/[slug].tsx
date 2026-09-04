@@ -9,6 +9,7 @@ import LoadingMessage, { MANIFEST_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import { productMatchesBrand } from '@/lib/brandMatch';
+import { generateEventId, fireMetaPixelEvent } from '@/lib/metaPixel';
 
 interface Brand {
   brandName: string;
@@ -87,11 +88,13 @@ export default function BrandPage({ brand }: { brand: Brand }) {
   }, [brand]);
 
   const trackClick = async (productId: string, productName: string) => {
+    const eventId = generateEventId();
+    fireMetaPixelEvent('ClickToSugargoo', eventId, { content_ids: [productId], content_name: productName });
     try {
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, productName, type: 'product-click', brand: brand.brandName }),
+        body: JSON.stringify({ productId, productName, type: 'product-click', brand: brand.brandName, eventId }),
       });
     } catch (error) {
       console.error('Error tracking click:', error);
