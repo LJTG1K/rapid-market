@@ -28,7 +28,7 @@ const WHY = [
   {
     n: '01',
     title: 'Brands you won’t find elsewhere',
-    body: 'Small independent labels and factories direct from China. Not Shein, not Amazon, not the same twelve dropshippers everyone else is reselling.',
+    body: 'RAPID indexes real Chinese fashion brands, the small labels and factories you won’t find on Shein or Amazon, so your next haul actually goes somewhere. Answer three questions, get real listings back.',
   },
   {
     n: '02',
@@ -146,9 +146,8 @@ export default function Reddit() {
               150+ sellers. Tell us what you&apos;re actually after.
             </h1>
             <p className="text-ink/70 leading-relaxed">
-              RAPID indexes real Chinese fashion brands, the small labels and factories
-              you won&apos;t find on Shein or Amazon, so your next haul actually goes
-              somewhere. Answer three questions, get real listings back.
+              Small independent labels and factories direct from China. Not Shein, not
+              Amazon, not the same twelve dropshippers everyone else is reselling.
             </p>
           </Reveal>
         </div>
