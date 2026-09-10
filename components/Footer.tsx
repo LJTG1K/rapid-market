@@ -4,7 +4,7 @@ import Stamp from './Stamp';
 
 export default function Footer() {
   const router = useRouter();
-  const isCampaign = router.pathname === '/campaign';
+  const isCampaign = ['/campaign', '/reddit'].includes(router.pathname);
 
   if (isCampaign) {
     return (

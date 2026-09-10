@@ -29,7 +29,7 @@ export default function Header() {
   const moreRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { user } = useAuth();
-  const isCampaign = router.pathname === '/campaign';
+  const isCampaign = ['/campaign', '/reddit'].includes(router.pathname);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

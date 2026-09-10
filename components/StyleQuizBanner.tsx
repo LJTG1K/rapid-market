@@ -3,10 +3,11 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 // Constant/sitewide by design — shown on every route, including /signup and
-// /campaign, except the quiz's own page (redundant there). Not gated on
-// localStorage (dismissed/already-answered) so it never silently disappears;
-// dismissing only hides it for the current page view, not future ones.
-const HIDDEN_ON = ['/style-quiz'];
+// /campaign, except the quiz's own page (redundant there) and /reddit (the
+// quiz is already embedded in that page's hero). Not gated on localStorage
+// (dismissed/already-answered) so it never silently disappears; dismissing
+// only hides it for the current page view, not future ones.
+const HIDDEN_ON = ['/style-quiz', '/reddit'];
 
 export default function StyleQuizBanner() {
   const router = useRouter();
