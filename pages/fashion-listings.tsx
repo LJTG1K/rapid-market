@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -7,30 +7,18 @@ import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
 import ProductCard from '@/components/ProductCard';
 import ProductFilterBar from '@/components/ProductFilterBar';
+import ProductMatchGrid from '@/components/ProductMatchGrid';
+import CategoryShelf from '@/components/CategoryShelf';
 import { productMatchesBrand } from '@/lib/brandMatch';
-import { STYLE_OPTIONS, FIT_OPTIONS, type StyleKey, type FitKey } from '@/lib/styleMatch';
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  price: string;
-  sugargooLink: string;
-  category: string;
-  verified?: boolean;
-  manualStyleTags?: StyleKey[];
-  manualFit?: FitKey | null;
-}
-
-interface Brand {
-  brandName: string;
-  slug: string;
-  description: string;
-  aesthetic: string[];
-  targetCustomer: string;
-  notes: string;
-}
+import { getAnswers, type StoredQuizAnswers } from '@/lib/styleQuizStorage';
+import {
+  matchProducts,
+  STYLE_OPTIONS,
+  type StyleKey,
+  type FitKey,
+  type Product,
+  type Brand,
+} from '@/lib/styleMatch';
 
 const FASHION_CATEGORIES = [
   'All',
@@ -53,7 +41,22 @@ const ITEM_TYPE_SORTS = [
 ];
 
 const STYLE_LABELS = Object.fromEntries(STYLE_OPTIONS.map((o) => [o.key, o.label]));
-const FIT_LABELS = Object.fromEntries(FIT_OPTIONS.map((o) => [o.key, o.label]));
+
+// Short forms for the card tag — FIT_OPTIONS' own labels ("Regular / True to
+// Size") are written for the quiz UI and are too long for a compact pill;
+// they were truncating mid-word into a stray "/" or "…" on the card.
+const FIT_TAG_LABELS: Record<FitKey, string> = {
+  oversized: 'Oversized',
+  regular: 'Regular',
+  cropped: 'Cropped',
+};
+
+function getProductTags(product: Product): string[] {
+  return [
+    ...(product.manualStyleTags?.map((s) => STYLE_LABELS[s]) ?? []),
+    product.manualFit ? FIT_TAG_LABELS[product.manualFit] : null,
+  ].filter(Boolean) as string[];
+}
 
 // Baymard's product-list-loading guidance skews lower on mobile (15–30 items)
 // than on a desktop apparel grid (100–150) — smaller viewport, heavier
@@ -64,6 +67,15 @@ const PAGE_SIZE_MOBILE = 24;
 function getPageSize() {
   if (typeof window === 'undefined') return PAGE_SIZE_DESKTOP;
   return window.innerWidth < 1024 ? PAGE_SIZE_MOBILE : PAGE_SIZE_DESKTOP;
+}
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
 export default function FashionListings() {
@@ -78,6 +90,12 @@ export default function FashionListings() {
   const [selectedSort, setSelectedSort] = useState('Newest');
   const [searchTerm, setSearchTerm] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE_DESKTOP);
+  const [quizAnswers, setQuizAnswers] = useState<StoredQuizAnswers | null>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setQuizAnswers(getAnswers());
+  }, []);
 
   useEffect(() => {
     if (router.isReady && router.query.category) {
@@ -149,6 +167,30 @@ export default function FashionListings() {
     setVisibleCount(getPageSize());
   }, [products, selectedCategory, selectedStyle, selectedBrand, selectedSort, searchTerm]);
 
+  // The unfiltered, unsearched state — the master listing's front page, shown
+  // as curated shelves instead of one flat grid. Any filter, style, brand, or
+  // search term drops straight into the ordinary sortable grid below.
+  const isBrowseMode =
+    selectedCategory === 'All' && selectedStyle === 'All' && selectedBrand === 'All' && searchTerm.trim() === '';
+
+  const randomPicks = useMemo(() => shuffle(products).slice(0, 8), [products]);
+  const quizPicks = useMemo(
+    () => (quizAnswers ? matchProducts(products, brands, quizAnswers, 8) : []),
+    [products, brands, quizAnswers]
+  );
+  const shelvesByCategory = useMemo(() => {
+    const map: Record<string, Product[]> = {};
+    FASHION_CATEGORIES.slice(1).forEach((cat) => {
+      map[cat] = shuffle(products.filter((p) => p.category === cat)).slice(0, 4);
+    });
+    return map;
+  }, [products]);
+
+  const goToCategory = (category: string) => {
+    setSelectedCategory(category);
+    resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   return (
@@ -159,51 +201,108 @@ export default function FashionListings() {
       </Head>
 
       <div className="container-edit py-12 md:py-16">
-        <span className="eyebrow block mb-2">Index — Fashion</span>
-        <h1 className="font-display font-black text-ink text-6xl md:text-7xl tracking-tightest leading-[0.85] mb-10">
-          Fashion
-        </h1>
+        <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
+          <div>
+            <span className="eyebrow block mb-2">Index — Fashion</span>
+            <h1 className="font-display font-black text-ink text-6xl md:text-7xl tracking-tightest leading-[0.85]">
+              Fashion
+            </h1>
+          </div>
+          <Link href="/style-quiz" className="btn-secondary whitespace-nowrap">
+            Take the Style Quiz →
+          </Link>
+        </div>
 
-        <ProductFilterBar
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          groups={[
-            {
-              key: 'category',
-              title: 'Category',
-              allLabel: 'All',
-              selected: selectedCategory,
-              onSelect: setSelectedCategory,
-              options: FASHION_CATEGORIES.slice(1).map((c) => ({ key: c, label: c })),
-            },
-            {
-              key: 'style',
-              title: 'Style',
-              allLabel: 'All',
-              selected: selectedStyle,
-              onSelect: (v) => setSelectedStyle(v as StyleKey | 'All'),
-              options: STYLE_OPTIONS.map((s) => ({ key: s.key, label: s.label })),
-            },
-            {
-              key: 'brand',
-              title: 'Brand',
-              allLabel: 'All Brands',
-              selected: selectedBrand,
-              onSelect: setSelectedBrand,
-              options: brands.map((b) => ({ key: b.slug, value: b.brandName, label: b.brandName })),
-              scroll: true,
-            },
-          ]}
-          sorts={ITEM_TYPE_SORTS}
-          selectedSort={selectedSort}
-          onSortChange={setSelectedSort}
-          resultCount={filteredProducts.length}
-        />
+        <div ref={resultsRef}>
+          <ProductFilterBar
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            groups={[
+              {
+                key: 'category',
+                title: 'Category',
+                allLabel: 'All',
+                selected: selectedCategory,
+                onSelect: setSelectedCategory,
+                options: FASHION_CATEGORIES.slice(1).map((c) => ({ key: c, label: c })),
+              },
+              {
+                key: 'style',
+                title: 'Style',
+                allLabel: 'All',
+                selected: selectedStyle,
+                onSelect: (v) => setSelectedStyle(v as StyleKey | 'All'),
+                options: STYLE_OPTIONS.map((s) => ({ key: s.key, label: s.label })),
+              },
+              {
+                key: 'brand',
+                title: 'Brand',
+                allLabel: 'All Brands',
+                selected: selectedBrand,
+                onSelect: setSelectedBrand,
+                options: brands.map((b) => ({ key: b.slug, value: b.brandName, label: b.brandName })),
+                scroll: true,
+              },
+            ]}
+            sorts={ITEM_TYPE_SORTS}
+            selectedSort={selectedSort}
+            onSortChange={setSelectedSort}
+            resultCount={filteredProducts.length}
+          />
+        </div>
 
         {loading ? (
           <>
             <LoadingMessage messages={CATEGORY_MESSAGES.fashion} className="mb-6" />
             <ProductGridSkeleton aspect="4:5" cols="grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" />
+          </>
+        ) : products.length === 0 ? (
+          <p className="font-mono text-sm text-muted py-12">
+            No products found. Try a different search or category.
+          </p>
+        ) : isBrowseMode ? (
+          <>
+            <section className="mb-16">
+              <div className="flex items-baseline justify-between mb-6 gap-4">
+                <h2 className="font-display font-black text-ink text-2xl md:text-3xl tracking-tightest">
+                  {quizAnswers ? 'Picked For You' : 'Popular Right Now'}
+                </h2>
+                {!quizAnswers && (
+                  <Link href="/style-quiz" className="link-underline font-mono text-xs uppercase tracking-wide whitespace-nowrap">
+                    Take the quiz for personalized picks →
+                  </Link>
+                )}
+              </div>
+              {quizAnswers ? (
+                <ProductMatchGrid products={quizPicks} />
+              ) : (
+                <Reveal stagger={60} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10">
+                  {randomPicks.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      wishlistCategory="fashion"
+                      tags={getProductTags(product)}
+                    />
+                  ))}
+                </Reveal>
+              )}
+            </section>
+
+            {FASHION_CATEGORIES.slice(1)
+              .filter((cat) => (shelvesByCategory[cat]?.length ?? 0) > 0)
+              .map((cat) => (
+                <CategoryShelf
+                  key={cat}
+                  title={cat}
+                  wishlistCategory="fashion"
+                  items={(shelvesByCategory[cat] ?? []).map((product) => ({
+                    product,
+                    tags: getProductTags(product),
+                  }))}
+                  onSeeAll={() => goToCategory(cat)}
+                />
+              ))}
           </>
         ) : filteredProducts.length === 0 ? (
           <p className="font-mono text-sm text-muted py-12">
@@ -212,16 +311,14 @@ export default function FashionListings() {
         ) : (
           <>
             <Reveal stagger={60} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10">
-              {visibleProducts.map((product) => {
-                const tags = [
-                  ...(product.manualStyleTags?.map((s) => STYLE_LABELS[s]) ?? []),
-                  product.manualFit ? FIT_LABELS[product.manualFit] : null,
-                ].filter(Boolean) as string[];
-
-                return (
-                  <ProductCard key={product.id} product={product} wishlistCategory="fashion" tags={tags} />
-                );
-              })}
+              {visibleProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  wishlistCategory="fashion"
+                  tags={getProductTags(product)}
+                />
+              ))}
             </Reveal>
 
             {visibleCount < filteredProducts.length && (
