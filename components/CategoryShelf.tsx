@@ -25,11 +25,7 @@ export default function CategoryShelf({ title, items, wishlistCategory, onSeeAll
     <section className="mb-16">
       <div className="flex items-baseline justify-between mb-6 gap-4">
         <h2 className="font-display font-black text-ink text-2xl md:text-3xl tracking-tightest">{title}</h2>
-        <button
-          type="button"
-          onClick={onSeeAll}
-          className="link-underline font-mono text-xs uppercase tracking-wide whitespace-nowrap"
-        >
+        <button type="button" onClick={onSeeAll} className="btn-secondary !px-5 !py-2.5 text-[11px] whitespace-nowrap">
           See all {title} →
         </button>
       </div>
