@@ -17,13 +17,16 @@ export function ProductGridSkeleton({
   count = 9,
   className = '',
   aspect = 'square',
+  cols = 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3',
 }: {
   count?: number;
   className?: string;
   aspect?: 'square' | '4:5';
+  /** Override the default 1/2/3 column ramp — used by denser grids (e.g. fashion-listings). */
+  cols?: string;
 }) {
   return (
-    <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10 ${className}`}>
+    <div className={`grid ${cols} gap-x-6 gap-y-10 ${className}`}>
       {Array.from({ length: count }).map((_, i) => (
         <ProductCardSkeleton key={i} aspect={aspect} />
       ))}

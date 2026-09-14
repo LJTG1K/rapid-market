@@ -5,10 +5,10 @@ import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
-import WishlistButton from '@/components/WishlistButton';
+import ProductCard from '@/components/ProductCard';
+import ProductFilterBar from '@/components/ProductFilterBar';
 import { productMatchesBrand } from '@/lib/brandMatch';
-import ProductImage from '@/components/ProductImage';
-import { STYLE_OPTIONS, type StyleKey } from '@/lib/styleMatch';
+import { STYLE_OPTIONS, FIT_OPTIONS, type StyleKey, type FitKey } from '@/lib/styleMatch';
 
 interface Product {
   id: string;
@@ -20,6 +20,7 @@ interface Product {
   category: string;
   verified?: boolean;
   manualStyleTags?: StyleKey[];
+  manualFit?: FitKey | null;
 }
 
 interface Brand {
@@ -51,6 +52,20 @@ const ITEM_TYPE_SORTS = [
   'Name: Z to A',
 ];
 
+const STYLE_LABELS = Object.fromEntries(STYLE_OPTIONS.map((o) => [o.key, o.label]));
+const FIT_LABELS = Object.fromEntries(FIT_OPTIONS.map((o) => [o.key, o.label]));
+
+// Baymard's product-list-loading guidance skews lower on mobile (15–30 items)
+// than on a desktop apparel grid (100–150) — smaller viewport, heavier
+// per-scroll cost. These are scaled down from that range for RAPID's larger card.
+const PAGE_SIZE_DESKTOP = 60;
+const PAGE_SIZE_MOBILE = 24;
+
+function getPageSize() {
+  if (typeof window === 'undefined') return PAGE_SIZE_DESKTOP;
+  return window.innerWidth < 1024 ? PAGE_SIZE_MOBILE : PAGE_SIZE_DESKTOP;
+}
+
 export default function FashionListings() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
@@ -62,6 +77,7 @@ export default function FashionListings() {
   const [selectedBrand, setSelectedBrand] = useState('All');
   const [selectedSort, setSelectedSort] = useState('Newest');
   const [searchTerm, setSearchTerm] = useState('');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE_DESKTOP);
 
   useEffect(() => {
     if (router.isReady && router.query.category) {
@@ -129,7 +145,11 @@ export default function FashionListings() {
     }
 
     setFilteredProducts(filtered);
+    // A new filter/sort/search result set starts back at page one.
+    setVisibleCount(getPageSize());
   }, [products, selectedCategory, selectedStyle, selectedBrand, selectedSort, searchTerm]);
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   return (
     <>
@@ -139,201 +159,80 @@ export default function FashionListings() {
       </Head>
 
       <div className="container-edit py-12 md:py-16">
-        <div className="flex items-baseline justify-between mb-2">
-          <span className="eyebrow">Index — Fashion</span>
-          <span className="eyebrow hidden sm:inline">
-            {filteredProducts.length} {filteredProducts.length === 1 ? 'piece' : 'pieces'}
-          </span>
-        </div>
-        <h1 className="font-display font-black text-ink text-6xl md:text-7xl tracking-tightest leading-[0.85] mb-14">
+        <span className="eyebrow block mb-2">Index — Fashion</span>
+        <h1 className="font-display font-black text-ink text-6xl md:text-7xl tracking-tightest leading-[0.85] mb-10">
           Fashion
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12">
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            <div className="mb-8">
-              <label htmlFor="search" className="eyebrow block mb-2">Search</label>
-              <input
-                id="search"
-                type="text"
-                placeholder="Search products…"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2.5 bg-paper border border-line focus:outline-none focus:border-ink text-sm"
-              />
-            </div>
+        <ProductFilterBar
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          groups={[
+            {
+              key: 'category',
+              title: 'Category',
+              allLabel: 'All',
+              selected: selectedCategory,
+              onSelect: setSelectedCategory,
+              options: FASHION_CATEGORIES.slice(1).map((c) => ({ key: c, label: c })),
+            },
+            {
+              key: 'style',
+              title: 'Style',
+              allLabel: 'All',
+              selected: selectedStyle,
+              onSelect: (v) => setSelectedStyle(v as StyleKey | 'All'),
+              options: STYLE_OPTIONS.map((s) => ({ key: s.key, label: s.label })),
+            },
+            {
+              key: 'brand',
+              title: 'Brand',
+              allLabel: 'All Brands',
+              selected: selectedBrand,
+              onSelect: setSelectedBrand,
+              options: brands.map((b) => ({ key: b.slug, value: b.brandName, label: b.brandName })),
+              scroll: true,
+            },
+          ]}
+          sorts={ITEM_TYPE_SORTS}
+          selectedSort={selectedSort}
+          onSortChange={setSelectedSort}
+          resultCount={filteredProducts.length}
+        />
 
-            <div className="mb-8 hidden lg:block">
-              <h3 className="eyebrow mb-3">Category</h3>
-              <ul>
-                {FASHION_CATEGORIES.map((category) => (
-                  <li key={category}>
-                    <button
-                      onClick={() => setSelectedCategory(category)}
-                      className={`block w-full text-left py-1.5 text-sm transition-colors ${
-                        selectedCategory === category ? 'text-stamp font-semibold' : 'text-ink/70 hover:text-ink'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        {loading ? (
+          <>
+            <LoadingMessage messages={CATEGORY_MESSAGES.fashion} className="mb-6" />
+            <ProductGridSkeleton aspect="4:5" cols="grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" />
+          </>
+        ) : filteredProducts.length === 0 ? (
+          <p className="font-mono text-sm text-muted py-12">
+            No products found. Try a different search or category.
+          </p>
+        ) : (
+          <>
+            <Reveal stagger={60} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10">
+              {visibleProducts.map((product) => {
+                const tags = [
+                  ...(product.manualStyleTags?.map((s) => STYLE_LABELS[s]) ?? []),
+                  product.manualFit ? FIT_LABELS[product.manualFit] : null,
+                ].filter(Boolean) as string[];
 
-            <div className="mb-8 lg:hidden">
-              <label htmlFor="category" className="eyebrow block mb-2">Category</label>
-              <select
-                id="category"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2.5 bg-paper border border-line text-sm"
-              >
-                {FASHION_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
+                return (
+                  <ProductCard key={product.id} product={product} wishlistCategory="fashion" tags={tags} />
+                );
+              })}
+            </Reveal>
 
-            <div className="mb-8 hidden lg:block">
-              <h3 className="eyebrow mb-3">Style</h3>
-              <ul>
-                <li>
-                  <button
-                    onClick={() => setSelectedStyle('All')}
-                    className={`block w-full text-left py-1.5 text-sm transition-colors ${
-                      selectedStyle === 'All' ? 'text-stamp font-semibold' : 'text-ink/70 hover:text-ink'
-                    }`}
-                  >
-                    All
-                  </button>
-                </li>
-                {STYLE_OPTIONS.map((style) => (
-                  <li key={style.key}>
-                    <button
-                      onClick={() => setSelectedStyle(style.key)}
-                      className={`block w-full text-left py-1.5 text-sm transition-colors ${
-                        selectedStyle === style.key ? 'text-stamp font-semibold' : 'text-ink/70 hover:text-ink'
-                      }`}
-                    >
-                      {style.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-8 lg:hidden">
-              <label htmlFor="style" className="eyebrow block mb-2">Style</label>
-              <select
-                id="style"
-                value={selectedStyle}
-                onChange={(e) => setSelectedStyle(e.target.value as StyleKey | 'All')}
-                className="w-full px-3 py-2.5 bg-paper border border-line text-sm"
-              >
-                <option value="All">All</option>
-                {STYLE_OPTIONS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
-              </select>
-            </div>
-
-            <div className="mb-8 hidden lg:block">
-              <h3 className="eyebrow mb-3">Brand</h3>
-              <ul className="max-h-64 overflow-y-auto pr-2">
-                <li>
-                  <button
-                    onClick={() => setSelectedBrand('All')}
-                    className={`block w-full text-left py-1.5 text-sm transition-colors ${
-                      selectedBrand === 'All' ? 'text-stamp font-semibold' : 'text-ink/70 hover:text-ink'
-                    }`}
-                  >
-                    All Brands
-                  </button>
-                </li>
-                {brands.map((brand) => (
-                  <li key={brand.slug}>
-                    <button
-                      onClick={() => setSelectedBrand(brand.brandName)}
-                      className={`block w-full text-left py-1.5 text-sm transition-colors ${
-                        selectedBrand === brand.brandName ? 'text-stamp font-semibold' : 'text-ink/70 hover:text-ink'
-                      }`}
-                    >
-                      {brand.brandName}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-8 lg:hidden">
-              <label htmlFor="brand" className="eyebrow block mb-2">Brand</label>
-              <select
-                id="brand"
-                value={selectedBrand}
-                onChange={(e) => setSelectedBrand(e.target.value)}
-                className="w-full px-3 py-2.5 bg-paper border border-line text-sm"
-              >
-                <option value="All">All Brands</option>
-                {brands.map((b) => <option key={b.slug} value={b.brandName}>{b.brandName}</option>)}
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="sort" className="eyebrow block mb-2">Sort by</label>
-              <select
-                id="sort"
-                value={selectedSort}
-                onChange={(e) => setSelectedSort(e.target.value)}
-                className="w-full px-3 py-2.5 bg-paper border border-line text-sm"
-              >
-                {ITEM_TYPE_SORTS.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </div>
-          </aside>
-
-          {/* Grid */}
-          <div className="lg:col-span-3">
-            {loading ? (
-              <>
-                <LoadingMessage messages={CATEGORY_MESSAGES.fashion} className="mb-6" />
-                <ProductGridSkeleton aspect="4:5" />
-              </>
-            ) : filteredProducts.length === 0 ? (
-              <p className="font-mono text-sm text-muted py-12">
-                No products found. Try a different search or category.
-              </p>
-            ) : (
-              <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
-                {filteredProducts.map((product) => (
-                  <div key={product.id} className="flex flex-col relative">
-                    <WishlistButton productId={product.id} category="fashion" className="absolute top-2 right-2 z-10" />
-                    <Link href={`/product/${product.id}?category=fashion`} className="group">
-                      <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
-                        <ProductImage src={product.image} alt={product.name} />
-                      </div>
-                      <span className="font-mono text-[11px] uppercase tracking-wide text-muted mb-1 block">
-                        {product.category}
-                      </span>
-                      <h3 className="font-semibold text-sm leading-snug mb-1 line-clamp-2 group-hover:text-stamp transition-colors">
-                        {product.name}
-                      </h3>
-                    </Link>
-                    <p className="text-xs text-muted mb-3 line-clamp-2">{product.description}</p>
-                    <div className="mt-auto flex items-center justify-between gap-3">
-                      <span className="font-mono text-sm">{product.price}</span>
-                      <a
-                        href={product.sugargooLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-primary !px-4 !py-2 text-[11px]"
-                      >
-                        Buy
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </Reveal>
+            {visibleCount < filteredProducts.length && (
+              <div className="mt-12 text-center">
+                <button type="button" onClick={() => setVisibleCount((v) => v + getPageSize())} className="btn-secondary">
+                  Load More — {visibleCount} of {filteredProducts.length}
+                </button>
+              </div>
             )}
-          </div>
-        </div>
+          </>
+        )}
 
         <div className="mt-16 pt-8 border-t border-line text-center">
           <Link href="/brands" className="link-underline font-mono text-xs uppercase tracking-wide">
