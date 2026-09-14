@@ -12,6 +12,8 @@ import PerforatedDivider from '@/components/PerforatedDivider';
 import SplitHeadline from '@/components/SplitHeadline';
 import ProductImage from '@/components/ProductImage';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { generateEventId } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
 
 interface HighlightProduct {
   id: string;
@@ -137,6 +139,9 @@ function ProductHighlights() {
                   href={p.sugargooLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    fireRedditPixelEvent('Lead', generateEventId(), { products: [{ id: p.id, name: p.name }] })
+                  }
                   className="btn-primary !px-4 !py-2 text-[11px]"
                 >
                   Buy

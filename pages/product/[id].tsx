@@ -9,6 +9,7 @@ import ProductImage from '@/components/ProductImage';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import WishlistButton from '@/components/WishlistButton';
 import { generateEventId, fireMetaPixelEvent } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
 import { productMatchesBrand } from '@/lib/brandMatch';
 import type { StyleKey, FitKey } from '@/lib/styleMatch';
 
@@ -94,6 +95,9 @@ export default function ProductPage() {
     fireMetaPixelEvent('ClickToSugargoo', eventId, {
       content_ids: [product.id],
       content_name: product.name,
+    });
+    fireRedditPixelEvent('Lead', eventId, {
+      products: [{ id: product.id, name: product.name }],
     });
     try {
       await fetch('/api/track', {

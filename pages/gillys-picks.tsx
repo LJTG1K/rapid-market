@@ -8,6 +8,8 @@ import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import ProductImage from '@/components/ProductImage';
+import { generateEventId } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
 
 declare global {
   interface Window {
@@ -68,6 +70,7 @@ export default function GillysPicks() {
         }],
       });
     }
+    fireRedditPixelEvent('Lead', generateEventId(), { products: [{ id: productId, name: productName }] });
     try {
       await fetch('/api/track', {
         method: 'POST',

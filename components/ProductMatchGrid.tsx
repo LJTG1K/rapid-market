@@ -5,6 +5,9 @@ import { STYLE_OPTIONS, type MatchedProduct } from '@/lib/styleMatch';
 
 const STYLE_LABELS = Object.fromEntries(STYLE_OPTIONS.map((o) => [o.key, o.label]));
 
+// Reddit's Lead event now fires from inside ProductCard itself on every
+// Sugargoo-exit click, so this only needs to log the internal
+// style-quiz-pick-click analytics event — see components/ProductCard.tsx.
 function trackPickClick(productId: string) {
   fetch('/api/track', {
     method: 'POST',

@@ -328,6 +328,9 @@ export default async function handler(
                   userId: sugargooResponse.userId || sugargooResponse.data?.userId,
                   errorCode,
                   errorMsg,
+                  // No browser/UTM involved in a Lead Ads submission — the
+                  // channel is unambiguously Facebook.
+                  channel: 'facebook',
                 });
               });
             }

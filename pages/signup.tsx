@@ -7,6 +7,9 @@ import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import ProductImage from '@/components/ProductImage';
 import StyleQuizSection from '@/components/StyleQuizSection';
+import { generateEventId } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
+import { getAttribution } from '@/lib/attribution';
 
 interface SignupResponse {
   success?: boolean;
@@ -74,6 +77,9 @@ function SignupProductPicks() {
                   href={p.sugargooLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    fireRedditPixelEvent('Lead', generateEventId(), { products: [{ id: p.id, name: p.name }] })
+                  }
                   className="btn-primary !px-4 !py-2 text-[11px]"
                 >
                   Buy
@@ -128,10 +134,18 @@ export default function SugargooSignUp() {
         (window as any).fbq('track', 'InitiateCheckout', { value: 0.0, currency: 'AUD' });
       }
 
+      const attribution = getAttribution();
       const response = await fetch('/api/sugargoo/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name: name || email.split('@')[0] }),
+        body: JSON.stringify({
+          email,
+          name: name || email.split('@')[0],
+          channel: attribution?.channel,
+          utmMedium: attribution?.utmMedium,
+          utmCampaign: attribution?.utmCampaign,
+          landingPath: attribution?.landingPath,
+        }),
       });
 
       const data: SignupResponse = await response.json();
@@ -253,6 +267,9 @@ export default function SugargooSignUp() {
                 href="https://www.sugargoo.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  fireRedditPixelEvent('Lead', generateEventId(), { context: 'post_signup' })
+                }
                 className="btn-stamp w-full mb-4"
               >
                 Go to Sugargoo →

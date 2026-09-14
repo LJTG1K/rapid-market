@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import { useState, useEffect } from 'react';
 import ProductImage from '@/components/ProductImage';
+import { generateEventId } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
 
 interface Brand {
   brandName: string;
@@ -41,6 +43,7 @@ export async function getStaticProps() {
 }
 
 const handleSignupClick = (url: string) => {
+    fireRedditPixelEvent('Lead', generateEventId(), { context: 'landingpagetest-2' });
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'CompleteRegistration', {
         value: 0.00,

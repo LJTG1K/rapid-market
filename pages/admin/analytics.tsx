@@ -11,6 +11,7 @@ interface Stats {
       website: number;
       facebook: number;
     };
+    byChannel: Record<string, number>;
   };
   lastHour: {
     total: number;
@@ -21,6 +22,7 @@ interface Stats {
     source: string;
     email: string;
     status: string;
+    channel?: string;
   }>;
   errors: Array<{
     code: number;
@@ -106,6 +108,25 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
+        {/* Channel Breakdown */}
+        <div className="bg-white p-6 rounded-lg shadow mb-8">
+          <h2 className="text-xl font-bold mb-4">Signups By Channel</h2>
+          {Object.keys(stats.today.byChannel).length === 0 ? (
+            <p className="text-gray-500 text-sm">No signups today yet.</p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {Object.entries(stats.today.byChannel)
+                .sort((a, b) => b[1] - a[1])
+                .map(([channel, count]) => (
+                  <div key={channel} className="p-4 bg-gray-50 rounded">
+                    <div className="text-gray-600 capitalize">{channel}</div>
+                    <div className="text-2xl font-bold text-indigo-600">{count}</div>
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
+
         {/* Errors Breakdown */}
         {stats.errors.length > 0 && (
           <div className="bg-white p-6 rounded-lg shadow mb-8">
@@ -140,6 +161,7 @@ export default function AnalyticsDashboard() {
                 <tr>
                   <th className="text-left py-2 px-2">Time</th>
                   <th className="text-left py-2 px-2">Source</th>
+                  <th className="text-left py-2 px-2">Channel</th>
                   <th className="text-left py-2 px-2">Email</th>
                   <th className="text-left py-2 px-2">Status</th>
                 </tr>
@@ -155,6 +177,7 @@ export default function AnalyticsDashboard() {
                         {event.source === 'website' ? '🌐 Website' : '📱 Facebook'}
                       </span>
                     </td>
+                    <td className="py-2 px-2 text-xs capitalize">{event.channel || 'direct/organic'}</td>
                     <td className="py-2 px-2 font-mono text-sm">{event.email}</td>
                     <td className="py-2 px-2">
                       <span

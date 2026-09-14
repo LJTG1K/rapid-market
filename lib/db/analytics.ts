@@ -12,6 +12,11 @@ interface SignupEvent {
   userId?: string;
   errorCode?: number;
   errorMsg?: string;
+  /** Marketing channel attribution (reddit, meta, facebook, organic, ...) — see lib/attribution.ts. */
+  channel?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  landingPath?: string;
 }
 
 interface DashboardStats {
@@ -25,6 +30,8 @@ interface DashboardStats {
       website: number;
       facebook: number;
     };
+    /** Signups today grouped by marketing channel, unattributed ones bucketed as 'direct/organic'. */
+    byChannel: Record<string, number>;
   };
   lastHour: {
     total: number;
@@ -77,6 +84,21 @@ function getDatabase(): Database.Database {
       CREATE INDEX IF NOT EXISTS idx_email ON signup_events(email);
     `);
 
+    // Additive migration for databases created before channel attribution
+    // existed — CREATE TABLE IF NOT EXISTS above is a no-op on an existing
+    // table, so these columns have to be added explicitly. Each ADD COLUMN
+    // errors if the column is already there, which is exactly the "already
+    // migrated" case, so it's safe to just swallow that one.
+    const existingColumns = new Set(
+      (db.prepare('PRAGMA table_info(signup_events)').all() as Array<{ name: string }>).map((c) => c.name)
+    );
+    for (const column of ['channel', 'utmMedium', 'utmCampaign', 'landingPath']) {
+      if (!existingColumns.has(column)) {
+        db.exec(`ALTER TABLE signup_events ADD COLUMN ${column} TEXT`);
+      }
+    }
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_channel ON signup_events(channel)`);
+
     console.log('✅ Analytics database initialized');
     return db;
   } catch (error) {
@@ -93,8 +115,8 @@ export function logSignupEvent(event: SignupEvent): void {
   try {
     const database = getDatabase();
     const stmt = database.prepare(`
-      INSERT INTO signup_events (timestamp, source, email, status, userId, errorCode, errorMsg)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO signup_events (timestamp, source, email, status, userId, errorCode, errorMsg, channel, utmMedium, utmCampaign, landingPath)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     stmt.run(
@@ -104,10 +126,14 @@ export function logSignupEvent(event: SignupEvent): void {
       event.status,
       event.userId || null,
       event.errorCode || null,
-      event.errorMsg || null
+      event.errorMsg || null,
+      event.channel || null,
+      event.utmMedium || null,
+      event.utmCampaign || null,
+      event.landingPath || null
     );
 
-    console.log(`📊 Event logged: ${event.source} | ${event.email} | ${event.status}`);
+    console.log(`📊 Event logged: ${event.source} | ${event.channel || 'unattributed'} | ${event.email} | ${event.status}`);
   } catch (error) {
     // CRITICAL: Never block signup on logging failure
     console.error('⚠️ Analytics logging failed (non-blocking):', error);
@@ -144,6 +170,20 @@ export function getDashboardStats(): DashboardStats {
       )
       .get(todayStart) as any;
 
+    // Channel breakdown for today — unattributed signups (organic/direct,
+    // or anything predating this migration) bucket under 'direct/organic'.
+    const channelRows = database
+      .prepare(
+        `
+        SELECT COALESCE(channel, 'direct/organic') as channel, COUNT(*) as count
+        FROM signup_events
+        WHERE DATE(timestamp) = ? AND status IN ('success', 'duplicate', 'error')
+        GROUP BY COALESCE(channel, 'direct/organic')
+      `
+      )
+      .all(todayStart) as Array<{ channel: string; count: number }>;
+    const byChannel = Object.fromEntries(channelRows.map((r) => [r.channel, r.count]));
+
     // Last hour stats
     const lastHourStats = database
       .prepare(
@@ -161,7 +201,7 @@ export function getDashboardStats(): DashboardStats {
     const recent = database
       .prepare(
         `
-        SELECT timestamp, source, email, status, userId, errorCode, errorMsg
+        SELECT timestamp, source, email, status, userId, errorCode, errorMsg, channel
         FROM signup_events
         ORDER BY timestamp DESC
         LIMIT 20
@@ -199,6 +239,7 @@ export function getDashboardStats(): DashboardStats {
           website: todayStats.website || 0,
           facebook: todayStats.facebook || 0,
         },
+        byChannel,
       },
       lastHour: {
         total: lastHourStats.total || 0,
@@ -221,6 +262,7 @@ export function getDashboardStats(): DashboardStats {
         error: 0,
         successRate: 0,
         bySource: { website: 0, facebook: 0 },
+        byChannel: {},
       },
       lastHour: { total: 0, success: 0 },
       recent: [],

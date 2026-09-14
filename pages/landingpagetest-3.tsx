@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import fs from 'fs';
 import path from 'path';
 import ProductImage from '@/components/ProductImage';
+import { generateEventId } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
 
 interface Brand {
   brandName: string;
@@ -59,6 +61,7 @@ const handleSignupClick = (url: string) => {
         status: 'completed'
       });
     }
+    fireRedditPixelEvent('Lead', generateEventId(), { context: 'landingpagetest-3' });
     window.open(url, '_blank');
   };
 

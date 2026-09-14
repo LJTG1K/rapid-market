@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import ProductImage from '@/components/ProductImage';
 import { generateEventId, fireMetaPixelEvent } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
 
 declare global {
   interface Window {
@@ -93,6 +94,7 @@ export default function ProductDetail() {
     // Log to backend
     const eventId = generateEventId();
     fireMetaPixelEvent('ClickToSugargoo', eventId, { content_ids: [productId], content_name: productName });
+    fireRedditPixelEvent('Lead', eventId, { products: [{ id: productId, name: productName }] });
     try {
       await fetch('/api/track', {
         method: 'POST',

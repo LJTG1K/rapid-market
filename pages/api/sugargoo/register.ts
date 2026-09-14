@@ -12,6 +12,10 @@ interface RegistrationRequest {
   name?: string;
   password?: string;
   source?: 'website' | 'facebook-lead'; // Track where the signup came from
+  channel?: string; // Marketing channel attribution (reddit, meta, organic, ...) — see lib/attribution.ts
+  utmMedium?: string;
+  utmCampaign?: string;
+  landingPath?: string;
 }
 
 interface SugargooSuccess {
@@ -118,7 +122,16 @@ export default async function handler(
   }
 
   try {
-    const { email, name, password, source = 'website' } = req.body as RegistrationRequest;
+    const {
+      email,
+      name,
+      password,
+      source = 'website',
+      channel,
+      utmMedium,
+      utmCampaign,
+      landingPath,
+    } = req.body as RegistrationRequest;
 
     // Validate required fields
     if (!email) {
@@ -211,6 +224,10 @@ export default async function handler(
             email,
             status: 'success',
             userId: data.data.userId,
+            channel,
+            utmMedium,
+            utmCampaign,
+            landingPath,
           });
         });
       }
@@ -281,6 +298,10 @@ export default async function handler(
             status: 'duplicate',
             errorCode: 40910,
             errorMsg: 'Email already registered',
+            channel,
+            utmMedium,
+            utmCampaign,
+            landingPath,
           });
         });
       }
@@ -304,6 +325,10 @@ export default async function handler(
             status: 'error',
             errorCode: 40011,
             errorMsg: 'Invalid email format',
+            channel,
+            utmMedium,
+            utmCampaign,
+            landingPath,
           });
         });
       }
@@ -335,6 +360,10 @@ export default async function handler(
           status: 'error',
           errorCode: data.code,
           errorMsg: data.msg || 'Registration failed',
+          channel,
+          utmMedium,
+          utmCampaign,
+          landingPath,
         });
       });
     }
@@ -358,6 +387,10 @@ export default async function handler(
           status: 'error',
           errorCode: 500,
           errorMsg,
+          channel: req.body?.channel,
+          utmMedium: req.body?.utmMedium,
+          utmCampaign: req.body?.utmCampaign,
+          landingPath: req.body?.landingPath,
         });
       });
     }

@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
+import { generateEventId } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
 
 interface Review {
   author: string;
@@ -9,6 +11,7 @@ interface Review {
 }
 
 const handleSignupClick = (url: string) => {
+    fireRedditPixelEvent('Lead', generateEventId(), { context: 'landingpagetest-1' });
     if (typeof window !== 'undefined' && (window as any).fbq) {
       (window as any).fbq('track', 'CompleteRegistration', {
         value: 0.00,

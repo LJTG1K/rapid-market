@@ -9,6 +9,8 @@ import ProductImage from '@/components/ProductImage';
 import StyleQuizSection from '@/components/StyleQuizSection';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import LoadingMessage, { MANIFEST_MESSAGES } from '@/components/LoadingMessage';
+import { generateEventId } from '@/lib/metaPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
 
 interface ShowcaseProduct {
   id: string;
@@ -89,6 +91,9 @@ function RandomShowcase() {
               href={p.sugargooLink}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                fireRedditPixelEvent('Lead', generateEventId(), { products: [{ id: p.id, name: p.name }] })
+              }
               className="btn-primary !px-4 !py-2 text-[11px]"
             >
               Buy
