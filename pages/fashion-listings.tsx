@@ -171,7 +171,11 @@ export default function FashionListings() {
   // as curated shelves instead of one flat grid. Any filter, style, brand, or
   // search term drops straight into the ordinary sortable grid below.
   const isBrowseMode =
-    selectedCategory === 'All' && selectedStyle === 'All' && selectedBrand === 'All' && searchTerm.trim() === '';
+    selectedCategory === 'All' &&
+    selectedStyle === 'All' &&
+    selectedBrand === 'All' &&
+    searchTerm.trim() === '' &&
+    selectedSort === 'Newest';
 
   const randomPicks = useMemo(() => shuffle(products).slice(0, 8), [products]);
   const quizPicks = useMemo(
