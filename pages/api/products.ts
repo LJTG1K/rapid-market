@@ -140,6 +140,40 @@ function fallbackDescription(category: string): string {
   );
 }
 
+// In-memory, per-warm-instance cache. At least 14 different pages
+// (fashion-listings, tech-listings, every product page, the homepage, brand
+// pages, the style quiz, …) independently call this endpoint, and each
+// uncached hit was costing two sequential round trips to the Google Sheets
+// API — the actual source of the multi-second page loads, not anything on
+// the client. This turns "every page load re-fetches the sheet" into "at
+// most one Sheets fetch per category every 5 minutes," which is what the
+// existing Cache-Control header was already assuming would happen upstream.
+const CACHE_TTL_MS = 5 * 60 * 1000;
+const productCache = new Map<string, { data: Product[]; expiresAt: number }>();
+
+async function fetchSheetValues(sheetId: string, apiKey: string, sheetName: string) {
+  const range = encodeURIComponent(`${sheetName}!A:H`);
+  const dataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+  return fetch(dataUrl);
+}
+
+// Only hit the metadata endpoint (a second round trip) if the tab isn't
+// named exactly what we guessed — handles a renamed/re-cased tab without
+// paying for sheet discovery on every request.
+async function resolveSheetName(sheetId: string, apiKey: string, category: string): Promise<string | null> {
+  const metadataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?key=${apiKey}&fields=sheets`;
+  const sheetsResponse = await fetch(metadataUrl);
+  if (!sheetsResponse.ok) {
+    console.error('Failed to fetch sheet metadata:', sheetsResponse.statusText);
+    return null;
+  }
+  const sheetsData = await sheetsResponse.json();
+  const sheets = sheetsData.sheets || [];
+  const target = category.toLowerCase() === 'tech' ? 'TECH' : 'FASHION';
+  const found = sheets.find((s: any) => s.properties?.title?.toUpperCase() === target);
+  return found ? (found as any).properties.title : null;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Product[]>
@@ -148,60 +182,40 @@ export default async function handler(
     const sheetId = process.env.GOOGLE_SHEET_ID;
     const apiKey = process.env.GOOGLE_API_KEY;
     const category = (req.query.category as string) || 'fashion';
+    const cacheKey = category.toLowerCase();
+    const cacheTime = process.env.NODE_ENV === 'production' ? 3600 : 300;
 
     if (!sheetId || !apiKey) {
       console.warn('Google Sheets credentials not configured. Using demo data.');
       return res.status(200).json(getDemoProducts());
     }
 
+    const cached = productCache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) {
+      res.setHeader('Cache-Control', `public, s-maxage=${cacheTime}, stale-while-revalidate=${cacheTime * 2}`);
+      return res.status(200).json(cached.data);
+    }
+
     console.log(`📥 Fetching ${category} products from Google Sheets...`);
 
-    // Get sheet metadata
-    const metadataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?key=${apiKey}&fields=sheets`;
-    const sheetsResponse = await fetch(metadataUrl);
+    const categoryFunc = category.toLowerCase() === 'tech' ? categorizeTechProduct : categorizeFashionProduct;
+    const guessedSheetName = category.toLowerCase() === 'tech' ? 'Tech' : 'Fashion';
 
-    if (!sheetsResponse.ok) {
-      console.error('Failed to fetch sheet metadata:', sheetsResponse.statusText);
-      return res.status(200).json(getDemoProducts());
-    }
-
-    const sheetsData = await sheetsResponse.json();
-    const sheets = sheetsData.sheets || [];
-
-    if (sheets.length === 0) {
-      console.error('No sheets found');
-      return res.status(200).json(getDemoProducts());
-    }
-
-    // Determine which sheet to fetch
-    let sheetName = 'Fashion';
-    let categoryFunc = categorizeFashionProduct;
-
-    if (category.toLowerCase() === 'tech') {
-      const techSheet = sheets.find((s: any) => s.properties?.title?.toUpperCase() === 'TECH');
-      if (techSheet) {
-        sheetName = (techSheet as any).properties.title;
-        categoryFunc = categorizeTechProduct;
-        console.log(`✓ Found TECH sheet`);
-      }
-    } else {
-      const fashionSheet = sheets.find((s: any) => s.properties?.title?.toUpperCase() === 'FASHION');
-      if (fashionSheet) {
-        sheetName = (fashionSheet as any).properties.title;
-        console.log(`✓ Found FASHION sheet`);
-      }
-    }
-
-    // Fetch data from the sheet. G ("Style Tags") and H ("Fit") are the manual
-    // quiz-tag columns.
-    const range = encodeURIComponent(`${sheetName}!A:H`);
-    const dataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
-
-    const dataResponse = await fetch(dataUrl);
+    let sheetName = guessedSheetName;
+    let dataResponse = await fetchSheetValues(sheetId, apiKey, sheetName);
 
     if (!dataResponse.ok) {
-      console.error(`API error: ${dataResponse.status} ${dataResponse.statusText}`);
-      return res.status(200).json(getDemoProducts());
+      const resolved = await resolveSheetName(sheetId, apiKey, category);
+      if (!resolved) {
+        console.error('No matching sheet found for category:', category);
+        return res.status(200).json(getDemoProducts());
+      }
+      sheetName = resolved;
+      dataResponse = await fetchSheetValues(sheetId, apiKey, sheetName);
+      if (!dataResponse.ok) {
+        console.error(`API error: ${dataResponse.status} ${dataResponse.statusText}`);
+        return res.status(200).json(getDemoProducts());
+      }
     }
 
     const data = await dataResponse.json();
@@ -299,7 +313,13 @@ export default async function handler(
       console.log(`⏭️  Skipped ${skipped} rows: noName=${skipReasons.noName}, noPrice=${skipReasons.noPrice}, noLink=${skipReasons.noLink}, badLink=${skipReasons.badLink}, badPrice=${skipReasons.badPrice}`);
     }
 
-    const cacheTime = process.env.NODE_ENV === 'production' ? 3600 : 300;
+    // Don't cache an empty/demo result as if it were real data — a transient
+    // parse hiccup should self-heal on the next request, not lock the whole
+    // site into showing the one-item fallback for the full TTL.
+    if (products.length > 0) {
+      productCache.set(cacheKey, { data: products, expiresAt: Date.now() + CACHE_TTL_MS });
+    }
+
     res.setHeader(
       'Cache-Control',
       `public, s-maxage=${cacheTime}, stale-while-revalidate=${cacheTime * 2}`
