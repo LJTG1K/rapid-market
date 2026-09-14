@@ -267,7 +267,7 @@ export default function FashionListings() {
         ) : isBrowseMode ? (
           <>
             <section className="mb-16">
-              <div className="flex items-baseline justify-between mb-6 gap-4">
+              <div className="flex flex-wrap items-baseline justify-between mb-6 gap-x-4 gap-y-2">
                 <h2 className="font-display font-black text-ink text-2xl md:text-3xl tracking-tightest">
                   {quizAnswers ? 'Picked For You' : 'Popular Right Now'}
                 </h2>
