@@ -240,6 +240,15 @@ function scoreProduct(
   return { ...product, matchScore, matchedStyles, budgetMatched, fitMatched };
 }
 
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 /**
  * Ranks (never hard-excludes on style/fit) so the results page can't dead-end
  * at zero products — a product whose brand isn't in brands.json still shows
@@ -247,6 +256,12 @@ function scoreProduct(
  * only affects ranking, not inclusion. The one hard exclusion is a product
  * explicitly marked N/A in the Sheet (non-apparel, e.g. briefcases) — those
  * are dropped before scoring so they never appear in quiz results.
+ *
+ * The base list is shuffled before scoring so that products tying on
+ * matchScore (the common case — most of the catalog isn't manually tagged)
+ * land in random relative order instead of the Sheet's row order. Array.sort
+ * is stable, so without this every retake of the quiz produced the exact
+ * same top N in the exact same order.
  */
 export function matchProducts(
   products: Product[],
@@ -254,7 +269,7 @@ export function matchProducts(
   answers: QuizAnswers,
   limit = 30
 ): MatchedProduct[] {
-  const eligible = products.filter((p) => !p.excludeFromQuiz);
+  const eligible = shuffle(products.filter((p) => !p.excludeFromQuiz));
   const tiers = computeBudgetTiers(eligible);
   return eligible
     .map((p) => scoreProduct(p, brands, answers, tiers))
