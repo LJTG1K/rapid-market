@@ -177,18 +177,26 @@ export default function FashionListings() {
     searchTerm.trim() === '' &&
     selectedSort === 'Newest';
 
-  const randomPicks = useMemo(() => shuffle(products).slice(0, 8), [products]);
+  // These back the browse-mode shelves only — gated on isBrowseMode so a
+  // visit that lands directly in a filtered/sorted view (e.g. a category
+  // link from elsewhere on the site) doesn't pay for shuffling the catalog
+  // or scoring every product against the quiz just to throw it away unused.
+  const randomPicks = useMemo(
+    () => (isBrowseMode ? shuffle(products).slice(0, 8) : []),
+    [products, isBrowseMode]
+  );
   const quizPicks = useMemo(
-    () => (quizAnswers ? matchProducts(products, brands, quizAnswers, 8) : []),
-    [products, brands, quizAnswers]
+    () => (isBrowseMode && quizAnswers ? matchProducts(products, brands, quizAnswers, 8) : []),
+    [products, brands, quizAnswers, isBrowseMode]
   );
   const shelvesByCategory = useMemo(() => {
+    if (!isBrowseMode) return {};
     const map: Record<string, Product[]> = {};
     FASHION_CATEGORIES.slice(1).forEach((cat) => {
       map[cat] = shuffle(products.filter((p) => p.category === cat)).slice(0, 4);
     });
     return map;
-  }, [products]);
+  }, [products, isBrowseMode]);
 
   const goToCategory = (category: string) => {
     setSelectedCategory(category);
