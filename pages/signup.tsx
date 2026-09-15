@@ -166,6 +166,10 @@ export default function SugargooSignUp() {
       if ((window as any).fbq) {
         (window as any).fbq('track', 'CompleteRegistration', { value: 0.0, currency: 'AUD', userId: data.userId });
       }
+      // Fires only here, after Sugargoo confirms the account actually exists —
+      // not on the initial button click, which fires regardless of whether
+      // registration succeeds, fails, or hits a duplicate email.
+      fireRedditPixelEvent('SignUp', generateEventId(), { userId: data.userId });
 
       setSuccess(true);
       setSubmittedEmail(email);
