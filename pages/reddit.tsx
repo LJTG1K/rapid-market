@@ -142,15 +142,15 @@ export default function Reddit() {
 
       {/* ---------- Hero + quiz ---------- */}
       <section className="container-edit pt-12 md:pt-16 pb-16 md:pb-20">
-        <div className="max-w-lg mx-auto text-center mb-12">
+        <div className="max-w-3xl mx-auto text-center mb-10">
           <Reveal>
             <span className="eyebrow block mb-5">Indexing Authentic Chinese Brands</span>
           </Reveal>
           <Reveal delay={80}>
             <h1 className="font-display font-black text-ink text-4xl sm:text-5xl tracking-tightest leading-[0.95] mb-4">
-              150+ sellers. Tell us what you&apos;re actually after.
+              Struggling with agent restrictions? Try something different for your next haul.
             </h1>
-            <p className="text-ink/70 leading-relaxed">
+            <p className="text-ink/70 leading-relaxed max-w-lg mx-auto">
               Small independent labels and factories direct from China. Not Shein, not
               Amazon, not the same twelve dropshippers everyone else is reselling.
             </p>
@@ -158,7 +158,7 @@ export default function Reddit() {
         </div>
 
         <Reveal delay={140}>
-          <StyleQuizSection />
+          <StyleQuizSection hideHeading />
         </Reveal>
       </section>
 

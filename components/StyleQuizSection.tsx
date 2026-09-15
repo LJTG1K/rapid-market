@@ -24,6 +24,8 @@ interface StyleQuizSectionProps {
   className?: string;
   /** Fires once on mount (with the existing answer state) and again on completion. */
   onAnswersChange?: (hasAnswers: boolean) => void;
+  /** Hide the "Get picks built around you" / "Your picks" heading row — for pages whose own hero copy already introduces the quiz. */
+  hideHeading?: boolean;
 }
 
 /**
@@ -32,7 +34,7 @@ interface StyleQuizSectionProps {
  * post-signup screen and the account page. Callers control outer spacing/card
  * treatment via `className` since the two host pages style sections differently.
  */
-export default function StyleQuizSection({ className = '', onAnswersChange }: StyleQuizSectionProps) {
+export default function StyleQuizSection({ className = '', onAnswersChange, hideHeading = false }: StyleQuizSectionProps) {
   const [answers, setAnswers] = useState<StoredQuizAnswers | null | undefined>(undefined);
   const [matched, setMatched] = useState<MatchedProduct[]>([]);
   const [loadingMatches, setLoadingMatches] = useState(false);
@@ -75,16 +77,18 @@ export default function StyleQuizSection({ className = '', onAnswersChange }: St
 
   return (
     <div className={className}>
-      <div className="flex items-baseline justify-between mb-8">
-        <h2 className="font-display font-black text-2xl md:text-3xl tracking-tightest">
-          {answers ? 'Your picks' : 'Get picks built around you'}
-        </h2>
-        {answers ? (
-          <Link href="/style-quiz" className="eyebrow link-underline">Refine →</Link>
-        ) : (
-          <span className="eyebrow hidden sm:inline">3 Questions</span>
-        )}
-      </div>
+      {!hideHeading && (
+        <div className="flex items-baseline justify-between mb-8">
+          <h2 className="font-display font-black text-2xl md:text-3xl tracking-tightest">
+            {answers ? 'Your picks' : 'Get picks built around you'}
+          </h2>
+          {answers ? (
+            <Link href="/style-quiz" className="eyebrow link-underline">Refine →</Link>
+          ) : (
+            <span className="eyebrow hidden sm:inline">3 Questions</span>
+          )}
+        </div>
+      )}
       {answers ? (
         <ProductMatchGrid products={matched} loading={loadingMatches} />
       ) : (
