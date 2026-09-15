@@ -140,7 +140,7 @@ function ProductHighlights() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() =>
-                    fireRedditPixelEvent('Lead', generateEventId(), { products: [{ id: p.id, name: p.name }] })
+                    fireRedditPixelEvent('SugargooBuyClick', generateEventId(), { products: [{ id: p.id, name: p.name }] })
                   }
                   className="btn-primary !px-4 !py-2 text-[11px]"
                 >

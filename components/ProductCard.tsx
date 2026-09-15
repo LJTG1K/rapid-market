@@ -66,7 +66,7 @@ export default function ProductCard({ product, wishlistCategory, tags = [], onBu
           // whether the parent also wires its own onBuyClick (e.g. the
           // style-quiz-pick-click log in ProductMatchGrid) — so no consumer
           // of this shared card can silently ship without Reddit tracking.
-          fireRedditPixelEvent('Lead', generateEventId(), {
+          fireRedditPixelEvent('SugargooBuyClick', generateEventId(), {
             products: [{ id: product.id, name: product.name }],
           });
           onBuyClick?.();

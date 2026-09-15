@@ -96,7 +96,7 @@ export default function ProductPage() {
       content_ids: [product.id],
       content_name: product.name,
     });
-    fireRedditPixelEvent('Lead', eventId, {
+    fireRedditPixelEvent('SugargooBuyClick', eventId, {
       products: [{ id: product.id, name: product.name }],
     });
     try {

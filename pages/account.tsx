@@ -184,7 +184,7 @@ export default function Account() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() =>
-                        fireRedditPixelEvent('Lead', generateEventId(), {
+                        fireRedditPixelEvent('SugargooBuyClick', generateEventId(), {
                           products: [{ id: product.id, name: product.name }],
                         })
                       }

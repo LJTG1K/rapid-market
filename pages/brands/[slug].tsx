@@ -91,7 +91,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
   const trackClick = async (productId: string, productName: string) => {
     const eventId = generateEventId();
     fireMetaPixelEvent('ClickToSugargoo', eventId, { content_ids: [productId], content_name: productName });
-    fireRedditPixelEvent('Lead', eventId, { products: [{ id: productId, name: productName }] });
+    fireRedditPixelEvent('SugargooBuyClick', eventId, { products: [{ id: productId, name: productName }] });
     try {
       await fetch('/api/track', {
         method: 'POST',

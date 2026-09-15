@@ -70,7 +70,7 @@ export default function GillysPicks() {
         }],
       });
     }
-    fireRedditPixelEvent('Lead', generateEventId(), { products: [{ id: productId, name: productName }] });
+    fireRedditPixelEvent('SugargooBuyClick', generateEventId(), { products: [{ id: productId, name: productName }] });
     try {
       await fetch('/api/track', {
         method: 'POST',
