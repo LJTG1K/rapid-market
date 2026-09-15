@@ -233,12 +233,21 @@ export default async function handler(
     let skipped = 0;
     let skipReasons = { noName: 0, noPrice: 0, noLink: 0, badLink: 0, badPrice: 0 };
 
-    // IMPORTANT: Column structure is (Empty) | NAME | IMAGE | DESCRIPTION | PRICE | LINK
-    // So indices are: row[0]=empty, row[1]=name, row[2]=image, row[3]=description, row[4]=price, row[5]=link
+    // Column A ("ID") holds a permanent, hand-assigned id — once a row has
+    // one, it's pinned there forever regardless of what happens to other
+    // rows (deleted, dead-linked, reordered). It's blank on every row today,
+    // so this changes nothing yet; see scripts/backfill-product-ids.mjs for
+    // the one-time migration that fills it in. Any row still without one
+    // falls back to the old counter, same as always — that's the ONLY
+    // thing still vulnerable to shifting when a row is removed/dead-linked.
+    //
+    // Column structure is ID | NAME | IMAGE | DESCRIPTION | PRICE | LINK
+    // So indices are: row[0]=id, row[1]=name, row[2]=image, row[3]=description, row[4]=price, row[5]=link
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
       if (!row || row.length < 6) continue;
 
+      const explicitId = (row[0] || '').toString().trim();
       const name = (row[1] || '').toString().trim();
       const image = (row[2] || '').toString().trim();
       const description = (row[3] || '').toString().trim();
@@ -286,7 +295,7 @@ export default async function handler(
       const fitParsed = normalizeFitInput(fitRaw);
 
       const product: Product = {
-        id: productId.toString(),
+        id: explicitId || productId.toString(),
         name: name.trim(),
         // Empty rather than a third-party placeholder URL: ProductImage renders
         // the local hatch placeholder for a falsy src, so a missing sheet image
@@ -305,7 +314,9 @@ export default async function handler(
       };
 
       products.push(product);
-      productId++;
+      // Only advance the fallback counter for rows still relying on it — a
+      // row with its own explicit id must never affect any other row's id.
+      if (!explicitId) productId++;
     }
 
     console.log(`✅ Successfully loaded ${products.length} products`);

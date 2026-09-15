@@ -9,7 +9,8 @@
     "lint": "next lint",
     "optimize:images": "node scripts/optimize-images.mjs",
     "build:shipping-index": "node scripts/build-shipping-index.mjs",
-    "build:world-paths": "node scripts/build-world-paths.mjs"
+    "build:world-paths": "node scripts/build-world-paths.mjs",
+    "backfill:product-ids": "node scripts/backfill-product-ids.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
