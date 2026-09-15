@@ -8,6 +8,22 @@
 import { generateEventId } from './metaPixel';
 import type { StyleKey } from './styleMatch';
 
+// Reddit's pixel only recognizes these as the primary `track()` name. Any
+// other event name has to route through the 'Custom' event type instead,
+// with the real name passed as `customEventName` — passing an arbitrary
+// name directly (as this file used to) is silently accepted by `rdt()` but
+// never surfaces as a named event on Reddit's side.
+const REDDIT_STANDARD_EVENTS = new Set([
+  'PageVisit',
+  'ViewContent',
+  'Search',
+  'AddToCart',
+  'AddToWishlist',
+  'Purchase',
+  'Lead',
+  'SignUp',
+]);
+
 export function fireRedditPixelEvent(
   eventName: string,
   eventId: string,
@@ -16,7 +32,11 @@ export function fireRedditPixelEvent(
   if (typeof window === 'undefined') return;
   const rdt = (window as any).rdt;
   if (typeof rdt !== 'function') return;
-  rdt('track', eventName, { conversionId: eventId, ...params });
+  if (REDDIT_STANDARD_EVENTS.has(eventName)) {
+    rdt('track', eventName, { conversionId: eventId, ...params });
+  } else {
+    rdt('track', 'Custom', { customEventName: eventName, conversionId: eventId, ...params });
+  }
 }
 
 // One custom event name per quiz style — kept distinct (rather than a single
