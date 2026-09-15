@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import ProductImage from '@/components/ProductImage';
 import StyleQuizSection from '@/components/StyleQuizSection';
 import { generateEventId } from '@/lib/metaPixel';
-import { fireRedditPixelEvent } from '@/lib/redditPixel';
+import { fireRedditPixelEvent, fireBuyClickPixelEvents } from '@/lib/redditPixel';
 import { getAttribution } from '@/lib/attribution';
 
 interface SignupResponse {
@@ -78,7 +78,7 @@ function SignupProductPicks() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() =>
-                    fireRedditPixelEvent('SugargooBuyClick', generateEventId(), { products: [{ id: p.id, name: p.name }] })
+                    fireBuyClickPixelEvents(generateEventId(), { products: [{ id: p.id, name: p.name }] })
                   }
                   className="btn-primary !px-4 !py-2 text-[11px]"
                 >
@@ -272,7 +272,7 @@ export default function SugargooSignUp() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
-                  fireRedditPixelEvent('SugargooBuyClick', generateEventId(), { context: 'post_signup' })
+                  fireBuyClickPixelEvents(generateEventId(), { context: 'post_signup' })
                 }
                 className="btn-stamp w-full mb-4"
               >

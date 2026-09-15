@@ -10,7 +10,7 @@ import { useWishlist } from '@/contexts/WishlistContext';
 import ProductImage from '@/components/ProductImage';
 import StyleQuizSection from '@/components/StyleQuizSection';
 import { generateEventId } from '@/lib/metaPixel';
-import { fireRedditPixelEvent } from '@/lib/redditPixel';
+import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
 
 interface Product {
   id: string;
@@ -184,7 +184,7 @@ export default function Account() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() =>
-                        fireRedditPixelEvent('SugargooBuyClick', generateEventId(), {
+                        fireBuyClickPixelEvents(generateEventId(), {
                           products: [{ id: product.id, name: product.name }],
                         })
                       }

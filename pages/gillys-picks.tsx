@@ -9,7 +9,7 @@ import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import ProductImage from '@/components/ProductImage';
 import { generateEventId } from '@/lib/metaPixel';
-import { fireRedditPixelEvent } from '@/lib/redditPixel';
+import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
 
 declare global {
   interface Window {
@@ -70,7 +70,7 @@ export default function GillysPicks() {
         }],
       });
     }
-    fireRedditPixelEvent('SugargooBuyClick', generateEventId(), { products: [{ id: productId, name: productName }] });
+    fireBuyClickPixelEvents(generateEventId(), { products: [{ id: productId, name: productName }] });
     try {
       await fetch('/api/track', {
         method: 'POST',

@@ -68,3 +68,20 @@ export function fireQuizCompletePixelEvents(styles: StyleKey[]): void {
     }
   });
 }
+
+/**
+ * Fires on every Sugargoo-exit click: Reddit's standard `AddToCart` event,
+ * plus the `SugargooBuyClick` custom event. Confirmed live in Ads Manager —
+ * a campaign's Conversion goal picker only ever offers Reddit's fixed
+ * standard events (Purchase, Lead, Sign up, Page visit, Add to cart), never
+ * a custom event, no matter how it fires or what Events/Audience Manager
+ * show elsewhere. `SugargooBuyClick` alone could never be a Stage 2 bidding
+ * target because of that — `AddToCart` is the closest honest standard-event
+ * fit for "clicked buy, hasn't paid yet" and is what Stage 2 actually
+ * optimizes against; `SugargooBuyClick` still fires alongside it so
+ * reporting can tell this click apart from a hypothetical future real cart.
+ */
+export function fireBuyClickPixelEvents(eventId: string, params: Record<string, unknown> = {}): void {
+  fireRedditPixelEvent('AddToCart', eventId, params);
+  fireRedditPixelEvent('SugargooBuyClick', eventId, params);
+}
