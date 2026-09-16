@@ -71,3 +71,34 @@ export function getAttribution(): Attribution | null {
     return null;
   }
 }
+
+const CLICK_ID_STORAGE_KEY = 'rapid_reddit_click_id';
+
+/**
+ * Reddit's click ID (rdt_cid), auto-appended to the landing URL when a user
+ * clicks a Reddit ad. Captured once and persisted so it's still available
+ * whichever later page actually fires a conversion event (quiz complete,
+ * buy click, signup) — the Reddit Conversions API needs it passed explicitly
+ * since, unlike the browser pixel, it has no access to the page URL. Call
+ * alongside captureAttribution() on every page load/route change.
+ */
+export function captureRedditClickId(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const clickId = new URLSearchParams(window.location.search).get('rdt_cid');
+    if (clickId) {
+      window.localStorage.setItem(CLICK_ID_STORAGE_KEY, clickId);
+    }
+  } catch {
+    // Private browsing / blocked storage — best-effort only.
+  }
+}
+
+export function getRedditClickId(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return window.localStorage.getItem(CLICK_ID_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}

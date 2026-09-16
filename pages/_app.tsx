@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import StyleQuizBanner from '@/components/StyleQuizBanner';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { WishlistProvider } from '@/contexts/WishlistContext';
-import { captureAttribution } from '@/lib/attribution';
+import { captureAttribution, captureRedditClickId } from '@/lib/attribution';
 import '@/styles/globals.css';
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -18,8 +18,13 @@ export default function App({ Component, pageProps }: AppProps) {
   // still be attributed. See lib/attribution.ts.
   useEffect(() => {
     captureAttribution();
-    router.events.on('routeChangeComplete', captureAttribution);
-    return () => router.events.off('routeChangeComplete', captureAttribution);
+    captureRedditClickId();
+    const captureAll = () => {
+      captureAttribution();
+      captureRedditClickId();
+    };
+    router.events.on('routeChangeComplete', captureAll);
+    return () => router.events.off('routeChangeComplete', captureAll);
   }, [router.events]);
 
   return (

@@ -6,6 +6,7 @@
  * event, the same way Meta's Pixel/CAPI pair already dedups on eventId.
  */
 import { generateEventId } from './metaPixel';
+import { getRedditClickId } from './attribution';
 import type { StyleKey } from './styleMatch';
 
 // Reddit's pixel only recognizes these as the primary `track()` name. Any
@@ -24,12 +25,34 @@ const REDDIT_STANDARD_EVENTS = new Set([
   'SignUp',
 ]);
 
+/**
+ * Mirrors the event to Reddit's server-side Conversions API (see
+ * lib/redditConversions.ts and pages/api/reddit-conversions.ts), sharing the
+ * same eventId as the pixel call for Reddit's pixel/CAPI dedup, and reading
+ * the rdt_cid click ID captured in lib/attribution.ts — the browser pixel
+ * gets that from the page URL automatically, but a server-side call has no
+ * access to it otherwise. Fire-and-forget: a slow/failed CAPI call must
+ * never block or break the UI action that triggered it.
+ */
+function reportServerSideConversion(eventName: string, eventId: string): void {
+  const clickId = getRedditClickId();
+  fetch('/api/reddit-conversions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ eventName, eventId, clickId }),
+    keepalive: true,
+  }).catch(() => {
+    // best-effort only
+  });
+}
+
 export function fireRedditPixelEvent(
   eventName: string,
   eventId: string,
   params: Record<string, unknown> = {}
 ): void {
   if (typeof window === 'undefined') return;
+  reportServerSideConversion(eventName, eventId);
   const rdt = (window as any).rdt;
   if (typeof rdt !== 'function') return;
   if (REDDIT_STANDARD_EVENTS.has(eventName)) {
