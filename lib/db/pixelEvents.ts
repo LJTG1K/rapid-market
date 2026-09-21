@@ -12,9 +12,10 @@ import type { LogicalEvent, PixelPlatform } from '../pixelEvents';
 export interface PixelEventRow {
   event_id: string;
   logical_event: LogicalEvent;
-  platform: PixelPlatform;
+  platform: PixelPlatform | 'none';
   platform_event: string;
-  source: 'browser' | 'server';
+  /** 'backfill' rows are pre-tracker history copied in by sql/backfill_pixel_events.sql. */
+  source: 'browser' | 'server' | 'backfill';
   status: string;
   error?: string | null;
   page_path?: string | null;
@@ -75,8 +76,12 @@ export interface PixelEventSummary {
   byPage: Array<{ logicalEvent: string; page: string; actions: number; meta: number; reddit: number }>;
   byChannel: Array<{ logicalEvent: string; channel: string; actions: number }>;
   recentErrors: Array<{ createdAt: string; platform: string; platformEvent: string; page: string; error: string }>;
-  /** One entry per distinct action (event_id) with its first timestamp — lets a client bucket a timeline in its own timezone. */
-  actions: Array<{ t: string; logicalEvent: string }>;
+  /**
+   * One entry per distinct action (event_id) with its first timestamp — lets a
+   * client bucket a timeline in its own timezone. `backfill` marks pre-tracker
+   * history, which has no pixel outcome and appears nowhere else in the summary.
+   */
+  actions: Array<{ t: string; logicalEvent: string; backfill: boolean }>;
   /** The newest actions with every platform fire attached, to check a test click end to end. */
   recentActions: Array<{
     eventId: string;
@@ -94,8 +99,17 @@ export function summarizePixelEvents(rows: PixelEventRecord[]): PixelEventSummar
   const channels = new Map<string, { logicalEvent: string; channel: string; all: Set<string> }>();
   const recentErrors: PixelEventSummary['recentErrors'] = [];
   const actions = new Map<string, PixelEventSummary['recentActions'][number]>();
+  const backfilled: PixelEventSummary['actions'] = [];
 
   for (const row of rows) {
+    // Backfilled history carries placeholder platform/status values and no page
+    // or channel, so counting it in delivery, per-page coverage or the recent
+    // feed would read as failures. It only feeds the timeline and totals.
+    if (row.source === 'backfill') {
+      backfilled.push({ t: row.created_at, logicalEvent: row.logical_event, backfill: true });
+      continue;
+    }
+
     let action = actions.get(row.event_id);
     if (!action) {
       action = {
@@ -175,7 +189,10 @@ export function summarizePixelEvents(rows: PixelEventRecord[]): PixelEventSummar
       .map((c) => ({ logicalEvent: c.logicalEvent, channel: c.channel, actions: c.all.size }))
       .sort((a, b) => b.actions - a.actions),
     recentErrors,
-    actions: Array.from(actions.values()).map((a) => ({ t: a.createdAt, logicalEvent: a.logicalEvent })),
+    actions: [
+      ...Array.from(actions.values()).map((a) => ({ t: a.createdAt, logicalEvent: a.logicalEvent, backfill: false })),
+      ...backfilled,
+    ],
     recentActions: Array.from(actions.values())
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
       .slice(0, 25)

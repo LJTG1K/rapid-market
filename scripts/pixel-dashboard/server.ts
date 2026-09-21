@@ -42,8 +42,17 @@ function demoRows(hours: number): PixelEventRecord[] {
   const count = Math.min(900, Math.round(hours * 9));
 
   for (let i = 0; i < count; i++) {
-    const at = new Date(now - rand() * hours * 3600_000).toISOString();
+    const ts = now - rand() * hours * 3600_000;
+    const at = new Date(ts).toISOString();
     const quiz = rand() < 0.3;
+    // The oldest part of the window plays "pre-tracker history": backfill rows, no pixel outcome.
+    if (now - ts > hours * 3600_000 * 0.6) {
+      rows.push({
+        created_at: at, event_id: `demo-bf-${i}`, logical_event: quiz ? 'quiz_complete' : 'buy_click',
+        platform: 'none', platform_event: 'none', source: 'backfill', status: 'backfilled',
+      } as PixelEventRecord);
+      continue;
+    }
     const page = quiz ? '/style-quiz' : pages[Math.floor(rand() * 4)];
     const channel = channels[Math.floor(rand() * channels.length)];
     const eventId = `demo-${i.toString().padStart(6, '0')}`;

@@ -119,6 +119,7 @@
     <div class="controls">
       <span id="windows"></span>
       <button class="seg" id="refresh">Refresh</button>
+      <label class="auto"><input type="checkbox" id="bf" checked> backfilled history</label>
       <label class="auto"><input type="checkbox" id="auto"> auto (60s)</label>
       <span id="updated"></span>
     </div>
@@ -139,7 +140,7 @@ const STATUS = {
   queued: ['…', 'warn'], skipped: ['–', 'none'],
   missing: ['✕', 'crit'], error: ['✕', 'crit'],
 };
-let hours = 24, data = null, timer = null;
+let hours = 24, data = null, timer = null, includeBackfill = true;
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -188,13 +189,19 @@ function deliveryTile(platform, label) {
   return `<div class="tile"><div class="label">${label} pixel delivery</div><div class="value">${pct(sent, total)}</div><div class="note">${note}</div></div>`;
 }
 
+function countTile(k, label, plain) {
+  const live = data.actions.filter((a) => a.logicalEvent === k && !a.backfill).length;
+  const bf = includeBackfill ? data.actions.filter((a) => a.logicalEvent === k && a.backfill).length : 0;
+  const note = bf ? `${fmt(live)} tracked · ${fmt(bf)} backfilled` : plain;
+  return `<div class="tile"><div class="label">${label}</div><div class="value">${fmt(live + bf)}</div><div class="note">${note}</div></div>`;
+}
+
 function tiles() {
-  const count = (k) => data.actions.filter((a) => a.logicalEvent === k).length;
   let errors = 0;
   for (const e of data.events) errors += e.server.error;
   return `<div class="tiles">
-    <div class="tile"><div class="label">Buy clicks</div><div class="value">${fmt(count('buy_click'))}</div><div class="note">distinct clicks out to Sugargoo</div></div>
-    <div class="tile"><div class="label">Quiz completions</div><div class="value">${fmt(count('quiz_complete'))}</div><div class="note">distinct completions</div></div>
+    ${countTile('buy_click', 'Buy clicks', 'distinct clicks out to Sugargoo')}
+    ${countTile('quiz_complete', 'Quiz completions', 'distinct completions')}
     ${deliveryTile('meta', 'Meta')}
     ${deliveryTile('reddit', 'Reddit')}
     <div class="tile"><div class="label">Server errors</div><div class="value">${fmt(errors)}</div>
@@ -209,14 +216,15 @@ function buckets() {
   hourly ? start.setMinutes(0, 0, 0) : start.setHours(0, 0, 0, 0);
   const list = [];
   for (let d = new Date(start); d <= new Date(); hourly ? d.setHours(d.getHours() + 1) : d.setDate(d.getDate() + 1)) {
-    list.push({ t: d.getTime(), buy_click: 0, quiz_complete: 0 });
+    list.push({ t: d.getTime(), buy_click: 0, quiz_complete: 0, buy_click_bf: 0, quiz_complete_bf: 0 });
   }
   const index = new Map(list.map((b, i) => [b.t, i]));
   for (const a of data.actions) {
+    if (a.backfill && !includeBackfill) continue;
     const d = new Date(a.t);
     hourly ? d.setMinutes(0, 0, 0) : d.setHours(0, 0, 0, 0);
     const i = index.get(d.getTime());
-    if (i !== undefined) list[i][a.logicalEvent] += 1;
+    if (i !== undefined) list[i][a.logicalEvent + (a.backfill ? '_bf' : '')] += 1;
   }
   return { list, hourly };
 }
@@ -238,7 +246,7 @@ function chart(key, list, hourly) {
   const cfg = LOGICAL[key];
   const W = 560, H = 190, m = { l: 36, r: 6, t: 8, b: 24 };
   const pw = W - m.l - m.r, ph = H - m.t - m.b;
-  const max = Math.max(...list.map((b) => b[key]), 0);
+  const max = Math.max(...list.map((b) => b[key] + b[key + '_bf']), 0);
   const step = niceStep(max / 4 || 1);
   const top = Math.max(step * Math.ceil(max / step), step);
   const y = (v) => m.t + ph - (v / top) * ph;
@@ -254,11 +262,18 @@ function chart(key, list, hourly) {
   list.forEach((b, i) => {
     const cx = m.l + slot * i + slot / 2;
     if (i % every === 0) svg += `<text x="${cx}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(bucketLabel(b.t, hourly, false))}</text>`;
-    const v = b[key];
-    if (v > 0) {
-      const x = cx - bw / 2, top_ = y(v), base = y(0), r = Math.min(4, bw / 2, base - top_);
-      svg += `<path d="M${x},${base} V${top_ + r} Q${x},${top_} ${x + r},${top_} H${x + bw - r} Q${x + bw},${top_} ${x + bw},${top_ + r} V${base} Z" fill="${cfg.color}"/>`;
-    }
+    // Backfilled history sits at the bottom in a lighter tint; tracked actions stack on top,
+    // separated by a 2px surface gap. Only the topmost segment gets the rounded end.
+    const real = b[key], bf = b[key + '_bf'], x = cx - bw / 2, base = y(0);
+    const bar = (top, bottom, round, opacity) => {
+      const h = bottom - top;
+      if (h <= 0) return '';
+      const r = round ? Math.min(4, bw / 2, h) : 0;
+      const cap = r ? `V${top + r} Q${x},${top} ${x + r},${top} H${x + bw - r} Q${x + bw},${top} ${x + bw},${top + r}` : `V${top} H${x + bw}`;
+      return `<path d="M${x},${bottom} ${cap} V${bottom} Z" fill="${cfg.color}" fill-opacity="${opacity}"/>`;
+    };
+    if (bf > 0) svg += bar(y(bf), base, real === 0, 0.4);
+    if (real > 0) svg += bar(y(bf + real), bf > 0 ? Math.max(y(bf) - 2, y(bf + real) + 1) : base, true, 1);
     svg += `<rect class="hit" data-i="${i}" x="${m.l + slot * i}" y="${m.t}" width="${slot}" height="${ph}" fill="transparent"/>`;
   });
   svg += '</svg>';
@@ -274,7 +289,9 @@ function wireTooltips(list, hourly) {
     el.querySelectorAll('.hit').forEach((r) => {
       r.addEventListener('mousemove', (ev) => {
         const b = list[Number(r.dataset.i)];
-        tip.innerHTML = `<div class="t">${esc(bucketLabel(b.t, hourly, true))}</div><strong>${fmt(b[key])}</strong> ${LOGICAL[key].noun}${b[key] === 1 ? '' : 's'}`;
+        const bf = b[key + '_bf'], total = b[key] + bf;
+        tip.innerHTML = `<div class="t">${esc(bucketLabel(b.t, hourly, true))}</div><strong>${fmt(total)}</strong> ${LOGICAL[key].noun}${total === 1 ? '' : 's'}` +
+          (bf ? `<div class="t">${fmt(b[key])} tracked · ${fmt(bf)} backfilled</div>` : '');
         tip.style.display = 'block';
         tip.style.left = ev.pageX + 12 + 'px';
         tip.style.top = ev.pageY + 12 + 'px';
@@ -358,10 +375,10 @@ function render() {
   }
   const { list, hourly } = buckets();
   $('#app').innerHTML = tiles() +
-    `<section class="card"><h2>Over time</h2><p class="hint">Distinct actions per ${hourly ? 'hour' : 'day'}, in your local time.</p>
+    `<section class="card"><h2>Over time</h2><p class="hint">Distinct actions per ${hourly ? 'hour' : 'day'}, in your local time.${includeBackfill && data.actions.some((a) => a.backfill) ? ' Lighter bars are backfilled history from Supabase: logged-in users only, and no pixel data.' : ''}</p>
       <div class="charts" id="charts"></div>
       <details><summary>Table view</summary><table><thead><tr><th>${hourly ? 'Hour' : 'Day'}</th><th class="num">Buy clicks</th><th class="num">Quiz completions</th></tr></thead><tbody>` +
-      list.map((b) => `<tr><td>${esc(bucketLabel(b.t, hourly, true))}</td><td class="num">${fmt(b.buy_click)}</td><td class="num">${fmt(b.quiz_complete)}</td></tr>`).join('') +
+      list.map((b) => `<tr><td>${esc(bucketLabel(b.t, hourly, true))}</td><td class="num">${fmt(b.buy_click + b.buy_click_bf)}${b.buy_click_bf ? ` <span style="color:var(--muted)">(${fmt(b.buy_click_bf)} backfilled)</span>` : ''}</td><td class="num">${fmt(b.quiz_complete + b.quiz_complete_bf)}${b.quiz_complete_bf ? ` <span style="color:var(--muted)">(${fmt(b.quiz_complete_bf)} backfilled)</span>` : ''}</td></tr>`).join('') +
     `</tbody></table></details></section>` +
     actionSection('buy_click') + actionSection('quiz_complete') +
     `<section class="card"><h2>Recent actions</h2><p class="hint">The newest ${data.recentActions.length}, every platform fire attached — click something on the site and find it here.</p>${recentTable()}</section>` +
@@ -371,6 +388,7 @@ function render() {
 }
 
 $('#refresh').addEventListener('click', load);
+$('#bf').addEventListener('change', (e) => { includeBackfill = e.target.checked; if (data) render(); });
 $('#auto').addEventListener('change', (e) => {
   clearInterval(timer);
   if (e.target.checked) timer = setInterval(load, 60000);
