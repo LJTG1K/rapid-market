@@ -8,7 +8,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import ProductImage from '@/components/ProductImage';
 import StyleQuizSection from '@/components/StyleQuizSection';
 import { generateEventId } from '@/lib/metaPixel';
-import { fireRedditPixelEvent, fireBuyClickPixelEvents } from '@/lib/redditPixel';
+import { fireRedditPixelEvent } from '@/lib/redditPixel';
+import { trackBuyClick } from '@/lib/tracking';
 import { getAttribution } from '@/lib/attribution';
 
 interface SignupResponse {
@@ -77,9 +78,7 @@ function SignupProductPicks() {
                   href={p.sugargooLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() =>
-                    fireBuyClickPixelEvents(generateEventId(), { products: [{ id: p.id, name: p.name }] })
-                  }
+                  onClick={() => trackBuyClick({ productId: p.id, productName: p.name })}
                   className="btn-primary !px-4 !py-2 text-[11px]"
                 >
                   Buy
@@ -271,9 +270,7 @@ export default function SugargooSignUp() {
                 href="https://www.sugargoo.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() =>
-                  fireBuyClickPixelEvents(generateEventId(), { context: 'post_signup' })
-                }
+                onClick={() => trackBuyClick({ context: 'post_signup' })}
                 className="btn-stamp w-full mb-4"
               >
                 Go to Sugargoo →

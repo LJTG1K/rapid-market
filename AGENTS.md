@@ -33,7 +33,7 @@ Next.js 14 (**pages router**, not app router), TypeScript, Tailwind CSS, hosted 
 - **Sessions** — a small custom httpOnly signed-cookie mechanism (not a third-party auth library).
 - **Email marketing** — MailerLite, captures signups locally instead of relying solely on Sugargoo's own export.
 - **Facebook Lead Ads** — a webhook that also creates Sugargoo accounts from ad-form leads.
-- **Meta Pixel / Conversions API** — ad tracking on key funnel events.
+- **Meta + Reddit Pixel / Conversions API** — ad tracking on the two funnel conversions (Sugargoo buy click, quiz completion). See "Ad-pixel tracking" below.
 - **Local analytics log** (SQLite) — lightweight signup-event logging, plus an admin dashboard to view it.
 
 ## Behavioral email automations
@@ -45,6 +45,16 @@ Three MailerLite automations react to on-site behavior, all triggered by "subscr
 - **Post-Signup Friction Remover** — content is drafted in MailerLite (automation "Post-Signup Friction Remover") but sits on a standalone holding group, **not yet wired to real signups**. MailerLite's API has no way to insert a `workflow_activity` condition step into an existing automation, so gating this on "didn't open the welcome email in 24h" requires a manual edit in the MailerLite visual editor: open "Post-Signup Onboard Flow", after the welcome email add a 24h delay → condition (welcome email opened?) → No branch → paste this automation's email content in. Once wired, the standalone automation/group can be deleted.
 
 Both cron routes require `Authorization: Bearer $CRON_SECRET` (Vercel's cron convention — see `vercel.json`'s `crons` and `lib/cronAuth.ts`) and target `MAILERLITE_BRAND_NUDGE_GROUP_ID` / `MAILERLITE_WISHLIST_DIGEST_GROUP_ID`. Both stage merge-field data via `upsertSubscriberFields` before calling `addSubscriberToGroup` (which fires the automation), then record `automation_triggers` so reruns are idempotent.
+
+## Ad-pixel tracking
+
+Buy clicks and quiz completions are reported to **both Meta and Reddit**, browser pixel + server-side Conversions API, and every fire is logged to a durable ledger.
+
+- **Never fire `fbq`/`rdt` directly from a page for these two actions.** Call `trackBuyClick()` (from any link/button that exits to Sugargoo) or `trackQuizComplete(styles)` from `lib/tracking.ts`. Which platform events each action sends is defined once in `lib/pixelEvents.ts` (`planEvents`) and shared by the browser and the server, so pages can't drift apart (they previously did — Meta only fired on 3 of ~10 buy-click sites).
+- The browser then reports to `pages/api/pixel-events.ts`, which fires the Meta + Reddit CAPI events (same `eventId` as the pixels, for dedup) and writes the ledger. The client only names the *logical* event; the server decides what to send, so the public endpoint can't be used to inject arbitrary conversions. `/api/track` no longer fires any CAPI event.
+- **Ledger** — Supabase table `pixel_events` (create it with `sql/pixel_events.sql`; if it's missing the endpoint logs a warning and carries on, it never fails a click). One row per platform event per source: `browser` rows record whether the pixel was `sent`, `queued` (pixel stub present but its library hadn't loaded — usually an ad blocker) or `missing`; `server` rows record CAPI `success` / `error` / `skipped`. View it with the **local dashboard**: `npm run dashboard` (then http://127.0.0.1:4100; `-- --demo` shows generated sample data). It's `scripts/pixel-dashboard/` — a tiny Node server that reads the ledger straight from Supabase with the service-role key in `.env.local`, bound to loopback only. There is deliberately **no** ledger view on the website or its admin pages.
+- Server-side CAPI sends only happen when `NODE_ENV=production` (or `PIXEL_EVENTS_SEND_IN_DEV=1`), so local testing can't pollute the live pixels. Note the browser pixels themselves still fire from localhost.
+- New Meta events: `ClickToSugargoo` (buy click) and `QuizComplete` (quiz; custom, deliberately not standard `Lead` because Facebook Lead Ads already feed that count). `lib/metaConversions.ts` still calls Graph API `v18.0` — if `server`/`error` rows appear for Meta, check that first.
 
 ## Important notes for future agents
 

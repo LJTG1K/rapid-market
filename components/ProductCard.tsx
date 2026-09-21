@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import ProductImage from './ProductImage';
 import WishlistButton from './WishlistButton';
-import { generateEventId } from '@/lib/metaPixel';
-import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
+import { trackBuyClick } from '@/lib/tracking';
 
 export interface ProductCardData {
   id: string;
@@ -65,10 +64,8 @@ export default function ProductCard({ product, wishlistCategory, tags = [], onBu
           // Fires for every ProductCard exit to Sugargoo regardless of
           // whether the parent also wires its own onBuyClick (e.g. the
           // style-quiz-pick-click log in ProductMatchGrid) — so no consumer
-          // of this shared card can silently ship without Reddit tracking.
-          fireBuyClickPixelEvents(generateEventId(), {
-            products: [{ id: product.id, name: product.name }],
-          });
+          // of this shared card can silently ship without ad-platform tracking.
+          trackBuyClick({ productId: product.id, productName: product.name });
           onBuyClick?.();
         }}
         className="self-start font-mono text-[11px] uppercase tracking-wide text-muted hover:text-stamp focus-visible:text-stamp transition-colors"

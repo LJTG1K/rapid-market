@@ -3,8 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import ProductImage from '@/components/ProductImage';
-import { generateEventId, fireMetaPixelEvent } from '@/lib/metaPixel';
-import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
+import { trackBuyClick } from '@/lib/tracking';
 
 declare global {
   interface Window {
@@ -92,9 +91,7 @@ export default function ProductDetail() {
     }
 
     // Log to backend
-    const eventId = generateEventId();
-    fireMetaPixelEvent('ClickToSugargoo', eventId, { content_ids: [productId], content_name: productName });
-    fireBuyClickPixelEvents(eventId, { products: [{ id: productId, name: productName }] });
+    const eventId = trackBuyClick({ productId, productName });
     try {
       await fetch('/api/track', {
         method: 'POST',

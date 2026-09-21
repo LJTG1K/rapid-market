@@ -9,8 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import ProductImage from '@/components/ProductImage';
 import StyleQuizSection from '@/components/StyleQuizSection';
-import { generateEventId } from '@/lib/metaPixel';
-import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
+import { trackBuyClick } from '@/lib/tracking';
 
 interface Product {
   id: string;
@@ -183,11 +182,7 @@ export default function Account() {
                       href={product.sugargooLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() =>
-                        fireBuyClickPixelEvents(generateEventId(), {
-                          products: [{ id: product.id, name: product.name }],
-                        })
-                      }
+                      onClick={() => trackBuyClick({ productId: product.id, productName: product.name })}
                       className="btn-primary !px-4 !py-2 text-[11px]"
                     >
                       Buy

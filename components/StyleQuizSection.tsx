@@ -10,7 +10,7 @@ import {
   type MatchedProduct,
 } from '@/lib/styleMatch';
 import { getAnswers, saveAnswers, type StoredQuizAnswers } from '@/lib/styleQuizStorage';
-import { fireQuizCompletePixelEvents } from '@/lib/redditPixel';
+import { trackQuizComplete } from '@/lib/tracking';
 
 function trackQuizEvent(type: string) {
   fetch('/api/track', {
@@ -69,7 +69,7 @@ export default function StyleQuizSection({ className = '', onAnswersChange, hide
       body: JSON.stringify(newAnswers),
     }).catch(() => {});
     trackQuizEvent('style-quiz-completed');
-    fireQuizCompletePixelEvents(newAnswers.styles);
+    trackQuizComplete(newAnswers.styles);
   };
 
   // Still checking localStorage — render nothing for a tick rather than flashing the quiz.

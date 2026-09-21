@@ -83,6 +83,8 @@ export async function sendRedditConversionEvent(params: SendRedditConversionPara
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(payload),
+      // Bounded: callers await this on Vercel, where the function freezes right after responding.
+      signal: AbortSignal.timeout(5000),
     });
 
     const responseData = await response.json().catch(() => null);

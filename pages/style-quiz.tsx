@@ -14,7 +14,7 @@ import {
   type MatchedProduct,
 } from '@/lib/styleMatch';
 import { getAnswers, saveAnswers, clearAnswers, type StoredQuizAnswers } from '@/lib/styleQuizStorage';
-import { fireQuizCompletePixelEvents } from '@/lib/redditPixel';
+import { trackQuizComplete } from '@/lib/tracking';
 
 function track(type: string) {
   fetch('/api/track', {
@@ -62,7 +62,7 @@ export default function StyleQuizPage() {
     setAnswers(stored);
     persistToAccount(newAnswers);
     track('style-quiz-completed');
-    fireQuizCompletePixelEvents(newAnswers.styles);
+    trackQuizComplete(newAnswers.styles);
   };
 
   const handleRetake = () => {

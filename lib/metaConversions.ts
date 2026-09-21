@@ -18,6 +18,10 @@ export interface SendConversionParams {
   ip?: string | null;
   userAgent?: string | null;
   eventSourceUrl?: string;
+  /** Meta's _fbp / _fbc browser cookies — extra match keys that also improve pixel/CAPI dedup. */
+  fbp?: string | null;
+  fbc?: string | null;
+  customData?: Record<string, unknown>;
 }
 
 export interface SendConversionResult {
@@ -40,6 +44,8 @@ export async function sendMetaConversionEvent(params: SendConversionParams): Pro
   if (params.email) userData.em = hashEmail(params.email);
   if (params.ip) userData.client_ip_address = params.ip;
   if (params.userAgent) userData.client_user_agent = params.userAgent;
+  if (params.fbp) userData.fbp = params.fbp;
+  if (params.fbc) userData.fbc = params.fbc;
 
   const payload = {
     data: [
@@ -50,6 +56,9 @@ export async function sendMetaConversionEvent(params: SendConversionParams): Pro
         event_source_url: params.eventSourceUrl || 'https://rapid.market',
         action_source: 'website',
         user_data: userData,
+        ...(params.customData && Object.keys(params.customData).length > 0
+          ? { custom_data: params.customData }
+          : {}),
       },
     ],
     access_token: accessToken,
@@ -60,6 +69,8 @@ export async function sendMetaConversionEvent(params: SendConversionParams): Pro
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+      // Bounded: callers await this on Vercel, where the function freezes right after responding.
+      signal: AbortSignal.timeout(5000),
     });
 
     const responseData = await response.json();

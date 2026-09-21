@@ -12,8 +12,7 @@ import PerforatedDivider from '@/components/PerforatedDivider';
 import SplitHeadline from '@/components/SplitHeadline';
 import ProductImage from '@/components/ProductImage';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { generateEventId } from '@/lib/metaPixel';
-import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
+import { trackBuyClick } from '@/lib/tracking';
 
 interface HighlightProduct {
   id: string;
@@ -139,9 +138,7 @@ function ProductHighlights() {
                   href={p.sugargooLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() =>
-                    fireBuyClickPixelEvents(generateEventId(), { products: [{ id: p.id, name: p.name }] })
-                  }
+                  onClick={() => trackBuyClick({ productId: p.id, productName: p.name })}
                   className="btn-primary !px-4 !py-2 text-[11px]"
                 >
                   Buy

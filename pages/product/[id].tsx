@@ -8,8 +8,7 @@ import Reveal from '@/components/Reveal';
 import ProductImage from '@/components/ProductImage';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import WishlistButton from '@/components/WishlistButton';
-import { generateEventId, fireMetaPixelEvent } from '@/lib/metaPixel';
-import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
+import { trackBuyClick } from '@/lib/tracking';
 import { productMatchesBrand } from '@/lib/brandMatch';
 import type { StyleKey, FitKey } from '@/lib/styleMatch';
 
@@ -91,14 +90,7 @@ export default function ProductPage() {
 
   const trackClick = async () => {
     if (!product) return;
-    const eventId = generateEventId();
-    fireMetaPixelEvent('ClickToSugargoo', eventId, {
-      content_ids: [product.id],
-      content_name: product.name,
-    });
-    fireBuyClickPixelEvents(eventId, {
-      products: [{ id: product.id, name: product.name }],
-    });
+    const eventId = trackBuyClick({ productId: product.id, productName: product.name });
     try {
       await fetch('/api/track', {
         method: 'POST',

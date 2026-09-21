@@ -8,8 +8,7 @@ import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import ProductImage from '@/components/ProductImage';
-import { generateEventId } from '@/lib/metaPixel';
-import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
+import { trackBuyClick } from '@/lib/tracking';
 
 declare global {
   interface Window {
@@ -70,12 +69,12 @@ export default function GillysPicks() {
         }],
       });
     }
-    fireBuyClickPixelEvents(generateEventId(), { products: [{ id: productId, name: productName }] });
+    const eventId = trackBuyClick({ productId, productName });
     try {
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, productName, type: 'gilly-pick-click' }),
+        body: JSON.stringify({ productId, productName, type: 'gilly-pick-click', eventId }),
       });
     } catch (error) {
       console.error('Error tracking click:', error);

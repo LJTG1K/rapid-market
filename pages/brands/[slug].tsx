@@ -9,8 +9,7 @@ import LoadingMessage, { MANIFEST_MESSAGES } from '@/components/LoadingMessage';
 import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import { productMatchesBrand } from '@/lib/brandMatch';
-import { generateEventId, fireMetaPixelEvent } from '@/lib/metaPixel';
-import { fireBuyClickPixelEvents } from '@/lib/redditPixel';
+import { trackBuyClick } from '@/lib/tracking';
 
 interface Brand {
   brandName: string;
@@ -89,9 +88,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
   }, [brand]);
 
   const trackClick = async (productId: string, productName: string) => {
-    const eventId = generateEventId();
-    fireMetaPixelEvent('ClickToSugargoo', eventId, { content_ids: [productId], content_name: productName });
-    fireBuyClickPixelEvents(eventId, { products: [{ id: productId, name: productName }] });
+    const eventId = trackBuyClick({ productId, productName });
     try {
       await fetch('/api/track', {
         method: 'POST',
