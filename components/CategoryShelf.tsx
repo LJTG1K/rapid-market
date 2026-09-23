@@ -11,14 +11,16 @@ interface CategoryShelfProps {
   items: ShelfItem[];
   wishlistCategory: string;
   onSeeAll: () => void;
+  /** Image crop passed through to each card — see ProductCard. Defaults to fashion's 4:5. */
+  aspect?: '4:5' | 'square';
 }
 
 /**
- * One category "rail" on the fashion-listings browse view — a handful of
+ * One category "rail" on the fashion/tech-listings browse view — a handful of
  * random items from that category plus a link into the full, filterable grid
  * for it. Renders nothing if the category has no items (nothing to shelve).
  */
-export default function CategoryShelf({ title, items, wishlistCategory, onSeeAll }: CategoryShelfProps) {
+export default function CategoryShelf({ title, items, wishlistCategory, onSeeAll, aspect }: CategoryShelfProps) {
   if (items.length === 0) return null;
 
   return (
@@ -31,7 +33,7 @@ export default function CategoryShelf({ title, items, wishlistCategory, onSeeAll
       </div>
       <Reveal stagger={60} className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10">
         {items.map(({ product, tags }) => (
-          <ProductCard key={product.id} product={product} wishlistCategory={wishlistCategory} tags={tags} />
+          <ProductCard key={product.id} product={product} wishlistCategory={wishlistCategory} tags={tags} aspect={aspect} />
         ))}
       </Reveal>
     </section>
