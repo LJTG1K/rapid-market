@@ -13,6 +13,7 @@ import SplitHeadline from '@/components/SplitHeadline';
 import ProductImage from '@/components/ProductImage';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { trackBuyClick } from '@/lib/tracking';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface HighlightProduct {
   id: string;
@@ -87,6 +88,13 @@ const FAQS = [
 function ProductHighlights() {
   const [products, setProducts] = useState<HighlightProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  // Cold ad traffic arrives logged out. A direct Sugargoo link would drop them
+  // on Sugargoo with no account, so logged-out visitors are sent to /signup
+  // instead (not a Sugargoo click, so no trackBuyClick). The sign-up version
+  // also shows while the session is still loading, so it never flashes a buy
+  // link it then has to take away.
+  const { user, loading: authLoading } = useAuth();
+  const canBuy = !authLoading && !!user;
 
   useEffect(() => {
     fetch('/api/products')
@@ -134,15 +142,21 @@ function ProductHighlights() {
               </Link>
               <div className="mt-auto flex items-center justify-between gap-3">
                 <span className="font-mono text-sm">{p.price}</span>
-                <a
-                  href={p.sugargooLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackBuyClick({ productId: p.id, productName: p.name })}
-                  className="btn-primary !px-4 !py-2 text-[11px]"
-                >
-                  Buy
-                </a>
+                {canBuy ? (
+                  <a
+                    href={p.sugargooLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackBuyClick({ productId: p.id, productName: p.name })}
+                    className="btn-primary !px-4 !py-2 text-[11px]"
+                  >
+                    Buy
+                  </a>
+                ) : (
+                  <Link href="/signup" className="btn-primary !px-4 !py-2 text-[11px]">
+                    Sign up to buy
+                  </Link>
+                )}
               </div>
             </div>
           ))}
