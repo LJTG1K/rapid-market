@@ -234,6 +234,7 @@ export default function ProductPage() {
                   href={product.sugargooLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={trackClick}
                   className="link-underline font-semibold"
                 >
                   See full reviews on Sugargoo →
