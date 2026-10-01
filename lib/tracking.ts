@@ -14,6 +14,7 @@ import Router from 'next/router';
 import { generateEventId, fireMetaPixelEvent } from './metaPixel';
 import { sendRedditPixel } from './redditPixel';
 import { getAttribution, getRedditClickId } from './attribution';
+import { isLikelyBotBrowser } from './botFilter';
 import {
   planEvents,
   metaCustomData,
@@ -54,7 +55,11 @@ function currentRoute(): string {
 function dispatch(event: LogicalEvent, eventId: string, data: EventData): void {
   if (typeof window === 'undefined') return;
 
-  const browser: BrowserResult[] = planEvents(event, data.styles).map(({ platform, name }) => {
+  // Automated browsers still report to the ledger (flagged, so the server
+  // skips CAPI too) but never fire the pixels campaigns optimise on.
+  const bot = isLikelyBotBrowser();
+
+  const browser: BrowserResult[] = bot ? [] : planEvents(event, data.styles).map(({ platform, name }) => {
     let status: BrowserFireStatus;
     try {
       status =
@@ -86,6 +91,7 @@ function dispatch(event: LogicalEvent, eventId: string, data: EventData): void {
       utmMedium: attribution?.utmMedium,
       utmCampaign: attribution?.utmCampaign,
       clickId: getRedditClickId(),
+      bot,
       browser,
     }),
   }).catch(() => {

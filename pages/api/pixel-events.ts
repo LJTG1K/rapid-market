@@ -3,6 +3,7 @@ import { getUserIdFromRequest } from '../../lib/auth/session';
 import { findUserById } from '../../lib/auth/users';
 import { sendMetaConversionEvent } from '../../lib/metaConversions';
 import { sendRedditConversionEvent } from '../../lib/redditConversions';
+import { isBotUserAgent } from '../../lib/botFilter';
 import { logPixelEvents, type PixelEventRow } from '../../lib/db/pixelEvents';
 import {
   isLogicalEvent,
@@ -37,11 +38,18 @@ function str(value: unknown, max: number): string | undefined {
   return typeof value === 'string' && value.length > 0 ? value.slice(0, max) : undefined;
 }
 
-/** The page's origin + path, only if it's on our own site — this becomes Meta's event_source_url. */
+const bareHost = (host: string) => host.replace(/^www\./, '');
+
+/**
+ * The page's origin + path, only if it's on our own site — this becomes Meta's
+ * event_source_url. The site is served from www.rapid.market while SITE_URL is
+ * the apex, so compare hosts without the `www.` (an exact match sent every
+ * server event's URL as the homepage).
+ */
 function ownPageUrl(value: unknown): string {
   try {
     const url = new URL(String(value));
-    if (url.host === new URL(SITE_URL).host) return `${url.origin}${url.pathname}`;
+    if (bareHost(url.host) === bareHost(new URL(SITE_URL).host)) return `${url.origin}${url.pathname}`;
   } catch {
     // fall through
   }
@@ -105,9 +113,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // pixels; the ledger is still written so the flow can be tested end to end.
   const sendServerSide = process.env.NODE_ENV === 'production' || process.env.PIXEL_EVENTS_SEND_IN_DEV === '1';
 
+  const fbp = str(req.cookies._fbp, 200);
+  const fbc = str(req.cookies._fbc, 200);
+
+  // Keep automated traffic out of the events campaigns optimise on. Bots that
+  // announce themselves are dropped for every platform. For Meta we also
+  // require some sign the visitor is a real browser Meta can match: the _fbp
+  // cookie (set only once fbevents.js has actually run), an _fbc click cookie,
+  // or a logged-in user. Without one, the event matches on IP + user agent
+  // only, and the 2026-09 audit found ~65% of ClickToSugargoo CAPI events in
+  // exactly that state, concentrated in unattributed traffic.
+  const botReason: string | null =
+    body.bot === true ? 'bot-browser' : isBotUserAgent(userAgent) ? 'bot-ua' : null;
+  const hasBrowserSignal = !!fbp || !!fbc || !!userId;
+
   const sendOne = async (planned: PlannedEvent): Promise<ServerOutcome> => {
     if (!sendServerSide) return { status: 'skipped', error: 'non-production' };
+    if (botReason) return { status: 'skipped', error: botReason };
     if (planned.platform === 'meta') {
+      if (!hasBrowserSignal) return { status: 'skipped', error: 'no-browser-signal' };
       const result = await sendMetaConversionEvent({
         eventName: planned.name,
         eventId,
@@ -115,8 +139,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ip,
         userAgent,
         eventSourceUrl: pageUrl,
-        fbp: str(req.cookies._fbp, 200),
-        fbc: str(req.cookies._fbc, 200),
+        fbp,
+        fbc,
         customData: metaCustomData(event, data),
       });
       return toOutcome(result, ['missing-token']);
@@ -149,6 +173,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ...(data.productName ? { product_name: data.productName } : {}),
       ...(data.context ? { context: data.context } : {}),
       ...(styles.length > 0 ? { styles } : {}),
+      // Kept so bot filtering can be audited and tuned from the ledger.
+      ...(userAgent ? { user_agent: userAgent.slice(0, 300) } : {}),
+      has_fbp: !!fbp,
     },
   };
 

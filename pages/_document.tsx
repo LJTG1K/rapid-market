@@ -90,8 +90,10 @@ export default function Document() {
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
               fbq('init', '951122617742977');
-              fbq('track', 'PageView');
-              console.log('[Meta Pixel] Initialized');
+              // Skip PageView for self-identified automation (keep in sync with lib/botFilter.ts).
+              if (!navigator.webdriver && !/bot|crawl|spider|headless|puppeteer|playwright|selenium|lighthouse|facebookexternalhit|bytespider/i.test(navigator.userAgent)) {
+                fbq('track', 'PageView');
+              }
             `,
           }}
         />
