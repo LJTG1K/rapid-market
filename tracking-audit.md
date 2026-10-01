@@ -11,7 +11,7 @@ Investigation only. Nothing was deployed or changed in production. Fixes are loc
 - **The 2:1 ratio on ClickToSugargoo means browser events are missing, not extra.** Every real click reaches Meta through CAPI, but only about half reach it through the browser pixel. Since 21 Sept: 1,243 buy clicks, 1,243 CAPI successes, 611 browser pixel fires.
 - **The real problem is what's in those clicks.** Only **34.9%** of ClickToSugargoo events carry Meta's `_fbp` browser cookie. Every other event on the pixel is at 100%. About two-thirds of ClickToSugargoo events come from clients where Meta's pixel never ran, and they cluster in anonymous, unattributed traffic. A crawler is visibly working through the site right now. CAPI forwards all of it to Meta, so a campaign optimising on ClickToSugargoo would learn from this traffic.
 - **CAPI was off until 14 Sept.** `META_CONVERSIONS_API_TOKEN` was added to Vercel on 14 Sept at 06:21 UTC. From 4–13 Sept there were no server events, which is why the two numbers match exactly on those days.
-- **The 15–17 Sept spike was not a viral post, and it wasn't Meta ads.** It was almost entirely Android phones, appeared and disappeared on a daily schedule, and produced almost no signups. The leading explanation is automated traffic with an Android user agent, possibly mixed with the Reddit campaign that launched 15 Sept. I can't confirm which without user-agent, referrer or country data (see "What I couldn't check").
+- **The 15–17 Sept spike was the Reddit Stage 1 campaign, not a viral post or Meta ads.** Reddit Ads Manager reports **11,999 clicks** in that window. That's ~1.7 page loads per click against the ~20,600 browser PageViews Meta saw. The traffic was almost entirely Android, came in on a daily schedule and produced ~16 signups, so the quality was very poor (possibly invalid clicks). It also fed the Meta pixel.
 
 ---
 
@@ -84,7 +84,7 @@ Meta's Event Match Quality: ClickToSugargoo 5.3, QuizComplete 6.2, QualifiedLead
 
 InitiateCheckout **is** firing on sign-up, by design rather than by mistake. It fires when the signup form is *submitted* (`pages/signup.tsx:133`), and CompleteRegistration fires a second or two later when the account is confirmed (`:166`). That's why the hourly counts move together. Over the window it was 1,387 vs 1,076, so about 22% of submits fail (duplicate email, bad format and so on).
 
-RAPID has no checkout, so on this site **InitiateCheckout means "submitted the signup form"**. Don't optimise on it, and don't read it as purchase intent. If nothing (custom conversions, audiences) depends on the name, rename it to a custom event such as `SignupSubmit`. I left that rename out of the branch because it breaks any existing custom conversion or audience built on InitiateCheckout. That's your call.
+RAPID has no checkout, so on this site **InitiateCheckout means "submitted the signup form"**, including the ~22% of submits that fail. **Decision (1 Oct): keep the name unchanged**, because live ads are set up on InitiateCheckout. Anyone reading those campaigns should know a "checkout" there is a signup attempt, and that it counts failed attempts.
 
 CompleteRegistration looks trustworthy. Meta's browser count (1,076) is about 93% of Supabase signups over the same days (1,154), and the gap fits ad blockers. The `landingpagetest-*` misfires were small and are fixed in fix 3.
 
@@ -128,12 +128,13 @@ Window: 15 Sept 07:00 UTC to 17 Sept 14:00 UTC (55 hours) compared with every ot
 - **Sign-ups (Supabase `users`):** 16 across the whole spike, vs 79–125 a day from 1–14 Sept. But it's confounded: **Meta ad spend ended 15 Sept** (A$45 that day and nothing after; A$77–109 a day before), and signups have stayed at 1–5 a day ever since. The signup drop is the ads stopping, not the spike.
 - **Meta ads were not the source:** spend had stopped.
 
-### Verdict
+### Verdict: Reddit paid traffic
 
-- **Not a viral organic post.** A Gilly TikTok or Instagram spike would lift iPhone traffic (it fell), would bring some signups, and would decay over a day or two instead of switching on and off on a daily schedule.
-- **Not a referral link** that I can see, though without referrer data I can't fully rule it out.
-- **Most likely automated traffic with an Android user agent, running scripts on a schedule.** The second, partly overlapping candidate is the **Reddit Stage 1 campaign**, which went live 15 Sept (commit `92811bc`). Its click IDs show up during the spike. To tell them apart, check Reddit Ads Manager clicks by hour for 15–17 Sept. If Reddit reports hundreds of clicks an hour in those windows, it was Reddit traffic (and probably bad placements). If not, it was bots.
-- **Bots are definitely active now, whatever caused the spike.** In the current deployment's last 24h, brand pages were fetched in near-alphabetical order (`1am` 433, `54a0` 384, `99club` 313, `aberdeen` 259, then a smooth decline across 355 paths). The homepage-featured brand (Gray Dreams) isn't in the top 25. People don't browse like that.
+- **Source: the Reddit Stage 1 campaign** (live from 15 Sept, commit `92811bc`). Reddit Ads Manager reports **11,999 clicks** over the spike window. Meta saw ~20,600 browser PageViews in the same 55 hours, about 1.7 page loads per click. Reddit click IDs appear on the spike's CAPI events. Reddit doesn't give hourly figures here, so the daily on/off shape is most likely the campaign's daily budget pacing.
+- **Quality was very poor.** About 12k clicks led to ~16 signups (~0.13%), the traffic was Android-only, and iPhone traffic fell. That's a pattern seen with in-app or off-platform placements and invalid clicks. Worth raising with Reddit for an invalid-traffic review or credit, and checking the campaign's placements and device targeting before running it again.
+- **Not a viral organic post, not a referral link, and not Meta ads** (Meta spend had stopped).
+- **It polluted the Meta pixel.** Those visitors fired Meta PageView and some ClickToSugargoo. Fix 1 doesn't filter them, because they're real browsers. Meta's optimisation for the new campaign will partly have learned from this traffic.
+- **Separately, bots are active now.** In the current deployment's last 24h, brand pages were fetched in near-alphabetical order (`1am` 433, `54a0` 384, `99club` 313, `aberdeen` 259, then a smooth decline across 355 paths). The homepage-featured brand (Gray Dreams) isn't in the top 25. People don't browse like that.
 
 ### Stopping bot traffic reaching the pixel and CAPI
 
@@ -152,11 +153,26 @@ Window: 15 Sept 07:00 UTC to 17 Sept 14:00 UTC (55 hours) compared with every ot
 | 2 | `b05ab04` Remove the open /api/meta-conversions relay | Deletes an endpoint that sent any event name to the production pixel. | None in the repo. Anything external still posting to it would start getting 404s (no evidence of any). |
 | 3 | `0ae1f7d` Stop test landing pages firing CompleteRegistration on a link click | `landingpagetest-1/2/3` | Those test pages stop reporting a (wrong) Meta conversion. Reddit `Lead` is unchanged. |
 | 4 | `f159c1c` Track the product page's "See full reviews on Sugargoo" exit | Adds `onClick={trackClick}` | Slightly more ClickToSugargoo from real clicks. |
-| — | *Not on the branch* | Rename InitiateCheckout to `SignupSubmit` (see Problem 1, point 4) | Breaks anything built on InitiateCheckout. Needs your decision. |
+| 5 | `80ee5cf` Make local and preview runs unable to reach the live pixels or ledger | Meta CAPI is live only on the production deployment; elsewhere it uses Test Events (`META_TEST_EVENT_CODE`) or is skipped. Browser pixels are logging stubs off rapid.market. The ledger is console-logged outside production. | If Vercel ever stopped exposing `VERCEL_ENV`, previews would behave as before (live). Production can't lose CAPI from this change. Local `next start` (the `rapid-prod` launch config) still counts as live. |
 
 Type-check (`tsc --noEmit`) passes. The bot filter was checked against Android Chrome, iOS Instagram, the Reddit Android webview and the TikTok webview (all kept as human) and against HeadlessChrome, Googlebot, facebookexternalhit, python-requests and an empty user agent (all flagged).
 
-**Not verified in a browser.** The local dev server fires the *production* pixel from `localhost`, and you asked not to send test events without your OK. To verify, get a Test Events code from Events Manager and either (a) let me run the branch locally against it, or (b) deploy the branch to a preview and test there. Then check the `pixel_events` ledger for `server` rows marked `skipped` with `bot-ua` or `no-browser-signal`.
+**Verified locally (1 Oct), with nothing sent to Meta, Reddit or the production ledger:**
+
+- On localhost, the Meta and Reddit scripts don't load. PageView, PageVisit and every event call go to `window.__pixelLog`.
+- Clicking "Buy on Sugargoo" and "See full reviews on Sugargoo" on a product page gave exactly **one** ClickToSugargoo each. Each had its own event ID, and the pixel's `eventID` matched the ID sent to `/api/pixel-events`.
+- The server gate (rows console-logged, not written) behaves as follows:
+
+  | Request | Meta CAPI | Reddit CAPI |
+  |---|---|---|
+  | Googlebot UA | skipped `bot-ua` | skipped `bot-ua` |
+  | Browser flagged as bot | skipped `bot-browser` | skipped `bot-browser` |
+  | Real UA, no `_fbp` | skipped `no-browser-signal` | skipped `non-production` |
+  | Real UA + `_fbp` | passes the gate, then `non-production` (where Test Events takes over) | skipped `non-production` |
+  | Unknown event name | 400 | — |
+  | `POST /api/meta-conversions` | 404 (removed) | — |
+
+**Still to do: the Test Events run.** It needs `META_CONVERSIONS_API_TOKEN` and `META_TEST_EVENT_CODE` in `.env.local`. This tests the server half (payload, `event_source_url`, `fbp`, `event_id`) in Events Manager. Seeing browser + server dedup *together* in Test Events would need the branch running on a real rapid.market host, which means a deploy.
 
 **After fix 1 is live:** watch the ledger for 3–5 days. If real-looking clicks (attributed channels, logged-in users) show up as `no-browser-signal`, loosen the gate. Then launch the campaign.
 
@@ -173,7 +189,7 @@ Type-check (`tsc --noEmit`) passes. The bot filter was checked against Android C
 | Gap | Why | What would close it |
 |---|---|---|
 | User agents, IPs/networks, countries, referrers, UTMs and session length for the spike | Vercel Web Analytics isn't enabled (API returns 404). Runtime logs don't record these fields for page requests, and most wider log queries timed out. | **GA4 property G-2EKT9VWVPS** (read access, or an export of 15–17 Sept by source/medium, country, device and engagement time). This is the best single source. Alternatively Vercel Firewall/Observability Plus traffic logs. |
-| Whether Reddit ads caused the spike | No Reddit Ads access | Reddit Ads Manager: clicks and spend by hour, 15–17 Sept, Stage 1 campaign |
+| Hourly Reddit clicks for the spike | Reddit doesn't report it here (total for the window: 11,999) | Reddit's placement, device and invalid-traffic reports for the Stage 1 campaign |
 | Meta's deduplicated ClickToSugargoo count | The API exposes received counts only, and its source split is inconsistent | Events Manager → ClickToSugargoo → Overview (it shows deduplicated events and "events deduplicated") |
-| Live test of the fixes | Would send events to the production pixel | Your OK plus a Test Events code |
+| Test Events run | OK given 1 Oct; waiting on the token and test code in `.env.local` | Add `META_CONVERSIONS_API_TOKEN` and `META_TEST_EVENT_CODE` to `.env.local` |
 | Signup channel attribution in the spike | `channel` and `landingPath` are only logged to the local SQLite analytics DB, not to Supabase `users` | Add the channel to the `users` row, or read the production analytics log |
