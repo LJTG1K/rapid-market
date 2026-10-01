@@ -5,7 +5,7 @@ Investigation only. Nothing was deployed or changed in production. Fixes are loc
 
 ## TL;DR
 
-**Is ClickToSugargoo safe to optimise on right now? No. It will be after fix 1 (bot / no-browser-signal gate on CAPI) is deployed and a few days of clean data have built up.**
+**Is ClickToSugargoo safe to optimise on right now? Not yet. Fix 1 (the bot / no-browser-signal gate on CAPI) went live on 1 Oct 2026; it will be safe once a few days of clean data have built up.**
 
 - **There is no double counting.** Your pairs aren't browser vs server. The first number is **all events received** (browser + server) and the second is **browser only**. Dedup is correctly wired (same `eventID`/`event_id`, identical event names, server sent within ~1s), so Meta collapses the pairs.
 - **The 2:1 ratio on ClickToSugargoo means browser events are missing, not extra.** Every real click reaches Meta through CAPI, but only about half reach it through the browser pixel. Since 21 Sept: 1,243 buy clicks, 1,243 CAPI successes, 611 browser pixel fires.
@@ -172,7 +172,15 @@ Type-check (`tsc --noEmit`) passes. The bot filter was checked against Android C
   | Unknown event name | 400 | — |
   | `POST /api/meta-conversions` | 404 (removed) | — |
 
-**Still to do: the Test Events run.** It needs `META_CONVERSIONS_API_TOKEN` and `META_TEST_EVENT_CODE` in `.env.local`. This tests the server half (payload, `event_source_url`, `fbp`, `event_id`) in Events Manager. Seeing browser + server dedup *together* in Test Events would need the branch running on a real rapid.market host, which means a deploy.
+**Deployed to production (1 Oct 2026, ~03:32 UTC, at Lachlan's request).** Commit `10a100e`, deployment `dpl_9ksRggnkTyeJD7pvihDDoF54cXJ8`, built as a production redeploy so it has production env vars. Previous production deployment for rollback: `dpl_34DmmLEbm4eomQqvB2z2AkpVUV4D`. Note: pushing `feature/style-quiz` only builds a *preview*; production is a separate step.
+
+**Live check right after the deploy:**
+- On www.rapid.market the stubs stay off: the real `fbevents.js` and Reddit pixel load, `_fbp` is set, and the pixel ID is 951122617742977.
+- One real test click on `/product/1` gave one browser ClickToSugargoo (`sent`) and one CAPI ClickToSugargoo (`success`, `has_fbp: true`) with the same event ID, plus Reddit `success`. This was one genuine event in the dataset.
+- Live traffic in the first few minutes: 3 clicks with no Meta pixel were skipped as `no-browser-signal`. All three came from one desktop Opera user (built-in ad blocker). That's the expected cost of fix 1: real ad-blocked visitors no longer reach Meta CAPI. They're still ledgered and still sent to Reddit.
+- No errors or warnings in the production runtime logs.
+
+**Watch over the next 3–5 days:** the share of `skipped` / `no-browser-signal` rows by `channel` and user agent, and Meta's ClickToSugargoo `fbp` coverage (expected to move from 34.9% towards 100%).
 
 **After fix 1 is live:** watch the ledger for 3–5 days. If real-looking clicks (attributed channels, logged-in users) show up as `no-browser-signal`, loosen the gate. Then launch the campaign.
 
@@ -191,5 +199,5 @@ Type-check (`tsc --noEmit`) passes. The bot filter was checked against Android C
 | User agents, IPs/networks, countries, referrers, UTMs and session length for the spike | Vercel Web Analytics isn't enabled (API returns 404). Runtime logs don't record these fields for page requests, and most wider log queries timed out. | **GA4 property G-2EKT9VWVPS** (read access, or an export of 15–17 Sept by source/medium, country, device and engagement time). This is the best single source. Alternatively Vercel Firewall/Observability Plus traffic logs. |
 | Hourly Reddit clicks for the spike | Reddit doesn't report it here (total for the window: 11,999) | Reddit's placement, device and invalid-traffic reports for the Stage 1 campaign |
 | Meta's deduplicated ClickToSugargoo count | The API exposes received counts only, and its source split is inconsistent | Events Manager → ClickToSugargoo → Overview (it shows deduplicated events and "events deduplicated") |
-| Test Events run | OK given 1 Oct; waiting on the token and test code in `.env.local` | Add `META_CONVERSIONS_API_TOKEN` and `META_TEST_EVENT_CODE` to `.env.local` |
+| Test Events run | Replaced by a live production test (see above) | — |
 | Signup channel attribution in the spike | `channel` and `landingPath` are only logged to the local SQLite analytics DB, not to Supabase `users` | Add the channel to the `users` row, or read the production analytics log |
