@@ -44,13 +44,8 @@ export async function getStaticProps() {
 
 const handleSignupClick = (url: string) => {
     fireRedditPixelEvent('Lead', generateEventId(), { context: 'landingpagetest-2' });
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'CompleteRegistration', {
-        value: 0.00,
-        currency: 'AUD',
-        status: 'completed'
-      });
-    }
+    // No Meta CompleteRegistration here: this is a click out to Sugargoo signup, not
+    // a completed registration, and it was inflating the CompleteRegistration count.
     window.open(url, '_blank');
   };
 
