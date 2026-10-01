@@ -56,6 +56,33 @@ export async function getStaticProps(context: any) {
   }
 }
 
+/**
+ * Width of one glyph in Bricolage Grotesque black at -0.04em tracking, as a
+ * fraction of the font size — the widest member of each class, measured in
+ * the browser. A flat average undersized names full of capitals, m and w.
+ */
+function glyphEm(char: string): number {
+  if (/[MWQOGDCHNUmw]/.test(char)) return 0.96;
+  if (/[IJL]/.test(char)) return 0.63;
+  if (/[A-Z]/.test(char)) return 0.79;
+  if (/[ijlftr.'\-]/.test(char)) return 0.4;
+  return 0.63;
+}
+
+/**
+ * Title size that fits the widest unbreakable word inside the viewport minus
+ * the container's 20px gutters, with 5% to spare. Capped at the old desktop
+ * size (text-7xl, 4.5rem), so short names look exactly as before. Checked
+ * against all 170 names in public/data/brands.json at 320–768px widths.
+ */
+function brandTitleSize(name: string): string {
+  const widestWordEm = Math.max(
+    ...name.split(/\s+/).map((word) => [...word].reduce((sum, char) => sum + glyphEm(char), 0)),
+    1
+  );
+  return `clamp(1.5rem, calc((100vw - 2.5rem) / ${(widestWordEm * 1.05).toFixed(2)}), 4.5rem)`;
+}
+
 export default function BrandPage({ brand }: { brand: Brand }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -128,8 +155,14 @@ export default function BrandPage({ brand }: { brand: Brand }) {
         </Link>
 
         <div className="mt-8 mb-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-8">
-            <h1 className="font-display font-black text-ink text-6xl md:text-7xl tracking-tightest leading-[0.85] mb-6">
+          {/* min-w-0: a grid item defaults to min-width:auto, so one long
+              unbreakable word in the title widened the whole grid and pushed
+              the page sideways on mobile. */}
+          <div className="lg:col-span-8 min-w-0">
+            <h1
+              className="font-display font-black text-ink tracking-tightest leading-[0.85] mb-6 break-words"
+              style={{ fontSize: brandTitleSize(brand.brandName) }}
+            >
               {brand.brandName}
             </h1>
             <p className="text-xl text-ink/80 leading-relaxed max-w-2xl mb-6">{brand.description}</p>
