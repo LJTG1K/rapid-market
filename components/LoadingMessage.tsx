@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 export const MANIFEST_MESSAGES = [
   'Scanning the manifest…',
   'Clearing customs…',
-  'Sorting 100+ sellers…',
+  'Sorting 150+ sellers…',
   "Indexing today's drops…",
   'Pulling from the index…',
   'Tallying the ledger…',

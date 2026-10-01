@@ -36,7 +36,7 @@ const CASCADE_IMAGES = [
 ];
 
 const STATS = [
-  { value: '100+', label: 'Verified sellers' },
+  { value: '150+', label: 'Independent brands' },
   { value: '', label: 'New items indexed daily' },
   { value: '4.8★', label: 'Average rating' },
 ];
@@ -45,7 +45,7 @@ const DIFFERENTIATORS = [
   {
     n: '01',
     title: 'One login',
-    body: 'Sign up once and buy from any of 100+ Chinese sellers without juggling separate accounts, apps, or currencies.',
+    body: 'Sign up once and buy from any of 150+ Chinese sellers without juggling separate accounts, apps, or currencies.',
   },
   {
     n: '02',
@@ -61,7 +61,7 @@ const DIFFERENTIATORS = [
 
 const STEPS = [
   { n: '01', title: 'Create your account', body: 'Free, instant Sugargoo account — no email verification.' },
-  { n: '02', title: 'Find what you want', body: '100+ sellers, organised by category, searchable by brand.' },
+  { n: '02', title: 'Find what you want', body: '150+ sellers, organised by category, searchable by brand.' },
   { n: '03', title: 'One box, one shipment', body: 'Everything consolidates at the warehouse and ships to you together.' },
 ];
 
@@ -182,10 +182,10 @@ export default function Campaign() {
   return (
     <>
       <Head>
-        <title>RAPID — Shop 100+ Chinese Sellers Through One Account</title>
+        <title>RAPID — Shop 150+ Chinese Sellers Through One Account</title>
         <meta
           name="description"
-          content="Free Sugargoo account, instant approval. Browse 100+ verified sellers, new items indexed daily, QC'd before they ship, consolidated into one box."
+          content="Free Sugargoo account, instant approval. Browse 150+ verified sellers, new items indexed daily, QC'd before they ship, consolidated into one box."
         />
         <meta name="robots" content="noindex, follow" />
       </Head>
@@ -202,7 +202,7 @@ export default function Campaign() {
               by="words"
               className="font-display font-black text-ink text-5xl sm:text-6xl md:text-7xl tracking-tightest leading-[0.92] mb-7"
             >
-              One account. 100+ Chinese sellers. Zero markup.
+              One account. 150+ Chinese sellers. Zero markup.
             </SplitHeadline>
             <Reveal delay={120}>
               <p className="text-xl text-ink/80 leading-relaxed max-w-xl mb-8">

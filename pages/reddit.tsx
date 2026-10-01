@@ -21,7 +21,7 @@ interface ShowcaseProduct {
 
 const STATS = [
   { value: '150+', label: 'Sellers indexed' },
-  { value: '2,000+', label: 'Products listed' },
+  { value: '1,500+', label: 'Products listed' },
   { value: '4.8★', label: 'Average rating' },
 ];
 
@@ -132,7 +132,7 @@ export default function Reddit() {
         <title>RAPID: Indexing Authentic Chinese Brands</title>
         <meta
           name="description"
-          content="150+ sellers, 2,000+ products, one index of authentic Chinese fashion. Answer three questions and get matched to real listings, routed through Sugargoo."
+          content="150+ sellers, 1,500+ products, one index of authentic Chinese fashion. Answer three questions and get matched to real listings, routed through Sugargoo."
         />
         <meta name="robots" content="noindex, follow" />
       </Head>
@@ -207,7 +207,7 @@ export default function Reddit() {
             </h2>
             <p className="text-stone/70 max-w-lg mx-auto leading-relaxed">
               Real sellers, real listings, nothing staged for the ad. Three items out of
-              2,000+, grabbed at random just now.
+              1,500+, grabbed at random just now.
             </p>
           </div>
 

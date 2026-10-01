@@ -132,7 +132,7 @@ export default function BlogPost({ post, content }: { post: BlogPost; content: s
           <h3 className="font-display font-black text-2xl md:text-3xl tracking-tightest mb-4">
             Ready to start your first haul?
           </h3>
-          <p className="text-stone/70 mb-6">Browse thousands of products and start ordering from China today.</p>
+          <p className="text-stone/70 mb-6">Browse 1,500+ products and start ordering from China today.</p>
           <Link href="/" className="btn-stamp">Shop now</Link>
         </div>
       </div>
