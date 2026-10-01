@@ -11,8 +11,11 @@ const STORAGE_KEY = 'rapid_attribution';
 
 export interface Attribution {
   channel: string;
+  utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  /** The ad name in our Meta URLs (e.g. SU_Explained_H1) — what activation is measured per. */
+  utmContent?: string;
   landingPath: string;
 }
 
@@ -24,7 +27,7 @@ function inferChannelFromPath(pathname: string): string | null {
 }
 
 /**
- * Reads utm_source/utm_medium/utm_campaign off the current URL and persists
+ * Reads utm_source/utm_medium/utm_campaign/utm_content off the current URL and persists
  * them, falling back to inferring a channel from a dedicated landing page
  * path (e.g. /reddit) when no UTM params are present. An explicit utm_source
  * always overwrites whatever was previously stored (last non-organic touch
@@ -40,10 +43,14 @@ export function captureAttribution(): void {
     const utmSource = params.get('utm_source');
 
     if (utmSource) {
+      // Replaces the whole stored object, so a new touch never inherits an
+      // older touch's campaign or ad name.
       const attribution: Attribution = {
         channel: utmSource,
+        utmSource,
         utmMedium: params.get('utm_medium') || undefined,
         utmCampaign: params.get('utm_campaign') || undefined,
+        utmContent: params.get('utm_content') || undefined,
         landingPath: window.location.pathname,
       };
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(attribution));

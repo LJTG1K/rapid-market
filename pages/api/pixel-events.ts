@@ -94,6 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const planned = planEvents(event, styles);
 
   const pageUrl = ownPageUrl(body.pageUrl);
+  const utmContent = str(body.utmContent, 200);
   const clickId = str(body.clickId, 200);
   const forwarded = req.headers['x-forwarded-for'];
   const ip = (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(',')[0]?.trim() || req.socket.remoteAddress;
@@ -171,12 +172,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     channel: str(body.channel, 100) ?? null,
     utm_medium: str(body.utmMedium, 100) ?? null,
     utm_campaign: str(body.utmCampaign, 200) ?? null,
+    utm_content: utmContent ?? null,
     product_id: data.productId ?? null,
     user_id: userId,
     params: {
       ...(data.productName ? { product_name: data.productName } : {}),
       ...(data.context ? { context: data.context } : {}),
       ...(styles.length > 0 ? { styles } : {}),
+      // Also in params so it survives on rows written before the utm_content
+      // column exists (lib/db/pixelEvents.ts retries without the column).
+      ...(utmContent ? { utm_content: utmContent } : {}),
       // Kept so bot filtering can be audited and tuned from the ledger.
       ...(userAgent ? { user_agent: userAgent.slice(0, 300) } : {}),
       has_fbp: !!fbp,

@@ -86,6 +86,45 @@ export async function createUser(params: {
   return data as DbUser;
 }
 
+const clip = (value: string | undefined) => (value ? value.slice(0, 200) : null);
+
+/**
+ * Records the UTMs a user signed up with (sql/users_utm_attribution.sql).
+ * Only fills a row whose UTM columns are all still null, so they're set once
+ * at signup and never overwritten — createUser upserts on email, so a
+ * re-registration would otherwise replace them. Never throws: before the
+ * migration is applied the columns don't exist and this just logs a warning.
+ */
+export async function setUserSignupUtmsIfUnset(
+  userId: string,
+  utm: { utmSource?: string; utmMedium?: string; utmCampaign?: string; utmContent?: string }
+): Promise<void> {
+  const row = {
+    utm_source: clip(utm.utmSource),
+    utm_medium: clip(utm.utmMedium),
+    utm_campaign: clip(utm.utmCampaign),
+    utm_content: clip(utm.utmContent),
+  };
+  if (!Object.values(row).some(Boolean)) return;
+
+  try {
+    const { error } = await getSupabase()
+      .from('users')
+      .update(row)
+      .eq('id', userId)
+      .is('utm_source', null)
+      .is('utm_medium', null)
+      .is('utm_campaign', null)
+      .is('utm_content', null);
+    if (error) throw error;
+  } catch (error) {
+    console.warn(
+      '⚠️ Signup UTMs not saved (non-blocking — has sql/users_utm_attribution.sql been applied?):',
+      error instanceof Error ? error.message : (error as { message?: string })?.message ?? error
+    );
+  }
+}
+
 /** Distinct user IDs with at least one saved item — the candidate pool for the wishlist-digest cron. */
 export async function getUsersWithWishlistItems(): Promise<string[]> {
   const { data, error } = await getSupabase().from('wishlist_items').select('user_id');

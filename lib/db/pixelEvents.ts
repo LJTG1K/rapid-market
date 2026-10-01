@@ -22,6 +22,8 @@ export interface PixelEventRow {
   channel?: string | null;
   utm_medium?: string | null;
   utm_campaign?: string | null;
+  /** Column added by sql/users_utm_attribution.sql; also copied into params. */
+  utm_content?: string | null;
   product_id?: string | null;
   user_id?: string | null;
   params?: Record<string, unknown> | null;
@@ -33,8 +35,22 @@ export interface PixelEventRecord extends PixelEventRow {
 
 export async function logPixelEvents(rows: PixelEventRow[]): Promise<void> {
   if (rows.length === 0) return;
-  const { error } = await getSupabase().from('pixel_events').insert(rows);
-  if (error) throw error;
+  const supabase = getSupabase();
+  const { error } = await supabase.from('pixel_events').insert(rows);
+  if (!error) return;
+
+  // Before sql/users_utm_attribution.sql is applied the utm_content column
+  // doesn't exist and PostgREST rejects the whole insert. Retry without it
+  // (the value is still in params) rather than lose the rows.
+  if (/utm_content/.test(error.message ?? '')) {
+    console.warn('⚠️ pixel_events.utm_content missing — writing rows without it (apply sql/users_utm_attribution.sql)');
+    const { error: retryError } = await supabase
+      .from('pixel_events')
+      .insert(rows.map(({ utm_content: _omit, ...rest }) => rest));
+    if (retryError) throw retryError;
+    return;
+  }
+  throw error;
 }
 
 // PostgREST caps a single response at 1000 rows by default, so page through.

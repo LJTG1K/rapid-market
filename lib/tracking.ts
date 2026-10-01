@@ -90,6 +90,7 @@ function dispatch(event: LogicalEvent, eventId: string, data: EventData): void {
       channel: attribution?.channel,
       utmMedium: attribution?.utmMedium,
       utmCampaign: attribution?.utmCampaign,
+      utmContent: attribution?.utmContent,
       clickId: getRedditClickId(),
       bot,
       browser,

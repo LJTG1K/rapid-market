@@ -141,8 +141,10 @@ export default function SugargooSignUp() {
           email,
           name: name || email.split('@')[0],
           channel: attribution?.channel,
+          utmSource: attribution?.utmSource,
           utmMedium: attribution?.utmMedium,
           utmCampaign: attribution?.utmCampaign,
+          utmContent: attribution?.utmContent,
           landingPath: attribution?.landingPath,
         }),
       });

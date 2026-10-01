@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { getAccessToken } from '../../../lib/sugargoo/tokenManager';
 import { logSignupEvent } from '../../../lib/db/analytics';
 import { addSubscriberToMailerLite } from '../../../lib/mailerlite';
-import { createUser } from '../../../lib/auth/users';
+import { createUser, setUserSignupUtmsIfUnset } from '../../../lib/auth/users';
 import { setSessionCookie } from '../../../lib/auth/session';
 
 interface RegistrationRequest {
@@ -13,8 +13,10 @@ interface RegistrationRequest {
   password?: string;
   source?: 'website' | 'facebook-lead'; // Track where the signup came from
   channel?: string; // Marketing channel attribution (reddit, meta, organic, ...) — see lib/attribution.ts
+  utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  utmContent?: string;
   landingPath?: string;
 }
 
@@ -128,8 +130,10 @@ export default async function handler(
       password,
       source = 'website',
       channel,
+      utmSource,
       utmMedium,
       utmCampaign,
+      utmContent,
       landingPath,
     } = req.body as RegistrationRequest;
 
@@ -264,6 +268,10 @@ export default async function handler(
         });
         if (source === 'website' && user) {
           setSessionCookie(res, user.id);
+          // First-touch-at-signup UTMs, written only while the row has none, so
+          // a later re-registration can't overwrite them. Non-blocking and
+          // tolerant of the columns not existing yet (sql/users_utm_attribution.sql).
+          await setUserSignupUtmsIfUnset(user.id, { utmSource, utmMedium, utmCampaign, utmContent });
         }
       } catch (acctErr) {
         console.error('⚠️ RAPID account create failed (non-blocking):', acctErr instanceof Error ? acctErr.message : acctErr);
