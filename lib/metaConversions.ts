@@ -7,6 +7,16 @@
  */
 import crypto from 'crypto';
 
+/**
+ * True on the production deployment. Same rule as before (NODE_ENV=production),
+ * except a deployment Vercel marks as preview/development no longer counts —
+ * previews were sending real CAPI events to the live dataset.
+ */
+export function isLiveDeployment(): boolean {
+  const vercelEnv = process.env.VERCEL_ENV;
+  return process.env.NODE_ENV === 'production' && vercelEnv !== 'preview' && vercelEnv !== 'development';
+}
+
 export function hashEmail(email: string): string {
   return crypto.createHash('sha256').update(email.toLowerCase().trim()).digest('hex');
 }
@@ -35,6 +45,14 @@ export async function sendMetaConversionEvent(params: SendConversionParams): Pro
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || '951122617742977';
   const accessToken = process.env.META_CONVERSIONS_API_TOKEN;
 
+  // Off the live deployment, events may only go to Events Manager → Test
+  // Events (META_TEST_EVENT_CODE), which never counts toward the dataset or
+  // campaign optimisation. Without a code they are skipped.
+  const testEventCode = isLiveDeployment() ? undefined : process.env.META_TEST_EVENT_CODE?.trim() || undefined;
+  if (!isLiveDeployment() && !testEventCode) {
+    return { success: false, eventId: params.eventId, error: 'non-production' };
+  }
+
   if (!accessToken) {
     console.error(`[Meta CAPI] ERROR: META_CONVERSIONS_API_TOKEN not configured — skipping ${params.eventName}`);
     return { success: false, eventId: params.eventId, error: 'missing-token' };
@@ -61,6 +79,7 @@ export async function sendMetaConversionEvent(params: SendConversionParams): Pro
           : {}),
       },
     ],
+    ...(testEventCode ? { test_event_code: testEventCode } : {}),
     access_token: accessToken,
   };
 
@@ -80,7 +99,9 @@ export async function sendMetaConversionEvent(params: SendConversionParams): Pro
       return { success: false, eventId: params.eventId, error: responseData.error?.message || 'Unknown error' };
     }
 
-    console.log(`[Meta CAPI] ${params.eventName} sent (event_id ${params.eventId})`);
+    console.log(
+      `[Meta CAPI] ${params.eventName} sent (event_id ${params.eventId})${testEventCode ? ` to Test Events (${testEventCode})` : ''}`
+    );
     return { success: true, eventId: params.eventId };
   } catch (error) {
     console.error(`[Meta CAPI] ${params.eventName} exception:`, error);

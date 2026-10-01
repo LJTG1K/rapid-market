@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getUserIdFromRequest } from '../../lib/auth/session';
 import { findUserById } from '../../lib/auth/users';
-import { sendMetaConversionEvent } from '../../lib/metaConversions';
+import { isLiveDeployment, sendMetaConversionEvent } from '../../lib/metaConversions';
 import { sendRedditConversionEvent } from '../../lib/redditConversions';
 import { isBotUserAgent } from '../../lib/botFilter';
 import { logPixelEvents, type PixelEventRow } from '../../lib/db/pixelEvents';
@@ -110,8 +110,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Local/preview traffic must not send real conversions to the production
-  // pixels; the ledger is still written so the flow can be tested end to end.
-  const sendServerSide = process.env.NODE_ENV === 'production' || process.env.PIXEL_EVENTS_SEND_IN_DEV === '1';
+  // pixels. Meta decides for itself (lib/metaConversions.ts: live deployment,
+  // or Test Events when META_TEST_EVENT_CODE is set); Reddit has no test mode
+  // wired up, so it sends only from the live deployment unless explicitly
+  // opted in.
+  const live = isLiveDeployment();
+  const sendRedditServerSide = live || process.env.PIXEL_EVENTS_SEND_IN_DEV === '1';
 
   const fbp = str(req.cookies._fbp, 200);
   const fbc = str(req.cookies._fbc, 200);
@@ -128,7 +132,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const hasBrowserSignal = !!fbp || !!fbc || !!userId;
 
   const sendOne = async (planned: PlannedEvent): Promise<ServerOutcome> => {
-    if (!sendServerSide) return { status: 'skipped', error: 'non-production' };
     if (botReason) return { status: 'skipped', error: botReason };
     if (planned.platform === 'meta') {
       if (!hasBrowserSignal) return { status: 'skipped', error: 'no-browser-signal' };
@@ -143,8 +146,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         fbc,
         customData: metaCustomData(event, data),
       });
-      return toOutcome(result, ['missing-token']);
+      return toOutcome(result, ['missing-token', 'non-production']);
     }
+    if (!sendRedditServerSide) return { status: 'skipped', error: 'non-production' };
     const result = await sendRedditConversionEvent({
       eventName: planned.name,
       eventId,
@@ -204,6 +208,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       error: outcomes[i].error ?? null,
     });
   });
+
+  // The ledger table lives in the production Supabase project, so local and
+  // preview runs log their rows instead of mixing test clicks into the real
+  // counts. PIXEL_LEDGER_IN_DEV=1 writes them anyway.
+  if (!live && process.env.PIXEL_LEDGER_IN_DEV !== '1') {
+    console.log('[pixel-events] ledger rows (not written outside production):', JSON.stringify(rows));
+    return res.status(200).json({ ok: true });
+  }
 
   try {
     await logPixelEvents(rows);

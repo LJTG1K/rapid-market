@@ -77,6 +77,36 @@ export default function Document() {
           }}
         />
 
+        {/* Off rapid.market (localhost, *.vercel.app previews) the Meta and
+            Reddit pixels are replaced by logging stubs, so local and preview
+            runs never send events to the live pixels. The official snippets
+            below see the existing fbq/rdt and skip loading their libraries.
+            Calls are kept in window.__pixelLog for testing. The stubs carry
+            callMethod/sendEvent so lib/metaPixel.ts and lib/redditPixel.ts
+            report them as 'sent', like a loaded pixel. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function (w) {
+                if (/(^|\\.)rapid\\.market$/.test(w.location.hostname)) return;
+                w.__pixelLog = [];
+                function stub(platform) {
+                  var f = function () {
+                    var args = Array.prototype.slice.call(arguments);
+                    w.__pixelLog.push({ platform: platform, args: args, at: Date.now() });
+                    console.info('[pixel stub: ' + platform + ']', JSON.stringify(args));
+                  };
+                  return f;
+                }
+                w.fbq = w._fbq = stub('meta');
+                w.fbq.callMethod = function () {};
+                w.rdt = stub('reddit');
+                w.rdt.sendEvent = function () {};
+              })(window);
+            `,
+          }}
+        />
+
         {/* Meta Pixel Code - Official Facebook Pixel */}
         <script
           dangerouslySetInnerHTML={{
