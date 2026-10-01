@@ -28,17 +28,25 @@ interface Product {
   verified?: boolean;
 }
 
-const GILLYS_PICKS = [
-  'BEVAN UP CURVED ZIPPER JACKET',
-  'BEVAN UP NYLON LIGHTWEIGHT ZIP UP',
-  'BEVAN UP SEE THROUGH SUN PROTECTION JACKET',
-  'FOURTH3EX MUSIC NOTE BUCKLE PIANO BELT',
-  'FOURTH3EX DESTROYED DOUBLE WAIST MUSIC NOTE WIDE LEG PANTS',
-  'FOURTH3EX MUSIC NOTE SWEATPANTS',
-  'ROLLINGMONEY DIAMOND 10 BAGGY DENIM JEANS',
-  'ROLLINGMONEY FUR LEATHER BAG',
-  'ROLLINGMONEY SNAKE DENIM JEANS',
-];
+// Gilly's Picks pool = product IDs in this range (column A of the sheet).
+// Each visit shows a random PICKS_PER_VISIT of them to keep the page fresh.
+const PICK_ID_MIN = 1432;
+const PICK_ID_MAX = 1659;
+const PICKS_PER_VISIT = 15;
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function isPick(p: Product) {
+  const id = Number(p.id);
+  return Number.isInteger(id) && id >= PICK_ID_MIN && id <= PICK_ID_MAX;
+}
 
 export default function GillysPicks() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -48,9 +56,7 @@ export default function GillysPicks() {
     fetch('/api/products')
       .then((r) => r.json())
       .then((allProducts) => {
-        setFilteredProducts(
-          allProducts.filter((p: Product) => GILLYS_PICKS.some((name) => p.name.toLowerCase() === name.toLowerCase()))
-        );
+        setFilteredProducts(shuffle((allProducts as Product[]).filter(isPick)).slice(0, PICKS_PER_VISIT));
       })
       .catch(() => {})
       .finally(() => setLoading(false));
