@@ -17,6 +17,10 @@ const nextConfig = {
   },
   compress: true,
   poweredByHeader: false,
+  redirects: async () => [
+    // Jceaser was a misspelling of JCaesar and was merged into it.
+    { source: '/brands/jceaser', destination: '/brands/jcaesar', permanent: true },
+  ],
   headers: async () => [
     {
       // Next serves public/ with `max-age=0` by default, so every repeat visit

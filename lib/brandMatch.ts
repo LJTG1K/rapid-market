@@ -11,11 +11,23 @@ function escapeRegExp(value: string): string {
 // once per product.
 const patternCache = new Map<string, RegExp>();
 
+// Product names come from the Google Sheet, where a few sellers' names are
+// misspelled on some rows. Rather than leave those listings orphaned from their
+// brand page, each canonical brand (lowercase) also accepts its known
+// misspellings as the leading word(s) of a title.
+const BRAND_ALIASES: Record<string, string[]> = {
+  antiphase: ['ANTIPHANSE'],
+  beft: ['BFET'],
+  pi0neer: ['PIONEER'],
+  jcaesar: ['JCAESER', 'JCEASER', 'JCEASAR'],
+};
+
 function getBrandPattern(brandName: string): RegExp {
   const trimmed = brandName.trim();
   let pattern = patternCache.get(trimmed);
   if (!pattern) {
-    pattern = new RegExp(`^${escapeRegExp(trimmed)}\\b`, 'i');
+    const names = [trimmed, ...(BRAND_ALIASES[trimmed.toLowerCase()] ?? [])];
+    pattern = new RegExp(`^(?:${names.map(escapeRegExp).join('|')})\\b`, 'i');
     patternCache.set(trimmed, pattern);
   }
   return pattern;

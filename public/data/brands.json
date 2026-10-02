@@ -249,6 +249,34 @@
     "notes": "Emphasizes fit and quality materials. Modern approach to essential pieces."
   },
   {
+    "brandName": "BAOVICTO",
+    "slug": "baovicto",
+    "description": "Contemporary label focusing on sculptural paneling and wide, relaxed cuts. Everyday outerwear and heavy bottoms built around textured fabrics and sharp geometric shapes.",
+    "aesthetic": [
+      "sculptural",
+      "paneled",
+      "wide-fit",
+      "boxy",
+      "geometric"
+    ],
+    "targetCustomer": "Relaxed-fit streetwear shoppers aged 18-30 who want structured, paneled outerwear and wide bottoms",
+    "notes": "Relaxed streetwear label focused on boxy outerwear and wide, paneled bottoms."
+  },
+  {
+    "brandName": "Basic Annals",
+    "slug": "basic-annals",
+    "description": "Budget-friendly everyday basics — boxy tees, loose cotton shirts and utility cargo pants in solid colours, mud-dye washes and digital camo.",
+    "aesthetic": [
+      "basics",
+      "boxy",
+      "utility",
+      "washed",
+      "budget-friendly"
+    ],
+    "targetCustomer": "Value-minded streetwear shoppers aged 16-28 building a wardrobe of everyday staples",
+    "notes": "Lowest price point in the catalogue, with tees from around $13 and cargos under $45. Mostly boxy short-sleeve shirts plus a few cargo pants."
+  },
+  {
     "brandName": "Beautiful Life",
     "slug": "beautiful-life",
     "description": "Easy wide-leg loungewear — nylon and distressed denim pants built for comfort over statement graphics.",
@@ -827,6 +855,20 @@
     "notes": "Horse/warhorse imagery repeats across most of the range — a clear house motif."
   },
   {
+    "brandName": "GOOD",
+    "slug": "good",
+    "description": "Distressed, deconstructed streetwear — acid-washed and laser-burnt denim, double-waist pants and heavy leather jackets, with a different sub-line behind each drop.",
+    "aesthetic": [
+      "distressed",
+      "deconstructed",
+      "washed",
+      "heavy-bottoms",
+      "streetwear"
+    ],
+    "targetCustomer": "Distressed-streetwear shoppers aged 18-30 who like heavily treated fabrics and statement bottoms",
+    "notes": "Collects several sub-labels under one name (Wanna Lab, Relable, Whistlehunter, BRG). Heavy on pants, jackets and treated fabrics."
+  },
+  {
     "brandName": "GpStudio",
     "slug": "gpstudio",
     "description": "Design-first brand with a studio mentality. Creative approach to streetwear that prioritizes concept over trends.",
@@ -975,20 +1017,6 @@
     ],
     "targetCustomer": "Fashion-forward individuals aged 18-35 seeking confident pieces",
     "notes": "Strong design identity with confident approach. Bold modern fashion."
-  },
-  {
-    "brandName": "Jceaser",
-    "slug": "jceaser",
-    "description": "Small accessories label — a mummy-wrap bag and a vintage cracked-finish belt.",
-    "aesthetic": [
-      "accessories",
-      "vintage-finish",
-      "bag",
-      "belt",
-      "eclectic"
-    ],
-    "targetCustomer": "Accessory shoppers aged 18-28",
-    "notes": "Only two listings so far, both accessories with distinct, unrelated concepts (mummy bag, cracked belt)."
   },
   {
     "brandName": "Jhyq",
@@ -2194,6 +2222,20 @@
     ],
     "targetCustomer": "Adventurous fashion lovers aged 18-30",
     "notes": "Playful hunting and adventure-inspired design. Energetic and fun approach."
+  },
+  {
+    "brandName": "Wooster",
+    "slug": "wooster",
+    "description": "Heavily distressed, wash-treated streetwear — archive-print shirts, military-green button-up hoodies and mud-washed crewnecks that look like they've been lived in.",
+    "aesthetic": [
+      "distressed",
+      "washed",
+      "archive",
+      "military",
+      "vintage"
+    ],
+    "targetCustomer": "Streetwear shoppers aged 18-30 who like a worn-in, vintage-washed look",
+    "notes": "Deep catalogue of 15+ pieces, mostly shirts, hoodies and crewnecks with a few cargo pants and a long coat. Archive-series prints recur across the range."
   },
   {
     "brandName": "Wulien",
