@@ -9,6 +9,7 @@ import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import ProductImage from '@/components/ProductImage';
 import { trackBuyClick } from '@/lib/tracking';
+import picksConfig from '@/public/data/gillys-picks.json';
 
 declare global {
   interface Window {
@@ -30,9 +31,8 @@ interface Product {
 
 // Gilly's Picks pool = product IDs in this range (column A of the sheet).
 // Each visit shows a random PICKS_PER_VISIT of them to keep the page fresh.
-const PICK_ID_MIN = 1432;
-const PICK_ID_MAX = 1659;
-const PICKS_PER_VISIT = 15;
+// Edited in RAPID Studio (studio/), which commits public/data/gillys-picks.json.
+const { min: PICK_ID_MIN, max: PICK_ID_MAX, perVisit: PICKS_PER_VISIT } = picksConfig;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];

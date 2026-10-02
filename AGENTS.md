@@ -25,6 +25,7 @@ Next.js 14 (**pages router**, not app router), TypeScript, Tailwind CSS, hosted 
 - `components/` — shared UI (`Header`, `Footer`, `Stamp`, `Reveal`/motion primitives, `WishlistButton`, etc.).
 - `contexts/` — React state for auth and wishlist, provided globally from `pages/_app.tsx`.
 - `styles/globals.css` + `tailwind.config.js` — the design system (custom color tokens, shared button/card utility classes).
+- `studio/` — **RAPID Studio**, a separate internal content-editing app (brands, Gilly's Picks, product copy, blog) deployed as its own Vercel project. Slices 1–2 (login, brands editor, Gilly's Picks editor, drafts → publish → revert) are built; products and blog are next. Gilly's Picks' ID range now lives in `public/data/gillys-picks.json`. See `studio/SPEC.md`.
 
 ## Data & integrations, in brief
 
