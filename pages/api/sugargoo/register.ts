@@ -50,37 +50,6 @@ interface ApiResponse {
 }
 
 /**
- * Send email to Zapier webhook with timeout
- */
-async function sendToZapier(email: string, timeoutMs: number = 5000): Promise<void> {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-    
-    const response = await fetch('https://hooks.zapier.com/hooks/catch/25304829/43qjotk/', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Connection': 'close',
-      },
-      body: JSON.stringify({ email }),
-      signal: controller.signal,
-    });
-    
-    clearTimeout(timeoutId);
-    
-    if (response.ok) {
-      console.log(`✅ Sent to Zapier: ${email}`);
-    } else {
-      console.warn(`⚠️ Zapier returned ${response.status}`);
-    }
-  } catch (error) {
-    // Log error but don't throw (don't block signup)
-    console.error('⚠️ Zapier send failed:', error instanceof Error ? error.message : error);
-  }
-}
-
-/**
  * Generates a Unix timestamp in seconds
  */
 function generateTimestamp(): number {
@@ -242,15 +211,6 @@ export default async function handler(
     if (data.code === 200 && data.data) {
       console.log(`✅ Registration successful: ${email} (User ID: ${data.data.userId})`);
       
-      // Send to Zapier BEFORE response (ensures it completes)
-      console.log(`🚀 Calling sendToZapier for ${email}...`);
-      try {
-        await sendToZapier(email);
-        console.log(`✅ sendToZapier completed successfully`);
-      } catch (zapierErr) {
-        console.error(`❌ sendToZapier threw error:`, zapierErr instanceof Error ? zapierErr.message : zapierErr);
-      }
-      
       // Log event asynchronously (non-blocking) - ONLY if source is 'website'
       // (Facebook leads are already logged by webhook.ts, avoid double-counting)
       if (source === 'website') {
@@ -272,10 +232,9 @@ export default async function handler(
       // Capture the email locally for remarketing (both website and
       // facebook-lead sources — unlike the analytics log above, this isn't
       // about dedup, it's about building a complete list). Awaited (not
-      // setImmediate) with its own bounded timeout — same reasoning as
-      // sendToZapier above: Vercel freezes the function once the response
-      // is sent, so real async work fired via setImmediate never gets to
-      // finish. addSubscriberToMailerLite never throws, so this can't fail
+      // setImmediate) with its own bounded timeout: Vercel freezes the
+      // function once the response is sent, so real async work fired via
+      // setImmediate never gets to finish. addSubscriberToMailerLite never throws, so this can't fail
       // the signup even if MailerLite is down.
       try {
         await addSubscriberToMailerLite(email, name || email.split('@')[0]);

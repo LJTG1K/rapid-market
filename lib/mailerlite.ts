@@ -6,10 +6,8 @@
  * setImmediate() — Vercel freezes a serverless function's execution
  * context as soon as the HTTP response is sent, so any real async work
  * (this does a network fetch) scheduled via setImmediate silently never
- * completes once the response has gone out. This mirrors the existing
- * sendToZapier() pattern in pages/api/sugargoo/register.ts, which hit the
- * exact same issue and is why it's awaited with a bounded timeout instead
- * of fired-and-forgotten. This function never throws, and the timeout
+ * completes once the response has gone out, which is why it's awaited
+ * with a bounded timeout instead of fired-and-forgotten. This function never throws, and the timeout
  * below bounds how much latency a MailerLite outage can add to signup.
  */
 // Strips whitespace and accidental surrounding quotes — a common copy-paste
