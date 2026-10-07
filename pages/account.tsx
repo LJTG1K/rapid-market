@@ -96,6 +96,7 @@ export default function Account() {
       <>
         <Head>
           <title>Your Account — RAPID</title>
+          <meta name="robots" content="noindex" />
         </Head>
         <div className="container-edit py-24 text-center">
           <p className="font-mono text-sm text-muted">Loading…</p>

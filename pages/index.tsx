@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Head from 'next/head';
+import { CANONICAL_ORIGIN } from '@/lib/siteUrl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import Stamp from '@/components/Stamp';
@@ -113,6 +114,7 @@ export default function Home() {
           name="description"
           content="RAPID indexes 150+ independent Chinese sellers, with new items indexed daily, routed through Sugargoo's consolidation warehouse into one simple checkout."
         />
+        <link rel="canonical" href={`${CANONICAL_ORIGIN}/`} />
       </Head>
 
       {/* ---------- Hero ---------- */}
@@ -177,7 +179,7 @@ export default function Home() {
         </Reveal>
 
         <SplitHeadline
-          as="h1"
+          as="h2"
           by="words"
           className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none mt-4 md:mt-8"
         >

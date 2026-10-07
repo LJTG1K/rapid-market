@@ -47,6 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const weekKey = isoWeekKey(new Date());
 
   let processed = 0;
+  let skipped = 0;
   let failed = 0;
 
   try {
@@ -63,11 +64,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const heroProduct = products.find((p) => productMatchesBrand(p.name, brand.brandName));
 
-        await upsertSubscriberFields(user.email, {
+        const fieldsResult = await upsertSubscriberFields(user.email, {
           last_browsed_brand: brand.brandName,
-          last_browsed_brand_url: `https://rapid.market/brands/${brand.slug}`,
+          last_browsed_brand_url: `https://www.rapid.market/brands/${brand.slug}`,
           last_browsed_brand_image: heroProduct?.image ?? '',
         });
+        if (fieldsResult === 'inactive') {
+          // Unsubscribed/inactive in MailerLite: they can't be emailed, so
+          // close out this week's slot instead of retrying them every hour.
+          await markTriggered(view.userId, 'brand_nudge', weekKey);
+          skipped++;
+          continue;
+        }
         const added = await addSubscriberToGroup(user.email, groupId);
         if (!added) {
           failed++;
@@ -83,7 +91,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     }
 
-    return res.status(200).json({ processed, failed, candidates: staleViews.length });
+    return res.status(200).json({ processed, skipped, failed, candidates: staleViews.length });
   } catch (error) {
     console.error('❌ brand-nudge cron failed:', error);
     return res.status(500).json({ error: 'Cron failed' });

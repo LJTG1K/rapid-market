@@ -62,7 +62,7 @@ export default function BrandsDirectory({ brands }: { brands: Brand[] }) {
       <Head>
         <title>Seller Index — RAPID Marketplace</title>
         <meta name="description" content="Browse all 150+ featured sellers on RAPID" />
-        <link rel="canonical" href="https://rapid.market/brands" />
+        <link rel="canonical" href="https://www.rapid.market/brands" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -71,14 +71,14 @@ export default function BrandsDirectory({ brands }: { brands: Brand[] }) {
               '@type': 'CollectionPage',
               name: 'RAPID Seller Index',
               description: 'Explore 150+ featured sellers with exclusive products',
-              url: 'https://rapid.market/brands',
+              url: 'https://www.rapid.market/brands',
               mainEntity: {
                 '@type': 'ItemList',
                 numberOfItems: brands.length,
                 itemListElement: brands.slice(0, 50).map((brand, index) => ({
                   '@type': 'ListItem',
                   position: index + 1,
-                  url: `https://rapid.market/brands/${brand.slug}`,
+                  url: `https://www.rapid.market/brands/${brand.slug}`,
                   name: brand.brandName,
                   description: brand.description,
                 })),

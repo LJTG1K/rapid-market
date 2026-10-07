@@ -88,14 +88,20 @@ export async function addSubscriberToMailerLite(email: string, name?: string, ti
  * before addSubscriberToGroup fires the automation that reads it — MailerLite
  * applies field updates before the group-join trigger evaluates, but staging
  * fields first keeps the two calls independently retryable.
+ *
+ * Returns 'inactive' when MailerLite refuses the write because the subscriber
+ * has unsubscribed or is otherwise not active (bounced, deleted, junk). That
+ * is a permanent state, not a failure — callers should stop retrying it.
  */
+export type FieldUpdateResult = 'ok' | 'inactive' | 'failed';
+
 export async function upsertSubscriberFields(
   email: string,
   fields: Record<string, string>,
   timeoutMs: number = 5000
-): Promise<void> {
+): Promise<FieldUpdateResult> {
   const apiKey = getApiKey();
-  if (!apiKey) return;
+  if (!apiKey) return 'failed';
 
   try {
     const controller = new AbortController();
@@ -115,13 +121,19 @@ export async function upsertSubscriberFields(
 
     if (!response.ok) {
       const body = await response.text();
+      if (response.status === 422 && /unsubscribed|not active/i.test(body)) {
+        console.log(`⏭️ MailerLite: ${email} is unsubscribed or inactive — skipping`);
+        return 'inactive';
+      }
       console.error(`⚠️ MailerLite field update failed for ${email} (${response.status}): ${body}`);
-      return;
+      return 'failed';
     }
 
     console.log(`✅ MailerLite: updated fields for ${email}`);
+    return 'ok';
   } catch (error) {
     console.error('⚠️ MailerLite field update error (non-blocking):', error instanceof Error ? error.message : error);
+    return 'failed';
   }
 }
 

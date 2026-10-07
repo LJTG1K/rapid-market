@@ -34,7 +34,7 @@ Next.js 14 (**pages router**, not app router), TypeScript, Tailwind CSS, hosted 
 - **Email marketing** — MailerLite, captures signups locally instead of relying solely on Sugargoo's own export.
 - **Facebook Lead Ads** — a webhook that also creates Sugargoo accounts from ad-form leads.
 - **Meta + Reddit Pixel / Conversions API** — ad tracking on the two funnel conversions (Sugargoo buy click, quiz completion). See "Ad-pixel tracking" below.
-- **Local analytics log** (SQLite) — lightweight signup-event logging, plus an admin dashboard to view it.
+- **Local analytics log** (SQLite) — lightweight signup-event logging. It does not persist on Vercel (ephemeral filesystem), and the admin dashboard that read it was removed for that reason.
 
 ## Behavioral email automations
 
@@ -62,6 +62,6 @@ Buy clicks and quiz completions are reported to **both Meta and Reddit**, browse
 
 - **Vercel serverless functions freeze right after the HTTP response is sent.** Any "fire and forget" background work that does real async I/O (a `fetch` call fired via `setImmediate` and not awaited) can silently never complete — this has caused real, hard-to-diagnose bugs here. If an API route needs to call an external service, `await` it directly with a bounded timeout rather than deferring it.
 - **Env vars live in two places.** Real secrets go in `.env.local` (gitignored, never committed) for local dev, and must **also** be added manually in the Vercel dashboard for production — there's no CLI/tool wired up in this environment to do that remotely.
-- **The admin dashboard's access control is weak** (a client-side flag, not a verified server session) — treat it as trusted-network-only, not a hardened panel, until someone hardens it.
+- **There is no admin panel on the site.** The old `/admin` pages and their unauthenticated APIs were removed. The only admin route left is `/api/admin/export-audiences`, gated by `ADMIN_PASSWORD`.
 - **Older markdown docs in this repo are stale.** `README.md`, `PROJECT_SUMMARY.md`, `SETUP.md`, `SIGNUP_FLOW.md`, `START_HERE.md`, and `UPDATES_SUMMARY.md` predate the accounts/wishlist feature and the design-system rebuild, and contain outdated claims (e.g. "no user authentication," references to "Omnisend" where MailerLite is actually used). Verify against the code before trusting them.
 - **This site converts on trust and speed.** Instant signup with no email verification is a deliberate product decision, not an oversight — don't "fix" it by adding friction without checking first.

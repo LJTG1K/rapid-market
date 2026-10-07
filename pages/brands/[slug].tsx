@@ -134,7 +134,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
       <Head>
         <title>{brand.brandName} — RAPID Marketplace</title>
         <meta name="description" content={brand.description} />
-        <link rel="canonical" href={`https://rapid.market/brands/${brand.slug}`} />
+        <link rel="canonical" href={`https://www.rapid.market/brands/${brand.slug}`} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -143,7 +143,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
               '@type': 'Brand',
               name: brand.brandName,
               description: brand.description,
-              url: `https://rapid.market/brands/${brand.slug}`,
+              url: `https://www.rapid.market/brands/${brand.slug}`,
             }),
           }}
         />

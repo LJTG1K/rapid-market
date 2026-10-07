@@ -63,7 +63,7 @@ export default function BlogPost({ post, content }: { post: BlogPost; content: s
       <Head>
         <title>{`${post.title} — RAPID Journal`}</title>
         <meta name="description" content={post.excerpt} />
-        <link rel="canonical" href={`https://rapid.market/blog/${post.slug}`} />
+        <link rel="canonical" href={`https://www.rapid.market/blog/${post.slug}`} />
       </Head>
 
       <div className="container-edit py-12 md:py-16">

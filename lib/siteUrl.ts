@@ -1,6 +1,12 @@
 import type { NextApiRequest } from 'next';
 
 /**
+ * The origin the site is actually served from (rapid.market redirects to it).
+ * Use for canonical URLs, sitemap entries and structured data.
+ */
+export const CANONICAL_ORIGIN = 'https://www.rapid.market';
+
+/**
  * Base URL for server-side self-fetches to our own API routes (e.g. cron
  * routes pulling /api/products). Deliberately NOT `req.headers.host` in
  * production: Vercel Cron invokes the function via the raw deployment URL,

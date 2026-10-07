@@ -115,6 +115,24 @@ function generateSignature(secret: string, content: string): string {
   return crypto.createHmac('sha256', secret).update(content).digest('hex');
 }
 
+// Sugargoo error codes handled specially below.
+const USERNAME_TAKEN = 40013;
+const DUPLICATE_REQUEST = 40125;
+const MAX_NAME_ATTEMPTS = 3;
+
+/**
+ * Fits a name to Sugargoo's 2–50 character limit, optionally with a suffix
+ * (used to make a colliding name unique). The suffix always survives
+ * truncation; a name too short on its own gets a random one.
+ */
+function fitSugargooName(base: string, suffix: string = ''): string {
+  const trimmed = base.trim();
+  if (!suffix && trimmed.length < 2) {
+    suffix = crypto.randomInt(1000, 10000).toString();
+  }
+  return trimmed.slice(0, 50 - suffix.length) + suffix;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
@@ -160,50 +178,65 @@ export default async function handler(
     // Get valid access token
     const accessToken = await getAccessToken();
 
-    // Build request body
-    const requestBody = JSON.stringify({
-      email,
-      name: name || email.split('@')[0],
-      // Password omitted - let Sugargoo auto-generate
-      ...(password && { password }),
-    });
-
-    // Generate signature components
-    const timestamp = generateTimestamp();
-    const nonce = generateNonce();
-    const method = 'POST';
-    const path = '/opencenter/t-api/facebook/register';
-
-    // Build signing content
-    const signingContent = buildSigningContent(
-      method,
-      path,
-      timestamp,
-      nonce,
-      accessToken,
-      requestBody
-    );
-
-    // Generate signature
-    const signature = generateSignature(apiPassword, signingContent);
-
     console.log(`📤 Registering email: ${email}`);
 
-    // Call Sugargoo registration endpoint
-    const response = await fetch(`${baseUrl}/t-api/facebook/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Open-Authorization': `Bearer ${accessToken}`,
-        'X-Timestamp': timestamp.toString(),
-        'X-Nonce': nonce,
-        'X-Signature': signature,
-        'channel': '2', // 2 = PC (web service), 1 = App
-      },
-      body: requestBody,
-    });
+    // Sugargoo requires `name` to be unique across all its users, and we
+    // default it to the email prefix — so common prefixes collide (40013).
+    // The user never chose or sees this value, so on a collision retry with a
+    // random suffix rather than failing the signup. Each attempt needs its
+    // own timestamp/nonce/signature.
+    const baseName = name || email.split('@')[0];
+    let sugargooName = fitSugargooName(baseName);
+    let data: SugargooResponse;
 
-    const data: SugargooResponse = await response.json();
+    for (let attempt = 1; ; attempt++) {
+      const requestBody = JSON.stringify({
+        email,
+        name: sugargooName,
+        // Password omitted - let Sugargoo auto-generate
+        ...(password && { password }),
+      });
+
+      // Generate signature components
+      const timestamp = generateTimestamp();
+      const nonce = generateNonce();
+      const method = 'POST';
+      const path = '/opencenter/t-api/facebook/register';
+
+      // Build signing content
+      const signingContent = buildSigningContent(
+        method,
+        path,
+        timestamp,
+        nonce,
+        accessToken,
+        requestBody
+      );
+
+      // Generate signature
+      const signature = generateSignature(apiPassword, signingContent);
+
+      // Call Sugargoo registration endpoint
+      const response = await fetch(`${baseUrl}/t-api/facebook/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Open-Authorization': `Bearer ${accessToken}`,
+          'X-Timestamp': timestamp.toString(),
+          'X-Nonce': nonce,
+          'X-Signature': signature,
+          'channel': '2', // 2 = PC (web service), 1 = App
+        },
+        body: requestBody,
+      });
+
+      data = await response.json();
+
+      if (data.code !== USERNAME_TAKEN || attempt >= MAX_NAME_ATTEMPTS) break;
+
+      console.log(`🔁 userName taken for ${email} (attempt ${attempt}), retrying with a suffix`);
+      sugargooName = fitSugargooName(baseName, crypto.randomInt(1000, 10000).toString());
+    }
 
     // Handle response
     if (data.code === 200 && data.data) {
@@ -352,6 +385,18 @@ export default async function handler(
       return res.status(400).json({
         error: 'Password must be 6-64 characters',
         code: 40012,
+      });
+    }
+
+    if (data.code === DUPLICATE_REQUEST) {
+      // Sugargoo rejects a second request for the same email inside a short
+      // window — a double submit, or a retry straight after an error. Not a
+      // real failure, so it's logged as a warning and the client is told to
+      // wait rather than shown Sugargoo's raw message.
+      console.warn(`⚠️ Duplicate registration request: ${email}`);
+      return res.status(409).json({
+        error: 'Your signup is already being processed. Wait a few seconds, then try again.',
+        code: DUPLICATE_REQUEST,
       });
     }
 

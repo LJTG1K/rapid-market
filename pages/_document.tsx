@@ -8,10 +8,8 @@ export default function Document() {
       <Head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="sitemap" href="/api/sitemap.xml" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="sitemap" href="/sitemap.xml" />
         <meta name="theme-color" content="#E7E1D1" />
-        <meta name="description" content="RAPID - Access 150+ sellers, with new items indexed daily, through Sugargoo" />
 
         {/* Every product photograph is client-fetched from the sellers' CDN
             after /api/products resolves, so the DNS+TCP+TLS handshake would
@@ -26,21 +24,10 @@ export default function Document() {
           as="style"
         />
 
-        {/* Meta tags for SEO */}
-        <meta property="og:title" content="RAPID. - Direct from China" />
-        <meta property="og:description" content="150+ sellers, new items indexed daily. Shipped via Sugargoo. No middleman, no markup." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://rapid.market" />
-        <meta property="og:image" content="https://rapid.market/assets/logo.png" />
-        <meta property="og:image:alt" content="RAPID Logo" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="RAPID. - Direct from China" />
-        <meta name="twitter:description" content="150+ sellers, new items indexed daily. Shipped via Sugargoo." />
-        <meta name="twitter:image" content="https://rapid.market/assets/logo.png" />
-        <link rel="canonical" href="https://rapid.market" />
-        <link rel="alternate" type="application/rss+xml" href="/api/sitemap.xml" />
+        {/* Description, Open Graph and Twitter tags live in pages/_app.tsx
+            (next/head), not here: tags rendered from _document can't be
+            overridden per page, so every page ended up with two of each. */}
         <meta name="keywords" content="marketplace, sellers, products, Sugargoo, shopping, China" />
-        <meta name="robots" content="index, follow" />
 
         {/* Organization Schema */}
         <script
@@ -51,12 +38,12 @@ export default function Document() {
               '@type': 'Organization',
               name: 'RAPID',
               description: 'Direct access to 150+ sellers via Sugargoo, with new items indexed daily',
-              url: 'https://rapid.market',
-              logo: 'https://rapid.market/assets/logo.png',
+              url: 'https://www.rapid.market',
+              logo: 'https://www.rapid.market/assets/logo.png',
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'Customer Support',
-                url: 'https://rapid.market',
+                url: 'https://www.rapid.market',
               },
             }),
           }}
@@ -152,24 +139,6 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-
-        {/* Omnisend Email & SMS Marketing */}
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.omnisend = window.omnisend || [];
-              omnisend.push(["brandID", "6a39f9fd9193b63999bda5b2"]);
-              omnisend.push(["track", "$pageViewed"]);
-              !function(){var e=document.createElement("script");
-              e.type="text/javascript",e.async=!0,
-              e.src="https://omnisnippet1.com/inshop/launcher-v2.js";
-              var t=document.getElementsByTagName("script")[0];
-              t.parentNode.insertBefore(e,t)}();
-            `,
-          }}
-        />
-        {/* End Omnisend */}
       </body>
     </Html>
   );

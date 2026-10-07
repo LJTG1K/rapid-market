@@ -56,7 +56,7 @@ export default function ShippingCalculatorPage({ index }: { index: ShippingIndex
           name="description"
           content="Compare Sugargoo shipping cost and delivery time for every line to your country. Free calculator with volumetric weight support."
         />
-        <link rel="canonical" href="https://rapid.market/tools/shipping" />
+        <link rel="canonical" href="https://www.rapid.market/tools/shipping" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -64,7 +64,7 @@ export default function ShippingCalculatorPage({ index }: { index: ShippingIndex
               '@context': 'https://schema.org/',
               '@type': 'WebApplication',
               name: 'Sugargoo Shipping Calculator',
-              url: 'https://rapid.market/tools/shipping',
+              url: 'https://www.rapid.market/tools/shipping',
               applicationCategory: 'UtilitiesApplication',
               offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
               featureList: [
