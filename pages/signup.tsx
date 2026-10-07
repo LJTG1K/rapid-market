@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Reveal from '@/components/Reveal';
 import Stamp from '@/components/Stamp';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
@@ -102,6 +102,7 @@ export default function SugargooSignUp() {
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [copied, setCopied] = useState(false);
   const [hasQuizAnswers, setHasQuizAnswers] = useState(false);
+  const submittingRef = useRef(false);
   const { refresh } = useAuth();
 
   const handleCopyPassword = async () => {
@@ -116,7 +117,10 @@ export default function SugargooSignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return;
+    // A ref, not the `loading` state: two submits fired before React
+    // re-renders both see `loading === false`, and Sugargoo rejects the second
+    // as a duplicate request.
+    if (submittingRef.current) return;
 
     setError('');
     setSuccess(false);
@@ -126,6 +130,7 @@ export default function SugargooSignUp() {
       return;
     }
 
+    submittingRef.current = true;
     setLoading(true);
 
     try {
@@ -158,6 +163,10 @@ export default function SugargooSignUp() {
           setError('Invalid email format. Please check and try again.');
         } else if (data.code === 40012) {
           setError('Password must be 6-64 characters.');
+        } else if (data.code === 40125) {
+          setError('Your signup is already being processed. Wait a few seconds, then try again.');
+        } else if (response.status >= 500 || data.code === 500) {
+          setError("Sugargoo's signup service didn't respond properly. Wait a few seconds, then try again.");
         } else {
           setError(data.error || 'Registration failed. Please try again.');
         }
@@ -185,6 +194,7 @@ export default function SugargooSignUp() {
       setError('Network error. Please try again.');
       console.error('Signup error:', err);
     } finally {
+      submittingRef.current = false;
       setLoading(false);
     }
   };

@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/router';
+import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import Stars from '@/components/Stars';
@@ -10,84 +9,91 @@ import PerforatedDivider from '@/components/PerforatedDivider';
 import WishlistButton from '@/components/WishlistButton';
 import { trackBuyClick } from '@/lib/tracking';
 import { productMatchesBrand } from '@/lib/brandMatch';
-import type { StyleKey, FitKey } from '@/lib/styleMatch';
+import { loadProducts, type Product } from '@/lib/products';
+import { CANONICAL_ORIGIN } from '@/lib/siteUrl';
 
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  price: string;
-  sugargooLink: string;
-  category: string;
-  brand?: string;
-  verified?: boolean;
-  manualStyleTags?: StyleKey[];
-  manualFit?: FitKey | null;
-}
+type Category = 'fashion' | 'tech';
+
+type RelatedProduct = Pick<Product, 'id' | 'name' | 'image' | 'category' | 'price'>;
 
 interface Brand {
   brandName: string;
   slug: string;
 }
 
-export default function ProductPage() {
-  const router = useRouter();
-  const { id, category } = router.query;
-  const cat = (category as string) || 'fashion';
+interface Props {
+  product: Product | null;
+  more: RelatedProduct[];
+  matchedBrand: Brand | null;
+  cat: Category;
+}
 
-  const [product, setProduct] = useState<Product | null>(null);
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [brands, setBrands] = useState<Brand[]>([]);
+// Rendered on the server so crawlers and link previews get the product's own
+// title, description, canonical and structured data in the HTML, and so an
+// unknown id is a real 404 rather than a 200 with a "not found" message.
+export const getServerSideProps: GetServerSideProps<Props> = async ({ params, query, res }) => {
+  const id = String(params?.id ?? '');
+  const cat: Category = query.category === 'tech' ? 'tech' : 'fashion';
+  const empty: Props = { product: null, more: [], matchedBrand: null, cat };
 
-  useEffect(() => {
-    if (!router.isReady || !id) return;
-    setLoading(true);
-    fetch(`/api/products?category=${cat}`)
-      .then((r) => r.json())
-      .then((all: Product[]) => {
-        const found = all.find((p) => p.id === id) || null;
-        setProduct(found);
-        setAllProducts(all);
-      })
-      .catch(() => setProduct(null))
-      .finally(() => setLoading(false));
-  }, [router.isReady, id, cat]);
+  const { products, source } = await loadProducts(cat);
 
-  useEffect(() => {
-    fetch('/data/brands.json')
-      .then((r) => r.json())
-      .then(setBrands)
-      .catch(() => {});
-  }, []);
+  // The Sheet couldn't be read, so we can't tell whether this product exists.
+  // Say "temporarily unavailable" rather than 404ing (or showing the demo
+  // item for) a real product. Local dev without Sheet credentials still gets
+  // the demo catalogue.
+  if (source === 'demo' && process.env.NODE_ENV === 'production') {
+    res.statusCode = 503;
+    res.setHeader('Cache-Control', 'no-store');
+    return { props: empty };
+  }
 
-  const matchedBrand = product ? brands.find((b) => productMatchesBrand(product.name, b.brandName)) : undefined;
+  const product = products.find((p) => p.id === id);
+  if (!product) {
+    res.statusCode = 404;
+    return { props: empty };
+  }
+
+  const brands: Brand[] = (await import('../../public/data/brands.json')).default;
+  const brand = brands.find((b) => productMatchesBrand(product.name, b.brandName));
 
   // Ranks candidates instead of a strict same-category filter, so a Stussy
   // hoodie can surface a Stussy tee (shared brand) or another streetwear
   // pullover (shared style tags) rather than only exact same-category items.
   // Same-category alone still scores > 0, so this is a strict broadening of
   // the old filter, never a narrowing.
-  const more = useMemo(() => {
-    if (!product) return [];
-    const styleTags = new Set(product.manualStyleTags || []);
-    return allProducts
-      .filter((p) => p.id !== product.id)
-      .map((p) => {
-        let score = 0;
-        if (p.category === product.category) score += 3;
-        score += (p.manualStyleTags || []).filter((t) => styleTags.has(t)).length * 2;
-        if (matchedBrand && productMatchesBrand(p.name, matchedBrand.brandName)) score += 4;
-        if (product.manualFit && p.manualFit === product.manualFit) score += 1;
-        return { product: p, score };
-      })
-      .filter((entry) => entry.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3)
-      .map((entry) => entry.product);
-  }, [product, allProducts, matchedBrand]);
+  const styleTags = new Set(product.manualStyleTags || []);
+  const more = products
+    .filter((p) => p.id !== product.id)
+    .map((p) => {
+      let score = 0;
+      if (p.category === product.category) score += 3;
+      score += (p.manualStyleTags || []).filter((t) => styleTags.has(t)).length * 2;
+      if (brand && productMatchesBrand(p.name, brand.brandName)) score += 4;
+      if (product.manualFit && p.manualFit === product.manualFit) score += 1;
+      return { product: p, score };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(({ product: p }) => ({ id: p.id, name: p.name, image: p.image, category: p.category, price: p.price }));
 
+  // Same window as /api/products. Nothing here is per-user (the wishlist
+  // state loads client-side), so the CDN can share one copy.
+  res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=7200');
+
+  return {
+    props: {
+      // Round-trip drops `undefined` optionals, which Next refuses to serialise.
+      product: JSON.parse(JSON.stringify(product)),
+      more,
+      matchedBrand: brand ? { brandName: brand.brandName, slug: brand.slug } : null,
+      cat,
+    },
+  };
+};
+
+export default function ProductPage({ product, more, matchedBrand, cat }: Props) {
   const trackClick = async () => {
     if (!product) return;
     const eventId = trackBuyClick({ productId: product.id, productName: product.name });
@@ -102,43 +108,44 @@ export default function ProductPage() {
     }
   };
 
-  if (loading) {
+  if (!product) {
     return (
-      <div className="container-edit py-12 md:py-16">
-        <div className="h-3 w-28 bg-line/60 mb-8 motion-safe:animate-pulse" aria-hidden="true" />
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 motion-safe:animate-pulse" aria-hidden="true">
-          <div className="aspect-[4/5] bg-paper border border-line" />
-          <div>
-            <div className="h-2.5 w-20 bg-line/60 mb-4" />
-            <div className="h-8 w-full bg-line/60 mb-2" />
-            <div className="h-8 w-2/3 bg-line/60 mb-6" />
-            <div className="h-4 w-36 bg-line/60 mb-7" />
-            <div className="h-4 w-full bg-line/60 mb-1.5" />
-            <div className="h-4 w-4/5 bg-line/60 mb-8" />
-            <div className="h-8 w-24 bg-line/60 mb-8" />
-            <div className="h-12 w-44 bg-line/60" />
-          </div>
+      <>
+        <Head>
+          <title>Product not found — RAPID Marketplace</title>
+          <meta name="robots" content="noindex" />
+        </Head>
+        <div className="container-edit py-24 text-center">
+          <p className="text-ink/70 mb-6">We couldn&apos;t find that product — it may have sold out or moved.</p>
+          <Link
+            href={cat === 'tech' ? '/tech-listings' : '/fashion-listings'}
+            className="link-underline font-mono text-xs uppercase tracking-wide"
+          >
+            Browse all listings →
+          </Link>
         </div>
-      </div>
+      </>
     );
   }
 
-  if (!product) {
-    return (
-      <div className="container-edit py-24 text-center">
-        <p className="text-ink/70 mb-6">We couldn&apos;t find that product — it may have sold out or moved.</p>
-        <Link href="/fashion-listings" className="link-underline font-mono text-xs uppercase tracking-wide">
-          Browse all listings →
-        </Link>
-      </div>
-    );
-  }
+  // Fashion and tech ids overlap, so a tech product is only addressable with
+  // its ?category=tech; fashion is the default and canonicalises without it.
+  const canonical = `${CANONICAL_ORIGIN}/product/${encodeURIComponent(product.id)}${cat === 'tech' ? '?category=tech' : ''}`;
 
   return (
     <>
       <Head>
-        <title>{product.name} — RAPID Marketplace</title>
+        <title>{`${product.name} — RAPID Marketplace`}</title>
         <meta name="description" content={product.description} />
+        <link rel="canonical" href={canonical} />
+        <meta property="og:title" content={`${product.name} — RAPID`} key="og:title" />
+        <meta property="og:description" content={product.description} key="og:description" />
+        <meta property="og:url" content={canonical} key="og:url" />
+        {product.image && <meta property="og:image" content={product.image} key="og:image" />}
+        {product.image && <meta property="og:image:alt" content={product.name} key="og:image:alt" />}
+        <meta name="twitter:title" content={`${product.name} — RAPID`} />
+        <meta name="twitter:description" content={product.description} />
+        {product.image && <meta name="twitter:image" content={product.image} />}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -147,14 +154,15 @@ export default function ProductPage() {
               '@type': 'Product',
               name: product.name,
               description: product.description,
-              image: product.image,
+              ...(product.image && { image: product.image }),
+              url: canonical,
               offers: {
                 '@type': 'Offer',
                 price: product.price.replace(/[^0-9.]/g, ''),
                 priceCurrency: 'AUD',
                 url: product.sugargooLink,
               },
-            }),
+            }).replace(/</g, '\\u003c'),
           }}
         />
       </Head>

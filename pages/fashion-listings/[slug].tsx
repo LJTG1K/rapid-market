@@ -147,19 +147,19 @@ export default function ProductDetail() {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://rapid.market',
+        item: 'https://www.rapid.market',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Listings',
-        item: 'https://rapid.market/fashion-listings',
+        item: 'https://www.rapid.market/fashion-listings',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: product.name,
-        item: `https://rapid.market/fashion-listings/${slug}`,
+        item: `https://www.rapid.market/fashion-listings/${slug}`,
       },
     ],
   };
@@ -169,15 +169,15 @@ export default function ProductDetail() {
       <Head>
         <title>{product.name} - RAPID</title>
         <meta name="description" content={product.description} />
-        <meta property="og:title" content={`${product.name} - RAPID`} />
-        <meta property="og:description" content={product.description} />
-        <meta property="og:image" content={product.image} />
-        <meta property="og:type" content="product" />
+        <meta property="og:title" content={`${product.name} - RAPID`} key="og:title" />
+        <meta property="og:description" content={product.description} key="og:description" />
+        <meta property="og:image" content={product.image} key="og:image" />
+        <meta property="og:type" content="product" key="og:type" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${product.name} - RAPID`} />
         <meta name="twitter:description" content={product.description} />
         <meta name="twitter:image" content={product.image} />
-        <link rel="canonical" href={`https://rapid.market/fashion-listings/${slug}`} />
+        <link rel="canonical" href={`https://www.rapid.market/fashion-listings/${slug}`} />
 
         {/* Product Schema */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />

@@ -61,6 +61,7 @@ export default function Login() {
       <Head>
         <title>Log In — RAPID × Sugargoo</title>
         <meta name="description" content="Log in to your RAPID account" />
+        <meta name="robots" content="noindex, follow" />
       </Head>
 
       <div className="container-edit py-16 md:py-24">

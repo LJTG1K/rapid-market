@@ -38,7 +38,7 @@ export default function BlogIndex({ posts }: { posts: BlogPost[] }) {
       <Head>
         <title>Journal — RAPID Marketplace</title>
         <meta name="description" content="Guides and insights on ordering from China with RAPID & Sugargoo" />
-        <link rel="canonical" href="https://rapid.market/blog" />
+        <link rel="canonical" href="https://www.rapid.market/blog" />
       </Head>
 
       <div className="container-edit py-12 md:py-16">

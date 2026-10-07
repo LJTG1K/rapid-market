@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /.next/
 
-Sitemap: https://rapid-five-zeta.vercel.app/api/sitemap.xml
+Sitemap: https://www.rapid.market/sitemap.xml

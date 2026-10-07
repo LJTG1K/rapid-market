@@ -101,7 +101,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           fields[`wishlist_pick_${i + 1}_image`] = p?.image ?? '';
         }
 
-        await upsertSubscriberFields(user.email, fields);
+        const fieldsResult = await upsertSubscriberFields(user.email, fields);
+        if (fieldsResult === 'inactive') {
+          // Unsubscribed/inactive in MailerLite: they can't be emailed, so
+          // close out this period instead of retrying them on every run.
+          await markTriggered(userId, 'wishlist_digest', periodKey);
+          skipped++;
+          continue;
+        }
         const added = await addSubscriberToGroup(user.email, groupId);
         if (!added) {
           failed++;

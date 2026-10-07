@@ -1,87 +1,90 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { loadProducts } from '../../lib/products';
+import { CANONICAL_ORIGIN as BASE_URL } from '../../lib/siteUrl';
 
-const BASE_URL = 'https://rapid.market';
+interface Entry {
+  path: string;
+  priority: string;
+  changefreq: string;
+}
 
-function generateSiteMap(products: any[], brands: any[]) {
+// Indexable static routes only. Left out on purpose: /campaign and /reddit
+// (noindex ad landers), /login, /account, and the landing-page tests.
+const STATIC_PAGES: Entry[] = [
+  { path: '', priority: '1.0', changefreq: 'daily' },
+  { path: '/fashion-listings', priority: '0.9', changefreq: 'daily' },
+  { path: '/tech-listings', priority: '0.9', changefreq: 'daily' },
+  { path: '/gillys-picks', priority: '0.8', changefreq: 'weekly' },
+  { path: '/brands', priority: '0.9', changefreq: 'weekly' },
+  { path: '/blog', priority: '0.7', changefreq: 'weekly' },
+  { path: '/style-quiz', priority: '0.7', changefreq: 'monthly' },
+  { path: '/tutorial', priority: '0.7', changefreq: 'monthly' },
+  { path: '/tools', priority: '0.7', changefreq: 'monthly' },
+  { path: '/tools/shipping', priority: '0.9', changefreq: 'monthly' },
+  { path: '/signup', priority: '0.6', changefreq: 'monthly' },
+];
+
+function urlTag({ path, priority, changefreq }: Entry) {
+  return `
+  <url>
+    <loc>${BASE_URL}${path}</loc>
+    <priority>${priority}</priority>
+    <changefreq>${changefreq}</changefreq>
+  </url>`;
+}
+
+function generateSiteMap(entries: Entry[]) {
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Pages -->
-  <url>
-    <loc>${BASE_URL}</loc>
-    <priority>1.0</priority>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
-    <loc>${BASE_URL}/fashion-listings</loc>
-    <priority>0.9</priority>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
-    <loc>${BASE_URL}/brands</loc>
-    <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>${BASE_URL}/tutorial</loc>
-    <priority>0.7</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>${BASE_URL}/campaigns</loc>
-    <priority>0.8</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>${BASE_URL}/tools</loc>
-    <priority>0.7</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>${BASE_URL}/tools/shipping</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <!-- Product Pages -->
-  ${products
-    .map(({ slug }: { slug: string }) => {
-      return `
-  <url>
-    <loc>${BASE_URL}/fashion-listings/${slug}</loc>
-    <priority>0.8</priority>
-    <changefreq>weekly</changefreq>
-  </url>`;
-    })
-    .join('')}
-  <!-- Brand Pages -->
-  ${brands
-    .map(({ slug }: { slug: string }) => {
-      return `
-  <url>
-    <loc>${BASE_URL}/brands/${slug}</loc>
-    <priority>0.7</priority>
-    <changefreq>weekly</changefreq>
-  </url>`;
-    })
-    .join('')}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries.map(urlTag).join('')}
 </urlset>`;
+}
+
+async function fetchJson(path: string): Promise<any[]> {
+  const res = await fetch(`${BASE_URL}${path}`);
+  if (!res.ok) throw new Error(`${path} responded ${res.status}`);
+  const data = await res.json();
+  if (!Array.isArray(data)) throw new Error(`${path} did not return an array`);
+  return data;
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // Fetch products
-    const productsRes = await fetch(`${BASE_URL}/api/products`);
-    const products = await productsRes.json();
+    const [fashion, tech, brands, posts] = await Promise.all([
+      loadProducts('fashion'),
+      loadProducts('tech'),
+      fetchJson('/data/brands.json'),
+      fetchJson('/data/blog-posts.json'),
+    ]);
 
-    // Fetch brands
-    const brandsRes = await fetch(`${BASE_URL}/data/brands.json`);
-    const brands = await brandsRes.json();
+    // Fashion and tech ids overlap, so tech products are only addressable with
+    // ?category=tech — the same URL pages/product/[id].tsx declares canonical.
+    // A catalogue that fell back to demo data contributes nothing.
+    const productEntries = (catalogue: typeof fashion, suffix: string): Entry[] =>
+      catalogue.source === 'sheet'
+        ? catalogue.products.map((p) => ({
+            path: `/product/${encodeURIComponent(p.id)}${suffix}`,
+            priority: '0.8',
+            changefreq: 'weekly',
+          }))
+        : [];
 
-    // Generate sitemap
-    const sitemap = generateSiteMap(products, brands);
+    // Rows without the field a URL is built from are skipped rather than
+    // emitted as ".../undefined".
+    const entries: Entry[] = [
+      ...STATIC_PAGES,
+      ...productEntries(fashion, ''),
+      ...productEntries(tech, '?category=tech'),
+      ...brands
+        .filter((b) => b?.slug)
+        .map((b) => ({ path: `/brands/${encodeURIComponent(b.slug)}`, priority: '0.7', changefreq: 'weekly' })),
+      ...posts
+        .filter((p) => p?.slug)
+        .map((p) => ({ path: `/blog/${encodeURIComponent(p.slug)}`, priority: '0.6', changefreq: 'monthly' })),
+    ];
 
     res.setHeader('Content-Type', 'text/xml; charset=utf-8');
     res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate');
-    res.write(sitemap);
+    res.write(generateSiteMap(entries));
     res.end();
   } catch (error) {
     console.error('Sitemap generation error:', error);

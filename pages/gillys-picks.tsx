@@ -92,14 +92,14 @@ export default function GillysPicks() {
     '@type': 'CollectionPage',
     name: "Gilly's Picks",
     description: 'Curated selection of best-performing products from Gilly video reviews',
-    url: 'https://rapid.market/gillys-picks',
+    url: 'https://www.rapid.market/gillys-picks',
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: filteredProducts.length,
       itemListElement: filteredProducts.slice(0, 50).map((product, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        url: `https://rapid.market/fashion-listings/${product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`,
+        url: `https://www.rapid.market/product/${encodeURIComponent(product.id)}`,
         name: product.name,
         image: product.image,
       })),
@@ -110,8 +110,8 @@ export default function GillysPicks() {
     '@context': 'https://schema.org/',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://rapid.market' },
-      { '@type': 'ListItem', position: 2, name: "Gilly's Picks", item: 'https://rapid.market/gillys-picks' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rapid.market' },
+      { '@type': 'ListItem', position: 2, name: "Gilly's Picks", item: 'https://www.rapid.market/gillys-picks' },
     ],
   };
 
@@ -120,7 +120,7 @@ export default function GillysPicks() {
       <Head>
         <title>Gilly&apos;s Picks — RAPID Marketplace</title>
         <meta name="description" content="Curated selection of best-performing products from Gilly video reviews." />
-        <link rel="canonical" href="https://rapid.market/gillys-picks" />
+        <link rel="canonical" href="https://www.rapid.market/gillys-picks" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       </Head>

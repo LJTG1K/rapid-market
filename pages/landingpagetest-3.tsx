@@ -100,6 +100,7 @@ export default function LandingPageTest3({
       <Head>
         <title>RAPID. - Discover 100+ Verified Sellers</title>
         <meta name="description" content="Authentic brands at factory prices. No middleman. No markup." />
+        <meta name="robots" content="noindex, follow" />
       </Head>
 
       {/* TOP NAV CTA */}

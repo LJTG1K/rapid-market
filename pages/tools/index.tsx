@@ -40,7 +40,7 @@ export default function ToolsHub() {
       <Head>
         <title>Tools — RAPID Marketplace</title>
         <meta name="description" content="Free tools for ordering through Sugargoo and RAPID — shipping cost calculators and more." />
-        <link rel="canonical" href="https://rapid.market/tools" />
+        <link rel="canonical" href="https://www.rapid.market/tools" />
       </Head>
 
       <div className="container-edit py-12 md:py-16">
