@@ -17,12 +17,12 @@ export default function Document() {
         <link rel="preconnect" href="https://img.alicdn.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://img.alicdn.com" />
 
-        {/* Preload fonts */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..900&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-          rel="preload"
-          as="style"
-        />
+        {/* The fonts are loaded by the @import in styles/globals.css, so the
+            browser only learns about these origins once that CSS has parsed.
+            Open the connections early. (A rel=preload of the stylesheet here
+            doesn't work: Next's font optimiser strips its href.) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
 
         {/* Description, Open Graph and Twitter tags live in pages/_app.tsx
             (next/head), not here: tags rendered from _document can't be
