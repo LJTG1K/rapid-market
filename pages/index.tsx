@@ -34,6 +34,7 @@ const TECH_INDEX = [
   ['Gaming', 'gaming'],
   ['Audio', 'audio'],
   ['Lighting', 'lighting'],
+  ['Phone Cases', 'phone-cases'],
   ['Phone Accessories', 'phone-accessories'],
   ['Desk Setup', 'desk-setup'],
   ['Skins & Wraps', 'skins-wraps'],
@@ -309,7 +310,7 @@ export default function Home() {
               {TECH_INDEX.map(([label, slug], i) => (
                 <li key={slug} className="border-t border-line last:border-b">
                   <Link
-                    href={`/tech-listings?category=${slug}`}
+                    href={slug === 'phone-cases' ? '/phone-cases' : `/tech-listings?category=${slug}`}
                     className="flex items-center justify-between py-4 group"
                   >
                     <span className="font-display font-bold text-xl md:text-2xl group-hover:text-stamp transition-colors">

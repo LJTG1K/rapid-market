@@ -90,6 +90,21 @@ const techCategoryMap: { [key: string]: string } = {
   'ornament': 'Decor & Keychains',
 };
 
+// Blocks of the Tech sheet categorised by their permanent column-A id rather
+// than by keyword. The keyword map can't place these reliably (e.g. "LED"
+// matches "STYLED", "LIGHT" matches "LIGHTWEIGHT"), so the phone-case run
+// was landing under Lighting/Other. Applies only to rows with an explicit id —
+// a row still on the fallback counter has no stable id to key a range on.
+const techIdRangeCategories: { category: string; from: number; to: number }[] = [
+  { category: 'Phone Cases', from: 180, to: 206 },
+];
+
+function categoryFromIdRange(category: string, explicitId: string): string | null {
+  if (category.toLowerCase() !== 'tech' || !/^\d+$/.test(explicitId)) return null;
+  const n = Number(explicitId);
+  return techIdRangeCategories.find((r) => n >= r.from && n <= r.to)?.category ?? null;
+}
+
 function categorizeFashionProduct(name: string, description: string): string {
   const fullText = `${name} ${description}`.toLowerCase();
   for (const [keyword, category] of Object.entries(fashionCategoryMap)) {
@@ -124,6 +139,7 @@ const fallbackCopyByCategory: { [category: string]: string } = {
   Accessories: 'Finishing-touch accessory from a verified seller — see the listing photos for detail.',
   // Tech
   Gaming: 'Gaming gear from a verified seller — check the listing for specs and compatibility.',
+  'Phone Cases': 'Case from an independent maker — confirm your device model in the listing before ordering.',
   'Phone Accessories': 'Phone accessory from a verified seller — confirm your model in the listing photos.',
   Lighting: 'Ambient lighting piece from a verified seller — see the listing for size and setup.',
   Audio: 'Audio gear from a verified seller — check the listing for specs and connectivity.',
@@ -296,7 +312,7 @@ export async function loadProducts(category: string = 'fashion'): Promise<Produc
         continue;
       }
 
-      const productCategory = categoryFunc(name, description || '');
+      const productCategory = categoryFromIdRange(category, explicitId) ?? categoryFunc(name, description || '');
 
       const styleTagsRaw = (row[6] || '').toString().trim();
       const fitRaw = (row[7] || '').toString().trim();

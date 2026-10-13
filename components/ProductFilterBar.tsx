@@ -70,16 +70,18 @@ export default function ProductFilterBar({
             onChange={(e) => onSearchChange(e.target.value)}
             className="w-full sm:w-auto sm:flex-1 sm:min-w-[180px] px-3 py-2 bg-paper border border-line focus:outline-none focus:border-ink text-sm"
           />
-          <button
-            type="button"
-            onClick={() => setOpen((o) => !o)}
-            aria-expanded={open}
-            className={`font-mono text-[11px] uppercase tracking-wide px-3 py-2 border transition-colors ${
-              open ? 'bg-ink text-paper border-ink' : 'border-line text-ink hover:border-ink'
-            }`}
-          >
-            Refine{activeCount > 0 ? ` (${activeCount})` : ''}
-          </button>
+          {groups.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setOpen((o) => !o)}
+              aria-expanded={open}
+              className={`font-mono text-[11px] uppercase tracking-wide px-3 py-2 border transition-colors ${
+                open ? 'bg-ink text-paper border-ink' : 'border-line text-ink hover:border-ink'
+              }`}
+            >
+              Refine{activeCount > 0 ? ` (${activeCount})` : ''}
+            </button>
+          )}
           <select
             value={selectedSort}
             onChange={(e) => onSortChange(e.target.value)}
