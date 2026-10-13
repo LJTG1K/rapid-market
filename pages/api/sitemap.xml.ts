@@ -14,6 +14,7 @@ const STATIC_PAGES: Entry[] = [
   { path: '', priority: '1.0', changefreq: 'daily' },
   { path: '/fashion-listings', priority: '0.9', changefreq: 'daily' },
   { path: '/tech-listings', priority: '0.9', changefreq: 'daily' },
+  { path: '/phone-cases', priority: '0.8', changefreq: 'daily' },
   { path: '/gillys-picks', priority: '0.8', changefreq: 'weekly' },
   { path: '/brands', priority: '0.9', changefreq: 'weekly' },
   { path: '/blog', priority: '0.7', changefreq: 'weekly' },

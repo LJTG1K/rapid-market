@@ -23,6 +23,7 @@ interface Product {
 const TECH_CATEGORIES = [
   'All',
   'Gaming',
+  'Phone Cases',
   'Phone Accessories',
   'Lighting',
   'Audio',
@@ -77,6 +78,7 @@ export default function TechListings() {
       const categoryMap: { [key: string]: string } = {
         all: 'All',
         gaming: 'Gaming',
+        'phone-cases': 'Phone Cases',
         'phone-accessories': 'Phone Accessories',
         lighting: 'Lighting',
         audio: 'Audio',
@@ -162,6 +164,10 @@ export default function TechListings() {
   }, [products, isBrowseMode]);
 
   const goToCategory = (category: string) => {
+    if (category === 'Phone Cases') {
+      router.push('/phone-cases');
+      return;
+    }
     handleCategoryClick(category);
     resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -191,7 +197,7 @@ export default function TechListings() {
                 title: 'Category',
                 allLabel: 'All',
                 selected: selectedCategory,
-                onSelect: handleCategoryClick,
+                onSelect: (c) => (c === 'Phone Cases' ? goToCategory(c) : handleCategoryClick(c)),
                 options: TECH_CATEGORIES.slice(1).map((c) => ({ key: c, label: c })),
               },
             ]}
