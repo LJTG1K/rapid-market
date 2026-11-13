@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Stamp from '@/components/Stamp';
 import Reveal from '@/components/Reveal';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
 import LoadingMessage, { CATEGORY_MESSAGES } from '@/components/LoadingMessage';
-import WishlistButton from '@/components/WishlistButton';
 import PerforatedDivider from '@/components/PerforatedDivider';
-import ProductImage from '@/components/ProductImage';
-import { trackBuyClick } from '@/lib/tracking';
-import picksConfig from '@/public/data/gillys-picks.json';
+import ProductCard from '@/components/ProductCard';
+import { isGillyPick, PICKS_PER_VISIT } from '@/lib/gillyPicks';
 
 declare global {
   interface Window {
@@ -27,12 +24,9 @@ interface Product {
   category: string;
   brand?: string;
   verified?: boolean;
+  gillyNote?: string;
 }
 
-// Gilly's Picks pool = product IDs in this range (column A of the sheet).
-// Each visit shows a random PICKS_PER_VISIT of them to keep the page fresh.
-// Edited in RAPID Studio (studio/), which commits public/data/gillys-picks.json.
-const { min: PICK_ID_MIN, max: PICK_ID_MAX, perVisit: PICKS_PER_VISIT } = picksConfig;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -44,8 +38,24 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 function isPick(p: Product) {
-  const id = Number(p.id);
-  return Number.isInteger(id) && id >= PICK_ID_MIN && id <= PICK_ID_MAX;
+  return isGillyPick(p.id);
+}
+
+/** Gilly's own ink stamp. Only used on Gilly's Picks, never the homepage. */
+function GillyStamp({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <path id="gilly-ring" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" />
+      </defs>
+      <circle cx="50" cy="50" r="46" fill="none" className="stroke-pen" strokeWidth="3" />
+      <circle cx="50" cy="50" r="27" fill="none" className="stroke-pen" strokeWidth="1.5" />
+      <text fontFamily="Instrument Sans, Arial, sans-serif" fontSize="9.5" fontWeight="700" letterSpacing="2" className="fill-pen">
+        <textPath href="#gilly-ring">WORN BY GILLY · CHECKED · </textPath>
+      </text>
+      <text x="50" y="59" textAnchor="middle" fontFamily="Nanum Pen Script, cursive" fontSize="28" className="fill-pen">G.</text>
+    </svg>
+  );
 }
 
 export default function GillysPicks() {
@@ -62,6 +72,9 @@ export default function GillysPicks() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Runs on the actual exit to Sugargoo (after the handoff sheet). The shared
+  // ad-platform buy_click already fired there; this adds the GA view_item and
+  // the gilly-pick-click log.
   const trackClick = async (productId: string, productName: string, product?: Product) => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'view_item', {
@@ -75,12 +88,11 @@ export default function GillysPicks() {
         }],
       });
     }
-    const eventId = trackBuyClick({ productId, productName });
     try {
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, productName, type: 'gilly-pick-click', eventId }),
+        body: JSON.stringify({ productId, productName, type: 'gilly-pick-click' }),
       });
     } catch (error) {
       console.error('Error tracking click:', error);
@@ -126,22 +138,34 @@ export default function GillysPicks() {
       </Head>
 
       <div className="container-edit py-12 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
-          <div className="lg:col-span-8">
-            <span className="eyebrow block mb-3">Curated Edition</span>
-            <h1 className="font-display font-black text-ink text-6xl md:text-7xl tracking-tightest leading-[0.85] mb-6">
-              Gilly&apos;s Picks
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-10 items-center mb-16">
+          <div className="md:col-span-6">
+            <span className="eyebrow block mb-4">Gilly&apos;s Picks</span>
+            <h1 className="font-display text-ink text-[clamp(2.5rem,5.6vw,4.5rem)] leading-[1.02] mb-6">
+              Chinese labels, <span className="bg-hi px-[0.12em] box-decoration-clone">worn first</span> by Gilly.
             </h1>
-            <p className="text-xl text-ink/80 leading-relaxed max-w-xl mb-3">
-              The products that made the cut. Gilly saw them, wore them, and now
-              they&apos;re indexed on RAPID.
+            <p className="text-lg text-muted leading-relaxed max-w-[46ch] mb-3">
+              The pieces that made the cut. Gilly saw them, wore them, and left a note on
+              fit and fabric so you know what to expect when the warehouse photos come in.
             </p>
-            <p className="eyebrow">
-              {loading ? 'Loading…' : `${filteredProducts.length} items hand-picked`}
+            <p className="text-sm text-muted">
+              {loading ? 'Loading…' : `${filteredProducts.length} picks this visit`}
             </p>
           </div>
-          <div className="lg:col-span-4 flex lg:justify-end">
-            <Stamp size={104} centerText="G" sub="Curator Pick" ringText="Selected By Gilly · Reviewed On Video ·" />
+          <div className="md:col-span-5 md:col-start-8 relative justify-self-center w-full max-w-[340px]">
+            <GillyStamp className="absolute -left-5 -top-6 z-10 w-[92px] h-[92px] -rotate-12" />
+            <div className="relative aspect-[4/5] rounded-md overflow-hidden bg-paper">
+              {/* carousel-3.jpg is a three-photo strip; crop to its middle frame. */}
+              <div
+                role="img"
+                aria-label="Varsity jacket and washed denim, picked by Gilly"
+                className="absolute inset-0 bg-no-repeat"
+                style={{ backgroundImage: 'url(/carousel-3.jpg)', backgroundSize: '345% auto', backgroundPosition: '47.5% 40%' }}
+              />
+            </div>
+            <p className="gilly-note !text-[30px] absolute -right-2 -bottom-7 -rotate-3 bg-white border border-line px-3 py-1.5">
+              the varsity one.<br />trust me.
+            </p>
           </div>
         </div>
 
@@ -156,32 +180,14 @@ export default function GillysPicks() {
           <p className="font-mono text-sm text-muted py-12">No picked items found yet. Check back soon!</p>
         ) : (
           <div className="pt-12">
-            <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10">
+            <Reveal stagger={60} className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-6 gap-y-12">
               {filteredProducts.map((product) => (
-                <div key={product.id} className="flex flex-col relative">
-                  <WishlistButton productId={product.id} category="fashion" className="absolute top-2 right-2 z-10" />
-                  <Link href={`/product/${product.id}`} className="group">
-                    <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
-                      <ProductImage src={product.image} alt={`${product.name} — picked by Gilly`} />
-                    </div>
-                    <h3 className="font-semibold text-sm leading-snug mb-1 line-clamp-2 group-hover:text-stamp transition-colors">
-                      {product.name}
-                    </h3>
-                  </Link>
-                  <p className="text-xs text-muted mb-3 line-clamp-2">{product.description}</p>
-                  <div className="mt-auto flex items-center justify-between gap-3">
-                    <span className="font-mono text-sm">{product.price}</span>
-                    <a
-                      href={product.sugargooLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => trackClick(product.id, product.name, product)}
-                      className="btn-primary !px-4 !py-2 text-[11px]"
-                    >
-                      Buy
-                    </a>
-                  </div>
-                </div>
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  wishlistCategory="fashion"
+                  onBuyClick={() => trackClick(product.id, product.name, product)}
+                />
               ))}
             </Reveal>
           </div>
@@ -189,7 +195,7 @@ export default function GillysPicks() {
 
         <PerforatedDivider className="mt-20" />
         <div className="pt-10 text-center">
-          <h3 className="font-display font-black text-2xl md:text-3xl tracking-tightest mb-3">Want more?</h3>
+          <h2 className="font-display text-3xl md:text-4xl mb-3">Want more?</h2>
           <p className="text-ink/70 max-w-xl mx-auto mb-6">
             Browse the full fashion index — 1,500+ pieces from 150+ sellers.
           </p>

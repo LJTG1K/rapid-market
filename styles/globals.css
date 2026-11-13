@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..900&family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Young+Serif&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Geist+Mono:wght@400;500&family=Nanum+Pen+Script&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -34,9 +34,9 @@ html {
 }
 
 body {
-  font-family: 'Inter Tight', 'Inter', sans-serif;
-  background: #E7E1D1;
-  color: #1B1A14;
+  font-family: 'Instrument Sans', Arial, sans-serif;
+  background: #FFFFFF;
+  color: #0E0E10;
 }
 
 /* iOS auto-zooms a field on focus when its font-size is < 16px. Several inputs
@@ -50,11 +50,20 @@ body {
   }
 }
 
-h1, h2, h3, h4, .display {
-  font-family: 'Bricolage Grotesque', 'Arial Black', sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+/* Big headlines: Young Serif (one weight only, so never faux-bold it).
+   Smaller headings: Instrument Sans semibold. */
+h1, h2, .display {
+  font-family: 'Young Serif', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
+h3, h4 {
+  font-family: 'Instrument Sans', Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.font-display { font-weight: 400 !important; letter-spacing: -0.01em !important; }
+.font-mark { font-weight: 800 !important; letter-spacing: -0.02em; }
 
 /* Visible keyboard focus everywhere */
 a:focus-visible,
@@ -63,13 +72,13 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid #BC3A1D;
+  outline: 2px solid #C8361B;
   outline-offset: 3px;
 }
 
 ::selection {
-  background: #1B1A14;
-  color: #F3F0E8;
+  background: #FFE680;
+  color: #0E0E10;
 }
 
 /* ---------- Utility layer ---------- */
@@ -93,8 +102,8 @@ select:focus-visible,
     width: 100%;
     background-image: repeating-linear-gradient(
       to right,
-      #1B1A14 0,
-      #1B1A14 6px,
+      #0E0E10 0,
+      #0E0E10 6px,
       transparent 6px,
       transparent 13px
     );
@@ -104,21 +113,23 @@ select:focus-visible,
     clip-path: inset(0 100% 0 0);
   }
 
+  /* Pill buttons. Red (btn-stamp / btn-buy) is for buying only; every
+     other action is a dark (btn-primary) or outlined (btn-secondary) pill. */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 font-mono uppercase text-xs tracking-wide
-           px-6 py-3.5 rounded-sm transition-colors duration-200;
+    @apply inline-flex items-center justify-center gap-2 font-body font-semibold text-sm
+           px-5 py-3 rounded-full transition-colors duration-200;
   }
 
   .btn-primary {
-    @apply btn bg-ink text-paper hover:bg-stamp;
+    @apply btn bg-ink text-white hover:bg-ink/80;
   }
 
   .btn-secondary {
-    @apply btn bg-transparent text-ink border border-ink hover:bg-ink hover:text-paper;
+    @apply btn bg-transparent text-ink border-[1.5px] border-ink hover:bg-ink hover:text-white;
   }
 
   .btn-stamp {
-    @apply btn bg-stamp text-paper hover:bg-ink;
+    @apply btn bg-stamp text-white hover:bg-[#A82C14];
   }
 
   .link-underline {
@@ -130,7 +141,12 @@ select:focus-visible,
   }
 
   .tag {
-    @apply inline-block font-mono text-xs uppercase tracking-wide bg-accent border border-accent px-2.5 py-1 text-paper;
+    @apply inline-block font-body text-xs font-medium border border-line rounded-full px-2.5 py-1 text-ink bg-white;
+  }
+
+  /* Gilly's handwritten note: blue pen, product cards on Gilly picks only. */
+  .gilly-note {
+    @apply font-pen text-pen text-[21px] leading-[1.05];
   }
 
   /* Consistent hatch fill for image placeholders site-wide */

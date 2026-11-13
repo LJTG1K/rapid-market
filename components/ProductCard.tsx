@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import ProductImage from './ProductImage';
 import WishlistButton from './WishlistButton';
-import { trackBuyClick } from '@/lib/tracking';
+import VerifiedSeal from './VerifiedSeal';
+import { useHandoff } from '@/contexts/HandoffContext';
+import { gillyNoteFor } from '@/lib/gillyPicks';
 
 export interface ProductCardData {
   id: string;
@@ -10,68 +12,89 @@ export interface ProductCardData {
   price: string;
   sugargooLink: string;
   category: string;
+  gillyNote?: string;
 }
 
 interface ProductCardProps {
   product: ProductCardData;
   /** Category namespace for the wishlist store — 'fashion' | 'tech'. */
   wishlistCategory: string;
-  /** Small accent tags shown next to the price — e.g. a matched style/fit, or quiz-match reasons. */
+  /** Small tags shown under the name — e.g. a matched style/fit, or quiz-match reasons. */
   tags?: string[];
+  /** Extra work on the actual exit to Sugargoo (after the handoff sheet). */
   onBuyClick?: () => void;
   /** Image crop — fashion photography reads better at 4:5, tech product shots are square. */
   aspect?: '4:5' | 'square';
+  /** Gilly's handwritten note (Gilly picks only). Off on the homepage. */
+  showGillyNote?: boolean;
 }
 
 /**
- * Shared listing card — used by fashion-listings.tsx and ProductMatchGrid so
- * the card only needs updating in one place. Borderless image, a 3-line
- * caption (category, name, price row), and a quiet text CTA rather than a
- * solid button per card — see the fashion-listings reskin brief.
+ * Shared listing card (Direction A, "Verified"): the photo sits on a neutral
+ * tile with a Verified-seller seal, then name, category and price, and a red
+ * buy pill that opens the Sugargoo handoff sheet. Gilly picks can carry
+ * Gilly's note in blue pen.
  */
-export default function ProductCard({ product, wishlistCategory, tags = [], onBuyClick, aspect = '4:5' }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  wishlistCategory,
+  tags = [],
+  onBuyClick,
+  aspect = '4:5',
+  showGillyNote = true,
+}: ProductCardProps) {
+  const { handleBuyClick } = useHandoff();
+  const note = showGillyNote ? gillyNoteFor(product) : null;
+
   return (
-    <div className="flex flex-col relative">
+    <div className="flex flex-col relative min-w-0">
       <WishlistButton
         productId={product.id}
         category={wishlistCategory}
         className="absolute top-2 right-2 z-10 !w-11 !h-11"
       />
       <Link href={`/product/${product.id}?category=${wishlistCategory}`} className="group">
-        <div className={`${aspect === 'square' ? 'aspect-square' : 'aspect-[4/5]'} bg-paper overflow-hidden mb-3`}>
+        <div
+          className={`${aspect === 'square' ? 'aspect-square' : 'aspect-[4/5]'} relative bg-paper rounded-md overflow-hidden mb-3`}
+        >
           <ProductImage src={product.image} alt={product.name} />
+          <VerifiedSeal className="absolute left-2 top-2" />
         </div>
-        <span className="font-mono text-[11px] uppercase tracking-wide text-muted mb-1 block">
-          {product.category}
-        </span>
-        <h3 className="font-semibold text-sm leading-snug mb-1.5 line-clamp-2 group-hover:text-stamp transition-colors">
+        <h3 className="font-body font-semibold text-sm leading-snug mb-0.5 line-clamp-2 group-hover:underline underline-offset-2">
           {product.name}
         </h3>
+        <span className="text-xs text-muted block">{product.category}</span>
       </Link>
-      <div className="mt-auto flex items-center justify-between gap-2 mb-2">
+
+      {note && (
+        <p className="gilly-note mt-2">
+          {note.text}
+          {note.sample && (
+            <span className="ml-1.5 align-middle font-mono text-[9px] uppercase tracking-wide text-muted border border-line rounded px-1 py-px">
+              sample
+            </span>
+          )}
+        </p>
+      )}
+
+      {tags.length > 0 && (
+        <span className="mt-2 text-[11px] text-muted truncate" title={tags.join(' · ')}>
+          {tags.join(' · ')}
+        </span>
+      )}
+
+      <div className="mt-auto pt-3 flex items-center justify-between gap-2">
         <span className="font-mono text-sm">{product.price}</span>
-        {tags.length > 0 && (
-          <span className="tag !text-[9.5px] !px-2 !py-0.5 truncate max-w-[60%]" title={tags.join(' · ')}>
-            {tags.join(' · ')}
-          </span>
-        )}
+        <a
+          href={product.sugargooLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => handleBuyClick(e, product, { onExit: () => onBuyClick?.() })}
+          className="btn-stamp !px-4 !py-2 !text-[13px]"
+        >
+          Buy
+        </a>
       </div>
-      <a
-        href={product.sugargooLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => {
-          // Fires for every ProductCard exit to Sugargoo regardless of
-          // whether the parent also wires its own onBuyClick (e.g. the
-          // style-quiz-pick-click log in ProductMatchGrid) — so no consumer
-          // of this shared card can silently ship without ad-platform tracking.
-          trackBuyClick({ productId: product.id, productName: product.name });
-          onBuyClick?.();
-        }}
-        className="self-start font-mono text-[11px] uppercase tracking-wide text-muted hover:text-stamp focus-visible:text-stamp transition-colors"
-      >
-        View →
-      </a>
     </div>
   );
 }

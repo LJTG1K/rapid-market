@@ -3,31 +3,42 @@ module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
+    './contexts/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       colors: {
-        // RAPID Marketplace design tokens — warm industrial / customs-manifest palette
-        // "Dual Stamp" refresh: lighter/creamier ground, deeper ink, + a disciplined
-        // second accent (customs-ink teal) for tags & links. Red stays reserved for CTAs.
-        stone: '#E7E1D1',   // page background (lighter, creamier)
-        paper: '#F3F0E8',   // card / surface background
-        ink: '#1B1A14',     // primary text, display type (deeper)
-        muted: '#69614F',   // secondary text
-        line: '#C3BAA6',    // hairlines, rules, borders
-        stamp: '#BC3A1D',   // primary accent — customs-stamp red (CTAs)
-        accent: '#155E58',  // secondary accent — customs-ink teal (tags, links)
-        dusk: '#14140E',    // dark section background (footer)
+        // RAPID "Verified" identity (Direction A, Nov 2026): white ground, neutral
+        // photo tiles, near-black ink. Accents each have ONE job:
+        //   stamp (red)  - buying only (Buy / Continue to Sugargoo)
+        //   qc (green)   - only inside the Verified-seller seal
+        //   pen (blue)   - only Gilly's handwritten notes (Gilly picks, never homepage)
+        //   hi (yellow)  - highlighter, at most once per page, on a headline
+        stone: '#FFFFFF',   // page background
+        paper: '#F4F4F2',   // photo tile / quiet surface
+        ink: '#0E0E10',     // primary text
+        muted: '#6B6B70',   // secondary text
+        line: '#E3E3DF',    // hairlines, borders
+        stamp: '#C8361B',   // buy red
+        accent: '#0E0E10',  // tags + link hovers now use ink (teal retired)
+        qc: '#1F7A4D',
+        pen: '#1D3FD6',
+        hi: '#FFE680',
+        dusk: '#0E0E10',    // footer
         // legacy aliases kept for any un-migrated components
         rapid: {
-          black: '#1B1A14',
-          white: '#F3F0E8',
+          black: '#0E0E10',
+          white: '#FFFFFF',
         },
       },
       fontFamily: {
-        display: ['"Bricolage Grotesque"', 'Arial Black', 'sans-serif'],
-        body: ['"Inter Tight"', 'Inter', 'sans-serif'],
-        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        // Young Serif: big headlines only. Instrument Sans: everything else.
+        // Bricolage stays solely for the RAPID. wordmark (font-mark).
+        display: ['"Young Serif"', 'Georgia', 'serif'],
+        body: ['"Instrument Sans"', 'Arial', 'sans-serif'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
+        mark: ['"Bricolage Grotesque"', 'Arial Black', 'sans-serif'],
+        pen: ['"Nanum Pen Script"', 'cursive'],
       },
       fontSize: {
         xs: ['12px', '18px'],

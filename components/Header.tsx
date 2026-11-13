@@ -84,7 +84,7 @@ export default function Header() {
             height={28}
             className="h-7 w-auto"
           />
-          <span className="font-display font-black text-xl tracking-tightest text-ink">
+          <span className="font-mark text-xl tracking-tightest text-ink">
             RAPID<span className="text-stamp">.</span>
           </span>
         </Link>
@@ -100,10 +100,10 @@ export default function Header() {
                     href={item.href}
                     className="group relative py-2 font-mono text-[13px] font-medium uppercase tracking-wide text-ink/70 hover:text-ink transition-colors"
                   >
-                    <span className="text-stamp mr-1.5">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="text-muted mr-1.5">{String(i + 1).padStart(2, '0')}</span>
                     {item.label}
                     <span
-                      className="absolute left-0 -bottom-0.5 h-px w-full bg-stamp origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 motion-reduce:transition-none"
+                      className="absolute left-0 -bottom-0.5 h-px w-full bg-ink origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 motion-reduce:transition-none"
                       aria-hidden="true"
                     />
                   </Link>
@@ -220,7 +220,7 @@ export default function Header() {
                 className="flex items-center font-mono text-sm uppercase tracking-wide py-3.5 border-b border-line/60 text-ink"
                 onClick={() => setIsOpen(false)}
               >
-                <span className="text-stamp mr-3">{String(i + 1).padStart(2, '0')}</span>
+                <span className="text-muted mr-3">{String(i + 1).padStart(2, '0')}</span>
                 {item.label}
               </Link>
             ))}

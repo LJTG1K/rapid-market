@@ -15,6 +15,9 @@ export interface Product {
   manualStyleTags?: StyleKey[];
   manualFit?: FitKey | null;
   excludeFromQuiz?: boolean;
+  // Sheet column I ("GILLY NOTE"): Gilly's handwritten-style fit/feel note.
+  // Only shown on cards for Gilly picks (lib/gillyPicks.ts), never on the homepage.
+  gillyNote?: string;
 }
 
 const fashionCategoryMap: { [key: string]: string } = {
@@ -167,7 +170,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 const productCache = new Map<string, { data: Product[]; expiresAt: number }>();
 
 async function fetchSheetValues(sheetId: string, apiKey: string, sheetName: string) {
-  const range = encodeURIComponent(`${sheetName}!A:H`);
+  const range = encodeURIComponent(`${sheetName}!A:I`);
   const dataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
   return fetch(dataUrl);
 }
@@ -197,6 +200,29 @@ export interface ProductCatalogue {
   source: 'sheet' | 'demo';
 }
 
+/**
+ * Local-dev only: the Sheets keys live in Vercel, not .env.local, so a local
+ * run would otherwise only ever show the one demo product. If a snapshot of
+ * the live feed exists at .data/products-<category>.json (gitignored; save it
+ * with `curl https://www.rapid.market/api/products > .data/products-fashion.json`),
+ * serve that instead. Never used outside `next dev`.
+ */
+function devSnapshot(category: string): Product[] | null {
+  if (process.env.NODE_ENV !== 'development') return null;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const fs = require('fs') as typeof import('fs');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const path = require('path') as typeof import('path');
+    const file = path.join(process.cwd(), '.data', `products-${category.toLowerCase() === 'tech' ? 'tech' : 'fashion'}.json`);
+    if (!fs.existsSync(file)) return null;
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return Array.isArray(data) && data.length > 0 ? (data as Product[]) : null;
+  } catch {
+    return null;
+  }
+}
+
 const demo = (): ProductCatalogue => ({ products: getDemoProducts(), source: 'demo' });
 
 /**
@@ -212,6 +238,8 @@ export async function loadProducts(category: string = 'fashion'): Promise<Produc
     const cacheKey = category.toLowerCase();
 
     if (!sheetId || !apiKey) {
+      const snapshot = devSnapshot(category);
+      if (snapshot) return { products: snapshot, source: 'sheet' };
       console.warn('Google Sheets credentials not configured. Using demo data.');
       return demo();
     }
@@ -316,6 +344,7 @@ export async function loadProducts(category: string = 'fashion'): Promise<Produc
 
       const styleTagsRaw = (row[6] || '').toString().trim();
       const fitRaw = (row[7] || '').toString().trim();
+      const gillyNote = (row[8] || '').toString().trim();
       const styleTagsParsed = normalizeStyleTagsInput(styleTagsRaw);
       const fitParsed = normalizeFitInput(fitRaw);
 
@@ -336,6 +365,7 @@ export async function loadProducts(category: string = 'fashion'): Promise<Produc
         manualStyleTags: styleTagsParsed.tags,
         manualFit: fitParsed.fit,
         excludeFromQuiz: styleTagsParsed.exclude || fitParsed.exclude,
+        ...(gillyNote && gillyNote.toUpperCase() !== 'GILLY NOTE' ? { gillyNote } : {}),
       };
 
       products.push(product);

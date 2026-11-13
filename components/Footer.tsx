@@ -13,7 +13,7 @@ export default function Footer() {
           <p className="font-mono text-xs uppercase tracking-wide">
             &copy; {new Date().getFullYear()} RAPID Market
           </p>
-          <Link href="/privacy" className="font-mono text-xs uppercase tracking-wide hover:text-stamp transition-colors">
+          <Link href="/privacy" className="font-mono text-xs uppercase tracking-wide hover:underline transition-colors">
             Privacy Policy
           </Link>
         </div>
@@ -27,7 +27,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
           {/* Wordmark + mission */}
           <div className="lg:col-span-5">
-            <p className="font-display font-black text-4xl tracking-tightest mb-4">
+            <p className="font-mark text-4xl tracking-tightest mb-4">
               RAPID<span className="text-stamp">.</span>
             </p>
             <p className="text-stone/70 max-w-sm leading-relaxed">
@@ -40,10 +40,10 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <h3 className="eyebrow text-stone/50 mb-4">Browse</h3>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/fashion-listings" className="hover:text-stamp transition-colors">Fashion</Link></li>
-              <li><Link href="/tech-listings" className="hover:text-stamp transition-colors">Tech</Link></li>
-              <li><Link href="/brands" className="hover:text-stamp transition-colors">Brand Index</Link></li>
-              <li><Link href="/gillys-picks" className="hover:text-stamp transition-colors">Gilly&apos;s Picks</Link></li>
+              <li><Link href="/fashion-listings" className="hover:underline transition-colors">Fashion</Link></li>
+              <li><Link href="/tech-listings" className="hover:underline transition-colors">Tech</Link></li>
+              <li><Link href="/brands" className="hover:underline transition-colors">Brand Index</Link></li>
+              <li><Link href="/gillys-picks" className="hover:underline transition-colors">Gilly&apos;s Picks</Link></li>
             </ul>
           </div>
 
@@ -51,12 +51,12 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <h3 className="eyebrow text-stone/50 mb-4">Start here</h3>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/signup" className="hover:text-stamp transition-colors">Create Account</Link></li>
-              <li><Link href="/tutorial" className="hover:text-stamp transition-colors">Ordering Guide</Link></li>
-              <li><Link href="/tools/shipping" className="hover:text-stamp transition-colors">Shipping Calculator</Link></li>
-              <li><Link href="/blog" className="hover:text-stamp transition-colors">Journal</Link></li>
-              <li><Link href="/campaign" className="hover:text-stamp transition-colors">Campaign</Link></li>
-              <li><Link href="/privacy" className="hover:text-stamp transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/signup" className="hover:underline transition-colors">Create Account</Link></li>
+              <li><Link href="/tutorial" className="hover:underline transition-colors">Ordering Guide</Link></li>
+              <li><Link href="/tools/shipping" className="hover:underline transition-colors">Shipping Calculator</Link></li>
+              <li><Link href="/blog" className="hover:underline transition-colors">Journal</Link></li>
+              <li><Link href="/campaign" className="hover:underline transition-colors">Campaign</Link></li>
+              <li><Link href="/privacy" className="hover:underline transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
 

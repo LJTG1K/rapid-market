@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import StyleQuizBanner from '@/components/StyleQuizBanner';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { WishlistProvider } from '@/contexts/WishlistContext';
+import { HandoffProvider } from '@/contexts/HandoffContext';
 import { captureAttribution, captureRedditClickId } from '@/lib/attribution';
 import { CANONICAL_ORIGIN } from '@/lib/siteUrl';
 import '@/styles/globals.css';
@@ -53,6 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="twitter:image" content={`${CANONICAL_ORIGIN}/assets/og-default.jpg`} />
       </Head>
       <WishlistProvider>
+      <HandoffProvider>
         <div className="min-h-screen flex flex-col">
           <Header />
           <StyleQuizBanner />
@@ -61,6 +63,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </main>
           <Footer />
         </div>
+      </HandoffProvider>
       </WishlistProvider>
     </AuthProvider>
   );

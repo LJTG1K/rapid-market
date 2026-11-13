@@ -8,6 +8,7 @@ import ProductImage from '@/components/ProductImage';
 import PerforatedDivider from '@/components/PerforatedDivider';
 import WishlistButton from '@/components/WishlistButton';
 import { trackBuyClick } from '@/lib/tracking';
+import { useHandoff } from '@/contexts/HandoffContext';
 import { productMatchesBrand } from '@/lib/brandMatch';
 import { loadProducts, type Product } from '@/lib/products';
 import { CANONICAL_ORIGIN } from '@/lib/siteUrl';
@@ -94,9 +95,13 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ params, qu
 };
 
 export default function ProductPage({ product, more, matchedBrand, cat }: Props) {
-  const trackClick = async () => {
+  const { handleBuyClick } = useHandoff();
+
+  // Logs the exit to /api/track. Pass an eventId when the shared buy_click
+  // already fired (the handoff sheet does that); otherwise fire it here.
+  const trackClick = async (firedEventId?: string) => {
     if (!product) return;
-    const eventId = trackBuyClick({ productId: product.id, productName: product.name });
+    const eventId = firedEventId ?? trackBuyClick({ productId: product.id, productName: product.name });
     try {
       await fetch('/api/track', {
         method: 'POST',
@@ -226,7 +231,7 @@ export default function ProductPage({ product, more, matchedBrand, cat }: Props)
                 href={product.sugargooLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={trackClick}
+                onClick={(e) => handleBuyClick(e, product, { onExit: (id) => trackClick(id) })}
                 className="btn-stamp w-full sm:w-auto !px-10"
               >
                 Buy on Sugargoo →
@@ -242,7 +247,7 @@ export default function ProductPage({ product, more, matchedBrand, cat }: Props)
                   href={product.sugargooLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={trackClick}
+                  onClick={() => trackClick()}
                   className="link-underline font-semibold"
                 >
                   See full reviews on Sugargoo →

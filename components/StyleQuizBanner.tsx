@@ -28,9 +28,9 @@ export default function StyleQuizBanner() {
     <div className="bg-paper border-b border-line">
       <div className="container-edit flex items-center justify-between gap-4 py-2.5">
         <Link href="/style-quiz" className="group flex items-center gap-2.5 min-w-0">
-          <span className="font-mono text-[11px] text-stamp shrink-0">01/02/03</span>
+          <span className="font-mono text-[11px] text-muted shrink-0">01/02/03</span>
           <span className="text-sm text-ink/80 truncate">
-            <span className="font-semibold text-ink group-hover:text-stamp transition-colors">Find pieces you&apos;ll actually buy</span>
+            <span className="font-semibold text-ink group-hover:underline transition-colors">Find pieces you&apos;ll actually buy</span>
             {' '}— 3 questions, 30 seconds →
           </span>
         </Link>

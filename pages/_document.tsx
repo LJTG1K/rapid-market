@@ -9,7 +9,7 @@ export default function Document() {
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="sitemap" href="/sitemap.xml" />
-        <meta name="theme-color" content="#E7E1D1" />
+        <meta name="theme-color" content="#FFFFFF" />
 
         {/* Every product photograph is client-fetched from the sellers' CDN
             after /api/products resolves, so the DNS+TCP+TLS handshake would

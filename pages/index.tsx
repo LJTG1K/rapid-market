@@ -1,17 +1,16 @@
 import Link from 'next/link';
 import Head from 'next/head';
 import { CANONICAL_ORIGIN } from '@/lib/siteUrl';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import Stamp from '@/components/Stamp';
 import Stars from '@/components/Stars';
 import Reveal from '@/components/Reveal';
 import CountUp from '@/components/CountUp';
 import PerforatedDivider from '@/components/PerforatedDivider';
-import SplitHeadline from '@/components/SplitHeadline';
 import { productMatchesBrand } from '@/lib/brandMatch';
 import { useAuth } from '@/contexts/AuthContext';
 import ProductImage from '@/components/ProductImage';
+import ProductCard, { type ProductCardData } from '@/components/ProductCard';
+import VerifiedSeal from '@/components/VerifiedSeal';
 
 interface BrandProduct {
   id: string;
@@ -86,7 +85,7 @@ function FeaturedBrand() {
         </div>
 
         <div className="lg:col-span-6 order-1 lg:order-2 relative">
-          <div className="aspect-[4/5] bg-paper border border-line overflow-hidden">
+          <div className="aspect-[4/5] bg-paper rounded-md overflow-hidden">
             {productImage ? (
               <ProductImage src={productImage} alt={brand.brandName} variant="detail" />
             ) : (
@@ -95,12 +94,50 @@ function FeaturedBrand() {
               </div>
             )}
           </div>
-          <div className="absolute -top-5 -left-5 hidden sm:block">
-            <Stamp size={92} centerText="QC" sub="Passed" ringText="Quality Checked · Verified Seller ·" />
-          </div>
+          <VerifiedSeal className="absolute left-3 top-3" />
         </div>
       </div>
     </Reveal>
+  );
+}
+
+/** A-style product grid under the intro: the most recently indexed fashion pieces. */
+function LatestArrivals() {
+  const [products, setProducts] = useState<ProductCardData[] | null>(null);
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((r) => r.json())
+      .then((all: ProductCardData[]) => {
+        const latest = [...all]
+          .filter((p) => p.image)
+          .sort((a, b) => Number(b.id) - Number(a.id))
+          .slice(0, 8);
+        setProducts(latest);
+      })
+      .catch(() => setProducts([]));
+  }, []);
+
+  if (products && products.length === 0) return null;
+
+  return (
+    <section className="container-edit pb-20 md:pb-28">
+      <div className="flex items-end justify-between gap-4 mb-6 md:mb-8">
+        <h2 className="font-body font-semibold text-2xl md:text-3xl tracking-tight">Latest additions</h2>
+        <Link href="/fashion-listings" className="text-sm font-medium link-underline whitespace-nowrap">
+          See all fashion →
+        </Link>
+      </div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-6">
+        {products
+          ? products.map((p) => (
+              <ProductCard key={p.id} product={p} wishlistCategory="fashion" showGillyNote={false} />
+            ))
+          : Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="aspect-[4/5] rounded-md bg-paper motion-safe:animate-pulse" />
+            ))}
+      </div>
+    </section>
   );
 }
 
@@ -118,94 +155,53 @@ export default function Home() {
         <link rel="canonical" href={`${CANONICAL_ORIGIN}/`} />
       </Head>
 
-      {/* ---------- Hero ---------- */}
-      <section className="pt-10 md:pt-14">
+      {/* ---------- Intro (Direction A + B's intro block; no Gilly on the homepage) ---------- */}
+      <section className="container-edit pt-8 md:pt-12 pb-14 md:pb-20">
         {user && (
-          <div className="container-edit mb-6">
-            <Link
-              href="/account"
-              className="flex items-center justify-between gap-3 bg-paper border border-line px-4 py-3 hover:border-ink transition-colors group"
-            >
-              <span className="font-mono text-xs sm:text-sm uppercase tracking-wide text-ink">
-                Welcome back{user.name ? `, ${user.name}` : ''}
-              </span>
-              <span className="font-mono text-xs uppercase tracking-wide text-muted group-hover:text-stamp transition-colors">
-                View your wishlist →
-              </span>
-            </Link>
-          </div>
+          <Link
+            href="/account"
+            className="mb-8 flex items-center justify-between gap-3 bg-paper rounded-full px-5 py-3 hover:bg-line/60 transition-colors group"
+          >
+            <span className="text-sm font-medium text-ink">
+              Welcome back{user.name ? `, ${user.name}` : ''}
+            </span>
+            <span className="text-sm text-muted group-hover:text-ink transition-colors">View your wishlist →</span>
+          </Link>
         )}
 
-        <Reveal className="container-edit flex items-center justify-between mb-6 md:mb-10">
-          <span className="eyebrow">N° 001 — Sourced Direct</span>
-          <span className="eyebrow hidden sm:inline">Fashion / Tech / Accessories</span>
-        </Reveal>
-
-        <h1 className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none whitespace-nowrap">
-          <CountUp value="150+" className="tabular-nums" /> <SplitHeadline as="span" by="chars" className="inline">Sellers</SplitHeadline>
-        </h1>
-
-        <Reveal delay={160} className="container-edit mt-10 md:mt-14 pb-6">
-          <div className="relative pb-10 sm:pb-16 md:pb-20">
-            <div className="relative aspect-[16/10] md:aspect-[21/9] overflow-hidden border border-line bg-paper">
-              <Image
-                src="/assets/hero-main.webp"
-                alt="Streetwear sourced via RAPID sellers"
-                fill
-                priority
-                sizes="(min-width: 1400px) 1240px, 100vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="absolute bottom-0 right-2 sm:right-6 md:right-14 w-[46%] sm:w-[34%] md:w-[26%] aspect-[3/4] overflow-hidden border-4 border-stone shadow-stamp bg-paper">
-              <Image
-                src="/assets/hero-detail.webp"
-                alt="Detail shot — RAPID seller network"
-                fill
-                sizes="(min-width: 768px) 26vw, (min-width: 640px) 34vw, 46vw"
-                className="object-cover"
-              />
-            </div>
-            <div
-              className="hidden lg:block absolute top-4 right-0 font-mono text-[11px] tracking-widest text-muted"
-              style={{ writingMode: 'vertical-rl' }}
-            >
-              RAPID · SHENZHEN → YOUR DOOR ·
-            </div>
-          </div>
-          <div className="flex justify-between font-mono text-xs text-muted uppercase tracking-wide">
-            <span>Field — streetwear sourced via RAPID sellers</span>
-            <span className="hidden sm:inline">Photo — seller network</span>
-          </div>
-        </Reveal>
-
-        <SplitHeadline
-          as="h2"
-          by="words"
-          className="font-display font-black text-ink leading-[0.88] tracking-tightest text-[clamp(2.75rem,11.5vw,9.5rem)] px-5 sm:px-8 lg:px-10 pb-1 select-none mt-4 md:mt-8"
-        >
-          New Items Daily
-        </SplitHeadline>
-
-        <Reveal className="container-edit mt-12 md:mt-16 pb-20 md:pb-28">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-            <p className="lg:col-span-7 text-xl md:text-2xl leading-snug text-ink/90 max-w-2xl">
-              RAPID indexes independent sellers across China and routes every order
-              through Sugargoo&apos;s consolidation warehouse — so 150+ shops become
-              one simple checkout.
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-center">
+          <div className="md:col-span-6 lg:col-span-6">
+            <h1 className="font-display text-ink text-[clamp(2.5rem,5.6vw,4.75rem)] leading-[1.02] mb-6">
+              Chinese labels,{' '}
+              <span className="bg-hi px-[0.12em] box-decoration-clone">checked before</span>{' '}
+              they ship.
+            </h1>
+            <p className="text-lg text-muted leading-relaxed max-w-[46ch] mb-8">
+              150+ independent brands, with new pieces indexed daily. You buy through
+              Sugargoo, and the warehouse photographs every order so you can check it
+              before it ships to you.
             </p>
-            <div className="lg:col-span-5 flex flex-wrap gap-3 lg:justify-end">
-              {user ? (
-                <Link href="/account" className="btn-stamp">Your account</Link>
-              ) : (
-                <Link href="/signup" className="btn-stamp">Create Account</Link>
-              )}
-              <Link href="/fashion-listings" className="btn-secondary">Browse Fashion</Link>
-              <Link href="/tutorial" className="btn-secondary">View Tutorial</Link>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/fashion-listings" className="btn-primary">Shop new arrivals</Link>
+              <Link href="/tutorial" className="btn-secondary">How buying works</Link>
             </div>
           </div>
-        </Reveal>
+          <div className="md:col-span-6 lg:col-span-5 lg:col-start-8">
+            <div className="relative aspect-[4/5] rounded-md overflow-hidden bg-paper max-w-[460px] mx-auto">
+              {/* carousel-1.jpg is a three-photo strip; crop to its middle frame. */}
+              <div
+                role="img"
+                aria-label="Washed nylon flight jacket from a brand indexed on RAPID"
+                className="absolute inset-0 bg-no-repeat"
+                style={{ backgroundImage: 'url(/carousel-1.jpg)', backgroundSize: '320% auto', backgroundPosition: '46.5% 35%' }}
+              />
+              <VerifiedSeal className="absolute left-3 top-3" />
+            </div>
+          </div>
+        </div>
       </section>
+
+      <LatestArrivals />
 
       {/* ---------- Consumer proof ---------- */}
       <Reveal as="section" className="container-edit pb-16 md:pb-20">
@@ -259,7 +255,7 @@ export default function Home() {
                 i === 0 ? 'lg:pr-10' : i === 2 ? 'lg:pl-10' : 'lg:px-10'
               }`}
             >
-              <span className="font-mono text-sm text-stamp">{step.n}</span>
+              <span className="font-mono text-sm text-muted">{step.n}</span>
               <h3 className="font-display font-black text-2xl mt-4 mb-4">{step.title}</h3>
               <p className="text-ink/75 leading-relaxed mb-7">{step.body}</p>
               <Link href={step.cta.href} className="link-underline font-mono text-xs uppercase tracking-wide">
@@ -295,7 +291,7 @@ export default function Home() {
                     href={`/fashion-listings?category=${slug}`}
                     className="flex items-center justify-between py-4 group"
                   >
-                    <span className="font-display font-bold text-xl md:text-2xl group-hover:text-stamp transition-colors">
+                    <span className="font-display font-bold text-xl md:text-2xl group-hover:underline">
                       {label}
                     </span>
                     <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, '0')}</span>
@@ -313,7 +309,7 @@ export default function Home() {
                     href={slug === 'phone-cases' ? '/phone-cases' : `/tech-listings?category=${slug}`}
                     className="flex items-center justify-between py-4 group"
                   >
-                    <span className="font-display font-bold text-xl md:text-2xl group-hover:text-stamp transition-colors">
+                    <span className="font-display font-bold text-xl md:text-2xl group-hover:underline">
                       {label}
                     </span>
                     <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, '0')}</span>
