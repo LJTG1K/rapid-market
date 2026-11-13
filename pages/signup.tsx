@@ -11,6 +11,9 @@ import { generateEventId } from '@/lib/metaPixel';
 import { fireRedditPixelEvent } from '@/lib/redditPixel';
 import { trackBuyClick } from '@/lib/tracking';
 import { getAttribution } from '@/lib/attribution';
+import { useRouter } from 'next/router';
+import GoogleSignInButton, { googleSignInEnabled } from '@/components/GoogleSignInButton';
+import { rememberSignInMethod } from '@/lib/signInMethod';
 
 interface SignupResponse {
   success?: boolean;
@@ -103,7 +106,9 @@ export default function SugargooSignUp() {
   const [copied, setCopied] = useState(false);
   const [hasQuizAnswers, setHasQuizAnswers] = useState(false);
   const submittingRef = useRef(false);
+  const [viaGoogle, setViaGoogle] = useState(false);
   const { refresh } = useAuth();
+  const router = useRouter();
 
   const handleCopyPassword = async () => {
     try {
@@ -117,6 +122,46 @@ export default function SugargooSignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email) {
+      setError('Email is required');
+      return;
+    }
+    await register(email, name);
+  };
+
+  /**
+   * "Continue with Google": an existing RAPID account just logs in. A new one
+   * runs the normal signup below with the Google-verified email, so the
+   * Sugargoo account and referral work exactly as for an email signup.
+   */
+  const handleGoogle = async (credential: string) => {
+    if (submittingRef.current) return;
+    setError('');
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Google sign-in failed. Please try again.');
+        return;
+      }
+      rememberSignInMethod('google');
+      if (data.status === 'login') {
+        await refresh();
+        router.push('/account');
+        return;
+      }
+      const googleName = data.name ? String(data.name).trim().replace(/\s+/g, '_').toLowerCase() : '';
+      await register(data.email, googleName, credential);
+    } catch {
+      setError('Network error. Please try again.');
+    }
+  };
+
+  const register = async (email: string, name: string, googleCredential?: string) => {
     // A ref, not the `loading` state: two submits fired before React
     // re-renders both see `loading === false`, and Sugargoo rejects the second
     // as a duplicate request.
@@ -124,11 +169,6 @@ export default function SugargooSignUp() {
 
     setError('');
     setSuccess(false);
-
-    if (!email) {
-      setError('Email is required');
-      return;
-    }
 
     submittingRef.current = true;
     setLoading(true);
@@ -157,7 +197,21 @@ export default function SugargooSignUp() {
       const data: SignupResponse = await response.json();
 
       if (!response.ok) {
-        if (data.code === 40910) {
+        if (data.code === 40910 && googleCredential) {
+          // Already on Sugargoo (maybe via Sugargoo's own Google login), just
+          // not on RAPID: create the RAPID account and log them in.
+          const link = await fetch('/api/auth/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ credential: googleCredential, mode: 'link' }),
+          });
+          if (link.ok) {
+            await refresh();
+            router.push('/account');
+            return;
+          }
+          setError('This email already has a Sugargoo account. Log in to RAPID with Google to continue.');
+        } else if (data.code === 40910) {
           setError('This email is already registered. Log in or try another email.');
         } else if (data.code === 40011) {
           setError('Invalid email format. Please check and try again.');
@@ -182,6 +236,7 @@ export default function SugargooSignUp() {
       fireRedditPixelEvent('SignUp', generateEventId(), { userId: data.userId });
 
       setSuccess(true);
+      setViaGoogle(Boolean(googleCredential));
       setSubmittedEmail(email);
       setGeneratedPassword(data.password || '');
       setEmail('');
@@ -229,6 +284,11 @@ export default function SugargooSignUp() {
                 className="mx-auto mb-4"
               />
               <p className="eyebrow text-stamp mb-4">Account created</p>
+              {viaGoogle && (
+                <p className="text-sm text-ink mb-3 leading-relaxed">
+                  You&apos;ll log in to RAPID with Google. Sugargoo uses the email and password below.
+                </p>
+              )}
               <p className="text-sm text-ink/70 mb-6 leading-relaxed">
                 This is your real Sugargoo login — the same one you&apos;ll use every time you shop,
                 not a temporary code. We&apos;ve also sent it to your email so you don&apos;t lose it.
@@ -322,6 +382,17 @@ export default function SugargooSignUp() {
             {error && (
               <div className="mb-6 p-4 border-l-2 border-stamp bg-paper">
                 <p className="text-ink text-sm">{error}</p>
+              </div>
+            )}
+
+            {googleSignInEnabled && (
+              <div className="mb-6 grid gap-5">
+                <GoogleSignInButton onCredential={handleGoogle} text="signup_with" />
+                <div className="flex items-center gap-3 text-xs text-muted">
+                  <span className="h-px flex-1 bg-line" />
+                  or use your email
+                  <span className="h-px flex-1 bg-line" />
+                </div>
               </div>
             )}
 

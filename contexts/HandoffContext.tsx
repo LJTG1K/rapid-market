@@ -4,6 +4,7 @@ import ProductImage from '@/components/ProductImage';
 import { useAuth } from '@/contexts/AuthContext';
 import { trackBuyClick } from '@/lib/tracking';
 import { gillyNoteFor, isGillyPick } from '@/lib/gillyPicks';
+import { lastSignInMethod } from '@/lib/signInMethod';
 
 /**
  * The RAPID -> Sugargoo handoff. A buy click opens this sheet instead of
@@ -106,6 +107,9 @@ function HandoffSheet({
   const primaryRef = useRef<HTMLAnchorElement>(null);
   const returnFocus = useRef<Element | null>(null);
   const pick = isGillyPick(product.id);
+  // Google users never typed a password for RAPID, so "same email and
+  // password" would confuse them; point them at the Sugargoo login they got.
+  const viaGoogle = lastSignInMethod() === 'google';
   const note = gillyNoteFor(product);
 
   useEffect(() => {
@@ -169,7 +173,7 @@ function HandoffSheet({
           <>
             <p id="handoff-title" className="pr-10 text-[15px] leading-snug">
               <b className="font-semibold">Heading to Sugargoo.</b>{' '}
-              {user ? 'Same login as RAPID.' : (
+              {user ? (viaGoogle ? `Log in as ${user.email}.` : 'Same login as RAPID.') : (
                 <>No account yet? <Link href={signupHref} onClick={onClose} className="link-underline">Create one free</Link>.</>
               )}
             </p>
@@ -195,7 +199,9 @@ function HandoffSheet({
             <ol className="grid gap-2.5">
               {[
                 user
-                  ? 'Buy it on Sugargoo. Same email and password as RAPID.'
+                  ? viaGoogle
+                    ? `Buy it on Sugargoo, logged in as ${user.email}. Your Sugargoo password was in your signup email.`
+                    : 'Buy it on Sugargoo. Same email and password as RAPID.'
                   : 'Create a free account through RAPID first. It takes about 30 seconds and logs you into Sugargoo.',
                 note
                   ? "The warehouse sends you photos. Check them against Gilly's note."

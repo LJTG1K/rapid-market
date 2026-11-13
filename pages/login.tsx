@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Reveal from '@/components/Reveal';
 import { useAuth } from '@/contexts/AuthContext';
+import GoogleSignInButton, { googleSignInEnabled } from '@/components/GoogleSignInButton';
+import { rememberSignInMethod } from '@/lib/signInMethod';
 
 export default function Login() {
   const router = useRouter();
@@ -22,6 +24,34 @@ export default function Login() {
       router.replace(nextPath);
     }
   }, [loading, user, nextPath, router]);
+
+  const [noGoogleAccount, setNoGoogleAccount] = useState(false);
+
+  const handleGoogle = async (credential: string) => {
+    setError('');
+    setNoGoogleAccount(false);
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Google sign-in failed. Please try again.');
+        return;
+      }
+      if (data.status === 'new') {
+        setNoGoogleAccount(true);
+        return;
+      }
+      rememberSignInMethod('google');
+      await refresh();
+      router.replace(nextPath);
+    } catch {
+      setError('Network error. Please try again.');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +77,7 @@ export default function Login() {
         return;
       }
 
+      rememberSignInMethod('password');
       await refresh();
       router.replace(nextPath);
     } catch {
@@ -77,6 +108,26 @@ export default function Login() {
           {error && (
             <div className="mb-6 p-4 border-l-2 border-stamp bg-paper">
               <p className="text-ink text-sm">{error}</p>
+            </div>
+          )}
+
+          {noGoogleAccount && (
+            <div className="mb-6 p-4 border-l-2 border-ink bg-paper">
+              <p className="text-ink text-sm">
+                There&apos;s no RAPID account for that Google email yet.{' '}
+                <Link href="/signup" className="link-underline font-semibold">Sign up with Google</Link> to create one.
+              </p>
+            </div>
+          )}
+
+          {googleSignInEnabled && (
+            <div className="mb-6 grid gap-5">
+              <GoogleSignInButton onCredential={handleGoogle} text="signin_with" />
+              <div className="flex items-center gap-3 text-xs text-muted">
+                <span className="h-px flex-1 bg-line" />
+                or use your email
+                <span className="h-px flex-1 bg-line" />
+              </div>
             </div>
           )}
 
