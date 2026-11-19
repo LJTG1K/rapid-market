@@ -9,6 +9,7 @@ import ProductImage from '@/components/ProductImage';
 import ProductCard, { type ProductCardData } from '@/components/ProductCard';
 import VerifiedSeal from '@/components/VerifiedSeal';
 import VerifiedTick from '@/components/VerifiedTick';
+import HowBuyingWorks from '@/components/HowBuyingWorks';
 import { FASHION_CATEGORIES } from '@/lib/navCategories';
 
 /** Featured brand: a brand card beside three of its pieces. */
@@ -237,40 +238,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- How buying works ---------- */}
-      <section className="container-edit pb-20 md:pb-28">
-        <h2 className="font-display text-ink text-2xl md:text-3xl mb-8 md:mb-10">How buying works</h2>
-        <ol className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-          {[
-            {
-              title: 'Create your free account',
-              body: 'Sign up through RAPID and your Sugargoo account is made instantly. No email verification.',
-              cta: { href: '/signup', label: 'Create account' },
-            },
-            {
-              title: 'Pick what you like',
-              body: '150+ independent brands, organised by category, with new pieces indexed daily.',
-              cta: { href: '/fashion-listings', label: 'Browse fashion' },
-            },
-            {
-              title: 'Buy on Sugargoo',
-              body: 'Items go to the Sugargoo warehouse, get photographed for you to check, then ship together in one box.',
-              cta: { href: '/tutorial', label: 'Read the full guide' },
-            },
-          ].map((step, i) => (
-            <li key={step.title} className="border border-line rounded-xl p-6 flex flex-col">
-              <span className="w-8 h-8 rounded-full bg-ink text-white grid place-items-center text-sm font-semibold mb-5">
-                {i + 1}
-              </span>
-              <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-              <p className="text-muted leading-relaxed mb-6">{step.body}</p>
-              <Link href={step.cta.href} className="mt-auto text-sm font-medium link-underline self-start">
-                {step.cta.label} →
-              </Link>
-            </li>
-          ))}
-        </ol>
-      </section>
+      {/* ---------- How buying works (picture steps) ---------- */}
+      <HowBuyingWorks className="pb-20 md:pb-28" />
 
       <FeaturedBrand />
 

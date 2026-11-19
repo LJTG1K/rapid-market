@@ -1,233 +1,197 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import Stars from '@/components/Stars';
-import Reveal from '@/components/Reveal';
-import CountUp from '@/components/CountUp';
-import PerforatedDivider from '@/components/PerforatedDivider';
-import ProductImage from '@/components/ProductImage';
+import { useEffect, useMemo, useState } from 'react';
 import StyleQuizSection from '@/components/StyleQuizSection';
-import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
-import LoadingMessage, { MANIFEST_MESSAGES } from '@/components/LoadingMessage';
-import { trackBuyClick } from '@/lib/tracking';
+import ProductCard from '@/components/ProductCard';
+import { SignupBand, StickySignup, TrustChips, type CampaignProduct } from '@/components/CampaignParts';
+import { matchProducts, STYLE_OPTIONS, type Brand, type StyleKey, type Product as MatchableProduct } from '@/lib/styleMatch';
 
-interface ShowcaseProduct {
-  id: string;
-  name: string;
-  image: string;
-  price: string;
-  sugargooLink: string;
-}
-
-const STATS = [
-  { value: '150+', label: 'Sellers indexed' },
-  { value: '1,500+', label: 'Products listed' },
-  { value: '4.8★', label: 'Average rating' },
-];
+/**
+ * Reddit-ads landing page (Direction C, "quiz first"). The first quiz question
+ * is the hero, with a photo tile per style, so the first tap happens before
+ * any reading. Quiz completion is tracked inside StyleQuizSection
+ * (trackQuizComplete); signup buttons go to /signup, which owns signup
+ * tracking. The header is the stripped campaign header (Header.tsx).
+ */
 
 const WHY = [
   {
-    n: '01',
     title: 'Brands you won’t find elsewhere',
-    body: 'RAPID indexes real Chinese fashion brands, the small labels and factories you won’t find on Shein or Amazon, so your next haul actually goes somewhere. Answer three questions, get real listings back.',
+    body: 'Small independent labels and factories direct from China. Not Shein, not Amazon, not the same twelve dropshippers.',
   },
   {
-    n: '02',
     title: 'The quiz isn’t decoration',
-    body: 'Three questions feed real listings back from the actual catalog, not a generic "trending now" shelf with your name pasted on it.',
+    body: 'Three questions return real listings from the actual catalogue, not a generic "trending now" shelf.',
   },
   {
-    n: '03',
     title: 'Still runs through Sugargoo',
-    body: 'Same QC-before-it-ships, same one-box consolidation you already trust. RAPID just handles the part where you find something worth ordering.',
+    body: 'Same warehouse photos before it ships, same one-box consolidation you already trust.',
   },
 ];
 
-function RandomShowcase() {
-  const [products, setProducts] = useState<ShowcaseProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+/** One real product photo per quiz style, picked by the same matcher the quiz uses. */
+function useStyleImages(products: MatchableProduct[] | null, brands: Brand[] | null) {
+  // Starts as {} (not undefined) so the quiz renders photo tiles from the first paint.
+  const [images, setImages] = useState<Partial<Record<StyleKey, string>>>({});
+  useEffect(() => {
+    if (!products || !brands) return;
+    let cancelled = false;
+    const used = new Set<string>();
+    const shuffled = [...products].sort(() => Math.random() - 0.5);
+
+    // Seller CDN links sometimes die, so each candidate photo is test-loaded
+    // and the first one that actually loads wins. Tiles fill in one by one.
+    const loads = (src: string) =>
+      new Promise<boolean>((resolve) => {
+        const img = new Image();
+        const t = setTimeout(() => resolve(false), 6000);
+        img.onload = () => { clearTimeout(t); resolve(img.naturalWidth > 0); };
+        img.onerror = () => { clearTimeout(t); resolve(false); };
+        img.src = src;
+      });
+
+    // All four styles load in parallel.
+    STYLE_OPTIONS.forEach(async (opt) => {
+      {
+        // Prefer products hand-tagged with this style in the Sheet; then the
+        // quiz matcher (brand aesthetics).
+        const candidates = [
+          ...shuffled.filter((p) => p.image && p.manualStyleTags?.includes(opt.key)),
+          ...matchProducts(products, brands, { styles: [opt.key], budget: 'blowMeAway', fit: 'regular' }, 20),
+        ]
+          .map((p) => p.image)
+          .filter((src, i, arr) => src && !used.has(src) && arr.indexOf(src) === i)
+          .slice(0, 6);
+        for (const src of candidates) {
+          if (cancelled) return;
+          if (await loads(src)) {
+            used.add(src);
+            setImages((prev) => ({ ...prev, [opt.key]: src }));
+            break;
+          }
+        }
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [products, brands]);
+  return images;
+}
+
+export default function Reddit() {
+  const [products, setProducts] = useState<(MatchableProduct & CampaignProduct)[] | null>(null);
+  const [brands, setBrands] = useState<Brand[] | null>(null);
+  const [hasAnswers, setHasAnswers] = useState(false);
 
   useEffect(() => {
     fetch('/api/products?category=fashion')
       .then((r) => r.json())
-      .then((all: ShowcaseProduct[]) => {
-        const shuffled = [...all].sort(() => Math.random() - 0.5);
-        setProducts(shuffled.slice(0, 3));
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      .then((all) => setProducts(Array.isArray(all) ? all : []))
+      .catch(() => setProducts([]));
+    fetch('/data/brands.json')
+      .then((r) => r.json())
+      .then(setBrands)
+      .catch(() => setBrands([]));
   }, []);
 
-  if (loading) {
-    return (
-      <>
-        <LoadingMessage messages={MANIFEST_MESSAGES} className="mb-6 justify-center" />
-        <ProductGridSkeleton count={3} aspect="4:5" />
-      </>
-    );
-  }
-
-  if (products.length === 0) return null;
-
-  return (
-    <Reveal stagger={60} className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-10">
-      {products.map((p, i) => (
-        <div key={p.id} className="flex flex-col">
-          <Link href={`/product/${p.id}?category=fashion`} className="group">
-            <div className="aspect-[4/5] bg-paper border border-line overflow-hidden mb-3">
-              <ProductImage src={p.image} alt={p.name} />
-            </div>
-            <span className="font-mono text-[11px] text-stamp mb-1.5 block">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <h3 className="font-display font-black text-lg leading-snug mb-3 group-hover:text-stamp transition-colors">
-              {p.name}
-            </h3>
-          </Link>
-          <div className="mt-auto flex items-center justify-between gap-3">
-            <span className="font-mono text-sm">{p.price}</span>
-            <a
-              href={p.sugargooLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackBuyClick({ productId: p.id, productName: p.name })}
-              className="btn-primary !px-4 !py-2 text-[11px]"
-            >
-              Buy
-            </a>
-          </div>
-        </div>
-      ))}
-    </Reveal>
+  const styleImages = useStyleImages(products, brands);
+  // Shuffled once per page load, not on every re-render.
+  const showcase = useMemo(
+    () => (products ? [...products].filter((p) => p.image && p.brand).sort(() => Math.random() - 0.5).slice(0, 3) : []),
+    [products]
   );
-}
 
-function StickyCTA() {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > 480);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  return (
-    <div
-      className={`lg:hidden fixed bottom-0 inset-x-0 z-40 bg-stone/95 backdrop-blur-sm border-t border-line px-5 py-3 transition-transform duration-300 ${
-        show ? 'translate-y-0' : 'translate-y-full'
-      }`}
-    >
-      <Link href="/signup" className="btn-stamp w-full">
-        Create Free Account
-      </Link>
-    </div>
-  );
-}
-
-export default function Reddit() {
   return (
     <>
       <Head>
-        <title>RAPID: Indexing Authentic Chinese Brands</title>
+        <title>RAPID: Find Chinese Labels That Fit Your Style</title>
         <meta
           name="description"
-          content="150+ sellers, 1,500+ products, one index of authentic Chinese fashion. Answer three questions and get matched to real listings, routed through Sugargoo."
+          content="Answer three questions and get matched to real listings from 150+ independent Chinese brands, bought through Sugargoo."
         />
         <meta name="robots" content="noindex, follow" />
       </Head>
 
-      {/* ---------- Hero + quiz ---------- */}
-      <section className="container-edit pt-12 md:pt-16 pb-16 md:pb-20">
-        <div className="max-w-3xl mx-auto text-center mb-10">
-          <Reveal>
-            <span className="eyebrow block mb-5">Indexing Authentic Chinese Brands</span>
-          </Reveal>
-          <Reveal delay={80}>
-            <h1 className="font-display font-black text-ink text-4xl sm:text-5xl tracking-tightest leading-[0.95] mb-4">
-              Struggling with agent restrictions? Try something different for your next haul.
-            </h1>
-            <p className="text-ink/70 leading-relaxed max-w-lg mx-auto">
-              Small independent labels and factories direct from China. Not Shein, not
-              Amazon, not the same twelve dropshippers everyone else is reselling.
-            </p>
-          </Reveal>
+      {/* ---------- Hero = the quiz ---------- */}
+      <section className="container-edit pt-8 md:pt-12 pb-14 md:pb-20">
+        <div className="max-w-2xl mx-auto text-center mb-8">
+          <p className="text-sm text-muted mb-3">Struggling with agent restrictions? Try something different for your next haul.</p>
+          <h1 className="font-display text-ink text-[clamp(2rem,4.4vw,3.25rem)] leading-[1.04]">
+            Find Chinese labels that <span className="bg-hi px-[0.08em] box-decoration-clone">fit your style.</span>
+          </h1>
         </div>
 
-        <Reveal delay={140}>
-          <StyleQuizSection hideHeading />
-        </Reveal>
+        {hasAnswers && (
+          <div className="mb-10 bg-paper rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div>
+              <h2 className="font-display text-ink text-2xl md:text-3xl mb-1">Your matches are below. Want them?</h2>
+              <p className="text-muted">Create a free account to buy them. It works on Sugargoo straight away, no email verification.</p>
+            </div>
+            <Link href="/signup" className="btn-stamp !px-7 !py-3.5 text-[15px] self-start md:self-auto">
+              Create free account
+            </Link>
+          </div>
+        )}
+
+        <StyleQuizSection hideHeading styleImages={styleImages} onAnswersChange={setHasAnswers} />
+
+
+
+        {!hasAnswers && <p className="text-center text-sm text-muted mt-6">3 questions · 30 seconds · then your matches</p>}
       </section>
 
-      <div className="container-edit">
-        <PerforatedDivider />
-      </div>
-
-      {/* ---------- Proof strip ---------- */}
-      <Reveal as="section" className="bg-paper border-y border-line">
-        <div className="container-edit grid grid-cols-3 divide-x divide-line">
-          {STATS.map((s) => (
-            <div key={s.label} className="py-8 sm:py-10 text-center">
-              <p className="font-display font-black text-3xl sm:text-5xl tracking-tightest text-ink mb-1">
-                <CountUp value={s.value} />
-              </p>
-              <p className="font-mono text-[11px] sm:text-xs uppercase tracking-wide text-muted">{s.label}</p>
+      {/* ---------- Trust ---------- */}
+      <section className="container-edit pb-12 md:pb-16">
+        <div className="grid grid-cols-3 gap-px bg-line rounded-xl overflow-hidden border border-line text-center">
+          {[
+            ['150+', 'brands indexed'],
+            ['1,500+', 'products listed'],
+            ['4.8', 'seller rating'],
+          ].map(([v, l]) => (
+            <div key={l} className="bg-white py-6 px-2">
+              <p className="font-display text-ink text-2xl md:text-3xl">{v}</p>
+              <p className="text-[13px] text-muted">{l}</p>
             </div>
           ))}
         </div>
-      </Reveal>
+      </section>
 
       {/* ---------- Why an index ---------- */}
-      <Reveal as="section" className="container-edit py-16 md:py-24">
-        <h2 className="font-display font-black text-2xl md:text-3xl tracking-tightest mb-4 max-w-xl">
-          Why bother with an index
-        </h2>
-        <p className="text-ink/70 max-w-xl mb-12">
-          You already know what an agent does. This just stops you from having fifty
-          Taobao tabs open at the same time.
+      <section className="container-edit pb-16 md:pb-24">
+        <h2 className="font-display text-ink text-2xl md:text-3xl mb-3">Why bother with an index</h2>
+        <p className="text-muted max-w-[56ch] mb-8">
+          You already know what an agent does. This just stops you having fifty Taobao tabs open at once.
         </p>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {WHY.map((w) => (
-            <div key={w.n} className="border-t border-line pt-6">
-              <span className="font-mono text-sm text-stamp">{w.n}</span>
-              <h3 className="font-display font-black text-xl mt-3 mb-3">{w.title}</h3>
-              <p className="text-ink/75 leading-relaxed text-sm">{w.body}</p>
+            <div key={w.title} className="border border-line rounded-xl p-6">
+              <h3 className="text-lg font-semibold mb-2">{w.title}</h3>
+              <p className="text-muted leading-relaxed">{w.body}</p>
             </div>
           ))}
         </div>
-      </Reveal>
+      </section>
 
-      {/* ---------- Random pull from the index ---------- */}
-      <Reveal as="section" className="bg-dusk text-stone">
-        <div className="container-edit py-20 md:py-28">
-          <div className="text-center mb-14">
-            <h2 className="font-display font-black text-3xl md:text-5xl tracking-tightest mb-4 max-w-2xl mx-auto">
-              A random pull from the index.
-            </h2>
-            <p className="text-stone/70 max-w-lg mx-auto leading-relaxed">
-              Real sellers, real listings, nothing staged for the ad. Three items out of
-              1,500+, grabbed at random just now.
-            </p>
+      {/* ---------- Random pull ---------- */}
+      {showcase.length > 0 && (
+        <section className="container-edit pb-16 md:pb-24">
+          <h2 className="font-display text-ink text-2xl md:text-3xl mb-2">A random pull from the index</h2>
+          <p className="text-muted mb-8">Real sellers, real listings, picked at random just now.</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 md:gap-x-6 gap-y-10">
+            {showcase.map((p, i) => (
+              <div key={p.id} className={i === 2 ? 'hidden md:block' : ''}>
+                <ProductCard product={p} wishlistCategory="fashion" showGillyNote={false} />
+              </div>
+            ))}
           </div>
+          <TrustChips className="mt-10" />
+        </section>
+      )}
 
-          <RandomShowcase />
-
-          <div className="flex flex-col items-center gap-5 mt-16">
-            <Link href="/signup" className="btn-stamp !px-10 !py-4 text-sm">
-              Create free account →
-            </Link>
-            <div className="flex items-center gap-2.5">
-              <Stars />
-              <span className="font-mono text-sm text-stone/60">4.8/5 average seller rating · 47,000+ hauls shipped</span>
-            </div>
-          </div>
-        </div>
-      </Reveal>
-
-      <StickyCTA />
-      {/* Reserve space so the sticky bar never overlaps the final CTA on mobile */}
-      <div className="h-16 lg:hidden" aria-hidden="true" />
+      <SignupBand title="Your next haul starts with a free account." />
+      {/* Only after the quiz: before that, the quiz is the thing to tap. */}
+      {hasAnswers && <StickySignup />}
     </>
   );
 }

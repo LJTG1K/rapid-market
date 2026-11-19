@@ -8,6 +8,7 @@ import {
   type Product as MatchableProduct,
   type Brand,
   type MatchedProduct,
+  type StyleKey,
 } from '@/lib/styleMatch';
 import { getAnswers, saveAnswers, type StoredQuizAnswers } from '@/lib/styleQuizStorage';
 import { trackQuizComplete } from '@/lib/tracking';
@@ -26,6 +27,8 @@ interface StyleQuizSectionProps {
   onAnswersChange?: (hasAnswers: boolean) => void;
   /** Hide the "Get picks built around you" / "Your picks" heading row — for pages whose own hero copy already introduces the quiz. */
   hideHeading?: boolean;
+  /** Photo per style option for the quiz's first step (see StyleQuiz). */
+  styleImages?: Partial<Record<StyleKey, string>>;
 }
 
 /**
@@ -34,7 +37,7 @@ interface StyleQuizSectionProps {
  * post-signup screen and the account page. Callers control outer spacing/card
  * treatment via `className` since the two host pages style sections differently.
  */
-export default function StyleQuizSection({ className = '', onAnswersChange, hideHeading = false }: StyleQuizSectionProps) {
+export default function StyleQuizSection({ className = '', onAnswersChange, hideHeading = false, styleImages }: StyleQuizSectionProps) {
   const [answers, setAnswers] = useState<StoredQuizAnswers | null | undefined>(undefined);
   const [matched, setMatched] = useState<MatchedProduct[]>([]);
   const [loadingMatches, setLoadingMatches] = useState(false);
@@ -79,7 +82,7 @@ export default function StyleQuizSection({ className = '', onAnswersChange, hide
     <div className={className}>
       {!hideHeading && (
         <div className="flex items-baseline justify-between mb-8">
-          <h2 className="font-display font-black text-2xl md:text-3xl tracking-tightest">
+          <h2 className="font-display text-2xl md:text-3xl">
             {answers ? 'Your picks' : 'Get picks built around you'}
           </h2>
           {answers ? (
@@ -92,7 +95,7 @@ export default function StyleQuizSection({ className = '', onAnswersChange, hide
       {answers ? (
         <ProductMatchGrid products={matched} loading={loadingMatches} />
       ) : (
-        <StyleQuiz compact onComplete={handleComplete} />
+        <StyleQuiz compact onComplete={handleComplete} styleImages={styleImages} />
       )}
     </div>
   );
