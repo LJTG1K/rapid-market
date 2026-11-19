@@ -28,7 +28,7 @@ export default function StyleQuizBanner() {
     <div className="bg-paper border-b border-line">
       <div className="container-edit flex items-center justify-between gap-4 py-2.5">
         <Link href="/style-quiz" className="group flex items-center gap-2.5 min-w-0">
-          <span className="font-mono text-[11px] text-muted shrink-0">01/02/03</span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] bg-white border border-line rounded-full px-2 py-0.5 shrink-0">Style quiz</span>
           <span className="text-sm text-ink/80 truncate">
             <span className="font-semibold text-ink group-hover:underline transition-colors">Find pieces you&apos;ll actually buy</span>
             {' '}— 3 questions, 30 seconds →
@@ -38,7 +38,7 @@ export default function StyleQuizBanner() {
           type="button"
           onClick={handleDismiss}
           aria-label="Dismiss"
-          className="shrink-0 text-ink/40 hover:text-ink transition-colors font-mono text-lg leading-none px-1"
+          className="shrink-0 text-ink/40 hover:text-ink transition-colors text-lg leading-none px-1"
         >
           ×
         </button>

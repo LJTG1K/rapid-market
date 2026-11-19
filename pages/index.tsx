@@ -3,45 +3,18 @@ import Head from 'next/head';
 import { CANONICAL_ORIGIN } from '@/lib/siteUrl';
 import { useState, useEffect } from 'react';
 import Stars from '@/components/Stars';
-import Reveal from '@/components/Reveal';
-import CountUp from '@/components/CountUp';
-import PerforatedDivider from '@/components/PerforatedDivider';
 import { productMatchesBrand } from '@/lib/brandMatch';
 import { useAuth } from '@/contexts/AuthContext';
 import ProductImage from '@/components/ProductImage';
 import ProductCard, { type ProductCardData } from '@/components/ProductCard';
 import VerifiedSeal from '@/components/VerifiedSeal';
+import VerifiedTick from '@/components/VerifiedTick';
+import { FASHION_CATEGORIES } from '@/lib/navCategories';
 
-interface BrandProduct {
-  id: string;
-  name: string;
-  image: string;
-  brand: string;
-}
-
-const FASHION_INDEX = [
-  ['T-Shirts', 't-shirts'],
-  ['Hoodies', 'hoodies'],
-  ['Jackets', 'jackets'],
-  ['Pants', 'pants'],
-  ['Outerwear', 'outerwear'],
-  ['Bags', 'bags'],
-  ['Accessories', 'accessories'],
-];
-
-const TECH_INDEX = [
-  ['Gaming', 'gaming'],
-  ['Audio', 'audio'],
-  ['Lighting', 'lighting'],
-  ['Phone Cases', 'phone-cases'],
-  ['Phone Accessories', 'phone-accessories'],
-  ['Desk Setup', 'desk-setup'],
-  ['Skins & Wraps', 'skins-wraps'],
-];
-
+/** Featured brand: a brand card beside three of its pieces. */
 function FeaturedBrand() {
   const [brand, setBrand] = useState<any>(null);
-  const [productImage, setProductImage] = useState<string>('');
+  const [items, setItems] = useState<ProductCardData[]>([]);
 
   useEffect(() => {
     fetch('/data/brands.json')
@@ -54,9 +27,8 @@ function FeaturedBrand() {
     if (!brand) return;
     fetch('/api/products')
       .then((r) => r.json())
-      .then((products: BrandProduct[]) => {
-        const match = products.find((p) => productMatchesBrand(p.name, brand.brandName));
-        if (match) setProductImage(match.image);
+      .then((products: ProductCardData[]) => {
+        setItems(products.filter((p) => p.image && productMatchesBrand(p.name, brand.brandName)).slice(0, 3));
       })
       .catch(() => {});
   }, [brand]);
@@ -64,40 +36,84 @@ function FeaturedBrand() {
   if (!brand) return null;
 
   return (
-    <Reveal as="section" className="container-edit py-20 md:py-28">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <div className="lg:col-span-6 order-2 lg:order-1">
-          <span className="eyebrow block mb-5">Featured Seller — 01 of 150+</span>
-          <h2 className="font-display font-black text-ink text-5xl md:text-6xl tracking-tightest leading-[0.92] mb-6">
+    <section className="container-edit pb-20 md:pb-28">
+      <div className="bg-paper rounded-xl p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        <div className="lg:col-span-4 min-w-0">
+          <p className="text-sm text-muted mb-3">Featured brand</p>
+          <h2 className="font-display text-ink text-4xl md:text-5xl leading-[0.95] mb-4">
             {brand.brandName}
+            <VerifiedTick className="!w-5 !h-5 ml-2 align-middle" />
           </h2>
-          <p className="text-lg text-ink/80 leading-relaxed max-w-md mb-6">
-            {brand.description}
-          </p>
-          <div className="flex flex-wrap gap-2 mb-8">
+          <p className="text-ink/80 leading-relaxed mb-5 max-w-[42ch]">{brand.description}</p>
+          <div className="flex flex-wrap gap-2 mb-7">
             {brand.aesthetic.map((tag: string) => (
               <span key={tag} className="tag">{tag}</span>
             ))}
           </div>
           <Link href={`/brands/${brand.slug}`} className="btn-secondary">
-            View Seller Index →
+            View the brand
           </Link>
         </div>
-
-        <div className="lg:col-span-6 order-1 lg:order-2 relative">
-          <div className="aspect-[4/5] bg-paper rounded-md overflow-hidden">
-            {productImage ? (
-              <ProductImage src={productImage} alt={brand.brandName} variant="detail" />
-            ) : (
-              <div className="w-full h-full placeholder-media flex items-center justify-center font-mono text-xs uppercase tracking-wide text-muted text-center px-8">
-                [ Product photograph — {brand.brandName} ]
-              </div>
-            )}
-          </div>
-          <VerifiedSeal className="absolute left-3 top-3" />
+        <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5 min-w-0">
+          {items.length > 0
+            ? items.map((p, i) => (
+                <div key={p.id} className={i === 2 ? 'hidden md:block' : ''}>
+                  <ProductCard product={p} wishlistCategory="fashion" showGillyNote={false} />
+                </div>
+              ))
+            : Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className={`aspect-[4/5] rounded-md bg-white/70 motion-safe:animate-pulse ${i === 2 ? 'hidden md:block' : ''}`} />
+              ))}
         </div>
       </div>
-    </Reveal>
+    </section>
+  );
+}
+
+/** Shop by category: photo tiles, each using a real product from that category. */
+function CategoryTiles() {
+  const [images, setImages] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/products').then((r) => r.json()).catch(() => []),
+      fetch('/api/products?category=tech').then((r) => r.json()).catch(() => []),
+    ]).then(([fashion, tech]: [ProductCardData[], ProductCardData[]]) => {
+      const pick: Record<string, string> = {};
+      for (const c of FASHION_CATEGORIES) {
+        const p = fashion.find((x) => x.category === c.match && x.image);
+        if (p) pick[c.href] = p.image;
+      }
+      const t = tech.find((x) => x.image);
+      if (t) pick['/tech-listings'] = t.image;
+      setImages(pick);
+    });
+  }, []);
+
+  const tiles = [
+    ...FASHION_CATEGORIES,
+    { label: 'All tech', href: '/tech-listings', match: '' },
+  ];
+
+  return (
+    <section className="container-edit pb-24 md:pb-32">
+      <div className="flex items-end justify-between gap-4 mb-6 md:mb-8">
+        <h2 className="font-display text-ink text-2xl md:text-3xl">Shop by category</h2>
+        <Link href="/brands" className="text-sm font-medium link-underline whitespace-nowrap">
+          Or browse all 150+ brands →
+        </Link>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        {tiles.map((c) => (
+          <Link key={c.href} href={c.href} className="group relative aspect-[4/5] md:aspect-square rounded-md overflow-hidden bg-paper">
+            {images[c.href] && <ProductImage src={images[c.href]} alt="" />}
+            <span className="absolute left-3 bottom-3 bg-white rounded-full px-3.5 py-1.5 text-sm font-semibold text-ink group-hover:bg-ink group-hover:text-white transition-colors">
+              {c.label}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -123,7 +139,7 @@ function LatestArrivals() {
   return (
     <section className="container-edit pb-20 md:pb-28">
       <div className="flex items-end justify-between gap-4 mb-6 md:mb-8">
-        <h2 className="font-body font-semibold text-2xl md:text-3xl tracking-tight">Latest additions</h2>
+        <h2 className="font-display text-ink text-2xl md:text-3xl">Latest additions</h2>
         <Link href="/fashion-listings" className="text-sm font-medium link-underline whitespace-nowrap">
           See all fashion →
         </Link>
@@ -171,7 +187,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-center">
           <div className="md:col-span-6 lg:col-span-6">
-            <h1 className="font-display text-ink text-[clamp(2.5rem,5.6vw,4.75rem)] leading-[1.02] mb-6">
+            <h1 className="font-display text-ink text-[clamp(2.25rem,4.4vw,3.75rem)] leading-[1.02] mb-6">
               Chinese labels,{' '}
               <span className="bg-hi px-[0.12em] box-decoration-clone">checked before</span>{' '}
               they ship.
@@ -203,123 +219,62 @@ export default function Home() {
 
       <LatestArrivals />
 
-      {/* ---------- Consumer proof ---------- */}
-      <Reveal as="section" className="container-edit pb-16 md:pb-20">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-10 py-7 border-y border-line">
-          <div className="flex items-center gap-3 shrink-0">
+      {/* ---------- Trust strip ---------- */}
+      <section className="container-edit pb-16 md:pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-line rounded-xl overflow-hidden border border-line">
+          <div className="bg-white p-5 md:p-6 flex flex-col gap-2">
             <Stars />
-            <span className="font-mono text-sm text-ink">
-              <CountUp value="4.8" /> / 5 average seller rating
-            </span>
+            <p className="text-sm text-ink"><b className="font-semibold">4.8 / 5</b> average seller rating</p>
           </div>
-          <div className="hidden sm:block w-px h-8 bg-line shrink-0" />
-          <p className="font-mono text-sm text-muted">
-            <CountUp value="47,000+" /> hauls shipped · <CountUp value="150+" /> verified sellers · buyer protection on every order
-          </p>
+          <div className="bg-white p-5 md:p-6 flex flex-col gap-1">
+            <p className="font-display text-2xl text-ink">47,000+</p>
+            <p className="text-sm text-muted">hauls shipped through Sugargoo</p>
+          </div>
+          <div className="bg-white p-5 md:p-6 flex flex-col gap-1">
+            <p className="font-display text-2xl text-ink">Every order</p>
+            <p className="text-sm text-muted">photographed at the warehouse before it ships</p>
+          </div>
         </div>
-      </Reveal>
+      </section>
 
-      <PerforatedDivider />
-
-      {/* ---------- Process ---------- */}
-      <Reveal as="section" className="container-edit py-20 md:py-28">
-        <div className="flex items-baseline justify-between mb-12 md:mb-16">
-          <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest">How it works</h2>
-          <span className="eyebrow hidden sm:inline">Three steps, one checkout</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 border-t border-line">
+      {/* ---------- How buying works ---------- */}
+      <section className="container-edit pb-20 md:pb-28">
+        <h2 className="font-display text-ink text-2xl md:text-3xl mb-8 md:mb-10">How buying works</h2>
+        <ol className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
           {[
             {
-              n: '01',
-              title: 'Create your account',
-              body: 'Join Sugargoo through our invitation link to unlock verified-warehouse features and batch shopping.',
+              title: 'Create your free account',
+              body: 'Sign up through RAPID and your Sugargoo account is made instantly. No email verification.',
               cta: { href: '/signup', label: 'Create account' },
             },
             {
-              n: '02',
-              title: 'Browse our index',
-              body: '150+ sellers, hand-organised by category, with new items indexed daily so you can actually find something.',
-              cta: { href: '/fashion-listings', label: 'View listings' },
+              title: 'Pick what you like',
+              body: '150+ independent brands, organised by category, with new pieces indexed daily.',
+              cta: { href: '/fashion-listings', label: 'Browse fashion' },
             },
             {
-              n: '03',
-              title: 'Order through Sugargoo',
-              body: 'Add items to cart, they ship to the Sugargoo warehouse for consolidation, then on to your door after QC.',
+              title: 'Buy on Sugargoo',
+              body: 'Items go to the Sugargoo warehouse, get photographed for you to check, then ship together in one box.',
               cta: { href: '/tutorial', label: 'Read the full guide' },
             },
           ].map((step, i) => (
-            <div
-              key={step.n}
-              className={`border-b lg:border-b-0 lg:border-r border-line last:border-r-0 py-10 ${
-                i === 0 ? 'lg:pr-10' : i === 2 ? 'lg:pl-10' : 'lg:px-10'
-              }`}
-            >
-              <span className="font-mono text-sm text-muted">{step.n}</span>
-              <h3 className="font-display font-black text-2xl mt-4 mb-4">{step.title}</h3>
-              <p className="text-ink/75 leading-relaxed mb-7">{step.body}</p>
-              <Link href={step.cta.href} className="link-underline font-mono text-xs uppercase tracking-wide">
+            <li key={step.title} className="border border-line rounded-xl p-6 flex flex-col">
+              <span className="w-8 h-8 rounded-full bg-ink text-white grid place-items-center text-sm font-semibold mb-5">
+                {i + 1}
+              </span>
+              <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+              <p className="text-muted leading-relaxed mb-6">{step.body}</p>
+              <Link href={step.cta.href} className="mt-auto text-sm font-medium link-underline self-start">
                 {step.cta.label} →
               </Link>
-            </div>
+            </li>
           ))}
-        </div>
-      </Reveal>
-
-      <PerforatedDivider />
+        </ol>
+      </section>
 
       <FeaturedBrand />
 
-      <PerforatedDivider />
-
-      {/* ---------- Category index ---------- */}
-      <Reveal as="section" className="container-edit py-20 md:py-28">
-        <div className="flex items-baseline justify-between mb-12">
-          <h2 className="font-display font-black text-3xl md:text-4xl tracking-tightest">The index</h2>
-          <Link href="/brands" className="link-underline font-mono text-xs uppercase tracking-wide hidden sm:inline">
-            All 150+ sellers →
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
-          <div>
-            <p className="eyebrow mb-4">Fashion</p>
-            <ul>
-              {FASHION_INDEX.map(([label, slug], i) => (
-                <li key={slug} className="border-t border-line last:border-b">
-                  <Link
-                    href={`/fashion-listings?category=${slug}`}
-                    className="flex items-center justify-between py-4 group"
-                  >
-                    <span className="font-display font-bold text-xl md:text-2xl group-hover:underline">
-                      {label}
-                    </span>
-                    <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, '0')}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="mt-12 md:mt-0">
-            <p className="eyebrow mb-4">Tech</p>
-            <ul>
-              {TECH_INDEX.map(([label, slug], i) => (
-                <li key={slug} className="border-t border-line last:border-b">
-                  <Link
-                    href={slug === 'phone-cases' ? '/phone-cases' : `/tech-listings?category=${slug}`}
-                    className="flex items-center justify-between py-4 group"
-                  >
-                    <span className="font-display font-bold text-xl md:text-2xl group-hover:underline">
-                      {label}
-                    </span>
-                    <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, '0')}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </Reveal>
+      <CategoryTiles />
     </>
   );
 }

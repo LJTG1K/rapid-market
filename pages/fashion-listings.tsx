@@ -114,6 +114,13 @@ export default function FashionListings() {
     }
   }, [router.isReady, router.query.category]);
 
+  // Header search sends shoppers here as /fashion-listings?q=...
+  useEffect(() => {
+    if (router.isReady && typeof router.query.q === 'string') {
+      setSearchTerm(router.query.q);
+    }
+  }, [router.isReady, router.query.q]);
+
   useEffect(() => {
     fetch('/data/brands.json').then((r) => r.json()).then(setBrands).catch(() => {});
   }, []);
@@ -143,8 +150,13 @@ export default function FashionListings() {
       filtered = filtered.filter((p) => productMatchesBrand(p.name, selectedBrand));
     }
     if (searchTerm.trim()) {
-      const s = searchTerm.toLowerCase();
-      filtered = filtered.filter((p) => p.name.toLowerCase().includes(s) || p.description.toLowerCase().includes(s));
+      // Every word must appear somewhere, so "baovicto jacket" finds
+      // "BAOVICTO DOUBLE SIDED WOOL ZIP UP JACKET".
+      const words = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+      filtered = filtered.filter((p) => {
+        const hay = `${p.name} ${p.description}`.toLowerCase();
+        return words.every((w) => hay.includes(w));
+      });
     }
 
     switch (selectedSort) {

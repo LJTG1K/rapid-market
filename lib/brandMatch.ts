@@ -45,3 +45,9 @@ function getBrandPattern(brandName: string): RegExp {
 export function productMatchesBrand(productName: string, brandName: string): boolean {
   return getBrandPattern(brandName).test(productName.trim());
 }
+
+/** Length of the brand prefix at the start of a product name, or null if it doesn't lead with this brand. */
+export function brandPrefixLength(productName: string, brandName: string): number | null {
+  const m = getBrandPattern(brandName).exec(productName.trim());
+  return m ? m[0].length : null;
+}

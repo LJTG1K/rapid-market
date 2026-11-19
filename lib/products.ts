@@ -1,4 +1,6 @@
 import { normalizeStyleTagsInput, normalizeFitInput, type StyleKey, type FitKey } from './styleMatch';
+import { loadBrands } from './brandsData';
+import { splitProductName } from './productName';
 
 export interface Product {
   id: string;
@@ -18,6 +20,17 @@ export interface Product {
   // Sheet column I ("GILLY NOTE"): Gilly's handwritten-style fit/feel note.
   // Only shown on cards for Gilly picks (lib/gillyPicks.ts), never on the homepage.
   gillyNote?: string;
+  // Display split of `name` (lib/productName.ts): brand from brands.json and
+  // the rest in sentence case. `name` itself is unchanged for search/matching.
+  brand?: string;
+  brandSlug?: string;
+  itemName?: string;
+}
+
+/** Adds brand / itemName display fields. Cheap enough to run once per catalogue load. */
+function withNameParts(products: Product[]): Product[] {
+  const brands = loadBrands();
+  return products.map((p) => ({ ...p, ...splitProductName(p.name, brands) }));
 }
 
 const fashionCategoryMap: { [key: string]: string } = {
@@ -239,7 +252,7 @@ export async function loadProducts(category: string = 'fashion'): Promise<Produc
 
     if (!sheetId || !apiKey) {
       const snapshot = devSnapshot(category);
-      if (snapshot) return { products: snapshot, source: 'sheet' };
+      if (snapshot) return { products: withNameParts(snapshot), source: 'sheet' };
       console.warn('Google Sheets credentials not configured. Using demo data.');
       return demo();
     }
@@ -373,6 +386,10 @@ export async function loadProducts(category: string = 'fashion'): Promise<Produc
       // row with its own explicit id must never affect any other row's id.
       if (!explicitId) productId++;
     }
+
+    const named = withNameParts(products);
+    products.length = 0;
+    products.push(...named);
 
     console.log(`✅ Successfully loaded ${products.length} products`);
     if (category.toLowerCase() === 'tech' || (category === 'fashion' && skipped > 0)) {

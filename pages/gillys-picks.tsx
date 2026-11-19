@@ -141,7 +141,7 @@ export default function GillysPicks() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-10 items-center mb-16">
           <div className="md:col-span-6">
             <span className="eyebrow block mb-4">Gilly&apos;s Picks</span>
-            <h1 className="font-display text-ink text-[clamp(2.5rem,5.6vw,4.5rem)] leading-[1.02] mb-6">
+            <h1 className="font-display text-ink text-[clamp(2.25rem,4.4vw,3.75rem)] leading-[1.02] mb-6">
               Chinese labels, <span className="bg-hi px-[0.12em] box-decoration-clone">worn first</span> by Gilly.
             </h1>
             <p className="text-lg text-muted leading-relaxed max-w-[46ch] mb-3">

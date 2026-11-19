@@ -32,9 +32,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        // Young Serif: big headlines only. Instrument Sans: everything else.
+        // Archivo Expanded: big headlines only. Instrument Sans: everything else.
         // Bricolage stays solely for the RAPID. wordmark (font-mark).
-        display: ['"Young Serif"', 'Georgia', 'serif'],
+        display: ['Archivo', 'Arial', 'sans-serif'],
         body: ['"Instrument Sans"', 'Arial', 'sans-serif'],
         mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
         mark: ['"Bricolage Grotesque"', 'Arial Black', 'sans-serif'],

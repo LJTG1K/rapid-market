@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import ProductImage from './ProductImage';
 import WishlistButton from './WishlistButton';
-import VerifiedSeal from './VerifiedSeal';
+import VerifiedTick from './VerifiedTick';
 import { useHandoff } from '@/contexts/HandoffContext';
 import { gillyNoteFor } from '@/lib/gillyPicks';
 
@@ -13,6 +13,9 @@ export interface ProductCardData {
   sugargooLink: string;
   category: string;
   gillyNote?: string;
+  brand?: string;
+  brandSlug?: string;
+  itemName?: string;
 }
 
 interface ProductCardProps {
@@ -30,10 +33,10 @@ interface ProductCardProps {
 }
 
 /**
- * Shared listing card (Direction A, "Verified"): the photo sits on a neutral
- * tile with a Verified-seller seal, then name, category and price, and a red
- * buy pill that opens the Sugargoo handoff sheet. Gilly picks can carry
- * Gilly's note in blue pen.
+ * Shared listing card (Direction A, "Verified"): a clean photo on a neutral
+ * tile, then the brand line (brand name + green verified tick, linking to the
+ * brand page), the item name in sentence case, and a red buy pill that opens
+ * the Sugargoo handoff sheet. Gilly picks can carry Gilly's note in blue pen.
  */
 export default function ProductCard({
   product,
@@ -45,6 +48,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { handleBuyClick } = useHandoff();
   const note = showGillyNote ? gillyNoteFor(product) : null;
+  const productHref = `/product/${product.id}?category=${wishlistCategory}`;
 
   return (
     <div className="flex flex-col relative min-w-0">
@@ -53,17 +57,34 @@ export default function ProductCard({
         category={wishlistCategory}
         className="absolute top-2 right-2 z-10 !w-11 !h-11"
       />
-      <Link href={`/product/${product.id}?category=${wishlistCategory}`} className="group">
+      <Link href={productHref} className="block mb-3" tabIndex={-1} aria-hidden="true">
         <div
-          className={`${aspect === 'square' ? 'aspect-square' : 'aspect-[4/5]'} relative bg-paper rounded-md overflow-hidden mb-3`}
+          className={`${aspect === 'square' ? 'aspect-square' : 'aspect-[4/5]'} relative bg-paper rounded-md overflow-hidden`}
         >
-          <ProductImage src={product.image} alt={product.name} />
-          <VerifiedSeal className="absolute left-2 top-2" />
+          <ProductImage src={product.image} alt="" />
         </div>
-        <h3 className="font-body font-semibold text-sm leading-snug mb-0.5 line-clamp-2 group-hover:underline underline-offset-2">
-          {product.name}
+      </Link>
+
+      {product.brand && (
+        <span className="flex items-center gap-1.5 mb-0.5 min-w-0">
+          {product.brandSlug ? (
+            <Link
+              href={`/brands/${product.brandSlug}`}
+              className="text-[11.5px] uppercase tracking-[0.06em] text-ink truncate underline decoration-line underline-offset-[3px] hover:decoration-ink"
+            >
+              {product.brand}
+            </Link>
+          ) : (
+            <span className="text-[11.5px] uppercase tracking-[0.06em] text-ink truncate">{product.brand}</span>
+          )}
+          <VerifiedTick />
+        </span>
+      )}
+
+      <Link href={productHref} className="group">
+        <h3 className="font-body font-semibold text-sm leading-snug line-clamp-2 group-hover:underline underline-offset-2">
+          {product.itemName || product.name}
         </h3>
-        <span className="text-xs text-muted block">{product.category}</span>
       </Link>
 
       {note && (

@@ -26,6 +26,8 @@ export interface HandoffProduct {
   price: string;
   sugargooLink: string;
   gillyNote?: string;
+  brand?: string;
+  itemName?: string;
 }
 
 interface HandoffOptions {
@@ -189,7 +191,8 @@ function HandoffSheet({
                 <ProductImage src={product.image} alt={product.name} />
               </div>
               <div className="min-w-0">
-                <p className="font-semibold leading-snug line-clamp-2">{product.name}</p>
+                {product.brand && <p className="text-[11.5px] uppercase tracking-[0.06em] text-muted">{product.brand}</p>}
+                <p className="font-semibold leading-snug line-clamp-2">{product.itemName || product.name}</p>
                 <p className="text-sm text-muted">
                   <span className="font-mono">{product.price}</span> before shipping
                 </p>

@@ -1,53 +1,55 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { FASHION_CATEGORIES, TECH_CATEGORIES, DISCOVER_LINKS, HELP_LINKS } from '@/lib/navCategories';
 
-// Primary links stay flat in the bar (with their 01–03 numerals).
-const PRIMARY = [
-  { href: '/fashion-listings', label: 'Fashion' },
-  { href: '/tech-listings', label: 'Tech' },
-  { href: '/brands', label: 'Brands' },
-];
-
-// Secondary links are grouped under the "More" dropdown to de-clutter the bar.
-const MORE = [
-  { href: '/gillys-picks', label: "Gilly's Picks" },
-  { href: '/tutorial', label: 'Tutorial' },
-  { href: '/tools', label: 'Tools' },
-  { href: '/blog', label: 'Journal' },
-];
-
-// Full list (used by the mobile menu, which shows everything inline).
-const ALL_NAV = [...PRIMARY, ...MORE];
-
+/**
+ * Header (Direction A, layout L3). Links are grouped by what they are:
+ *   Shop      one "Shop" button opening a panel with every Fashion and Tech category
+ *   Discover  Brands and Gilly's Picks, flat in the bar
+ *   Help      Guide and Journal, small and grey on the right
+ * Search opens a field that sends the shopper to the fashion listings,
+ * pre-filtered. On phones the menu is the same three groups, stacked.
+ */
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
-  const moreRef = useRef<HTMLDivElement>(null);
+  const shopRef = useRef<HTMLDivElement>(null);
+  const searchInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { user } = useAuth();
   const isCampaign = ['/campaign', '/reddit'].includes(router.pathname);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close the "More" dropdown on outside-click or Escape.
+  // Close everything on navigation.
   useEffect(() => {
-    if (!moreOpen) return;
+    setShopOpen(false);
+    setMobileOpen(false);
+    setSearchOpen(false);
+  }, [router.asPath]);
+
+  // Shop panel: close on outside click / Escape.
+  useEffect(() => {
+    if (!shopOpen && !searchOpen) return;
     const onDown = (e: MouseEvent) => {
-      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
-        setMoreOpen(false);
-      }
+      if (shopOpen && shopRef.current && !shopRef.current.contains(e.target as Node)) setShopOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMoreOpen(false);
+      if (e.key === 'Escape') {
+        setShopOpen(false);
+        setSearchOpen(false);
+      }
     };
     document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey);
@@ -55,117 +57,96 @@ export default function Header() {
       document.removeEventListener('mousedown', onDown);
       document.removeEventListener('keydown', onKey);
     };
-  }, [moreOpen]);
+  }, [shopOpen, searchOpen]);
 
-  // Close the dropdown whenever navigation occurs.
   useEffect(() => {
-    setMoreOpen(false);
-  }, [router.asPath]);
+    if (searchOpen) searchInput.current?.focus();
+  }, [searchOpen]);
 
-  const moreActive = MORE.some((m) => router.pathname.startsWith(m.href));
+  const submitSearch = (e: FormEvent) => {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    router.push(`/fashion-listings?q=${encodeURIComponent(q)}`);
+  };
+
+  const shopActive = ['/fashion-listings', '/tech-listings', '/phone-cases'].some((p) => router.pathname.startsWith(p));
+  const linkCls = (active: boolean) =>
+    `relative py-2 text-[15px] font-semibold transition-colors ${active ? 'text-ink' : 'text-ink/80 hover:text-ink'}`;
+
+  const SearchIcon = (
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <circle cx="7" cy="7" r="5" />
+      <path d="M11 11l3.5 3.5" />
+    </svg>
+  );
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-stone/95 backdrop-blur-sm transition-shadow duration-300 ${
-        scrolled ? 'shadow-[0_1px_0_0_rgba(27,26,20,0.12)]' : ''
+      ref={shopRef}
+      className={`sticky top-0 z-50 bg-white border-b transition-colors duration-200 ${
+        scrolled || shopOpen ? 'border-line' : 'border-transparent'
       }`}
     >
-      <div
-        className={`container-edit flex items-center justify-between transition-[height] duration-300 ${
-          scrolled ? 'h-[58px]' : 'h-[72px]'
-        }`}
-      >
-        {/* Logotype */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <Image
-            src="/assets/logo.png"
-            alt="RAPID"
-            width={28}
-            height={28}
-            className="h-7 w-auto"
-          />
-          <span className="font-mark text-xl tracking-tightest text-ink">
+      <div className="container-edit flex items-center gap-6 h-16">
+        <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="RAPID home">
+          <Image src="/assets/logo.png" alt="" width={26} height={26} className="h-6 w-auto" />
+          <span className="font-mark text-xl text-ink">
             RAPID<span className="text-stamp">.</span>
           </span>
         </Link>
 
         {!isCampaign && (
           <>
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center">
-              {PRIMARY.map((item, i) => (
-                <span key={item.href} className="flex items-center">
-                  {i > 0 && <span className="w-px h-3 bg-line mx-4 xl:mx-5" aria-hidden="true" />}
-                  <Link
-                    href={item.href}
-                    className="group relative py-2 font-mono text-[13px] font-medium uppercase tracking-wide text-ink/70 hover:text-ink transition-colors"
-                  >
-                    <span className="text-muted mr-1.5">{String(i + 1).padStart(2, '0')}</span>
-                    {item.label}
-                    <span
-                      className="absolute left-0 -bottom-0.5 h-px w-full bg-ink origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 motion-reduce:transition-none"
-                      aria-hidden="true"
-                    />
+            {/* Desktop: Shop + Discover */}
+            <nav className="hidden lg:flex items-center gap-7" aria-label="Main">
+              <button
+                type="button"
+                onClick={() => setShopOpen((v) => !v)}
+                aria-expanded={shopOpen}
+                aria-controls="shop-panel"
+                className={`${linkCls(shopOpen || shopActive)} inline-flex items-center gap-1.5`}
+              >
+                Shop
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`w-3.5 h-3.5 transition-transform ${shopOpen ? 'rotate-180' : ''}`} aria-hidden="true">
+                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {(shopOpen || shopActive) && <span className="absolute left-0 right-0 -bottom-[13px] h-[2px] bg-ink" aria-hidden="true" />}
+              </button>
+              {DISCOVER_LINKS.map((l) => {
+                const active = router.pathname.startsWith(l.href);
+                return (
+                  <Link key={l.href} href={l.href} className={linkCls(active)}>
+                    {l.label}
+                    {active && <span className="absolute left-0 right-0 -bottom-[13px] h-[2px] bg-ink" aria-hidden="true" />}
                   </Link>
-                </span>
-              ))}
-
-              {/* More dropdown */}
-              <span className="flex items-center">
-                <span className="w-px h-3 bg-line mx-4 xl:mx-5" aria-hidden="true" />
-                <div className="relative" ref={moreRef}>
-                  <button
-                    type="button"
-                    onClick={() => setMoreOpen((v) => !v)}
-                    aria-haspopup="true"
-                    aria-expanded={moreOpen}
-                    className={`group inline-flex items-center gap-1.5 py-2 font-mono text-[13px] font-medium uppercase tracking-wide transition-colors ${
-                      moreActive || moreOpen ? 'text-ink' : 'text-ink/70 hover:text-ink'
-                    }`}
-                  >
-                    More
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className={`w-3 h-3 transition-transform duration-200 ${moreOpen ? 'rotate-180' : ''}`}
-                      aria-hidden="true"
-                    >
-                      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
-
-                  {moreOpen && (
-                    <div
-                      role="menu"
-                      className="absolute right-0 top-full mt-2 min-w-[190px] bg-paper border border-line shadow-[0_12px_30px_-12px_rgba(27,26,20,0.35)] py-1.5 z-50"
-                    >
-                      {MORE.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          role="menuitem"
-                          onClick={() => setMoreOpen(false)}
-                          className="block px-4 py-2.5 font-mono text-[13px] uppercase tracking-wide text-ink/75 hover:text-ink hover:bg-stone/60 transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </span>
+                );
+              })}
             </nav>
 
-            {/* Right side: CTAs */}
-            <div className="flex items-center gap-4">
+            <div className="ml-auto flex items-center gap-1 sm:gap-2">
+              {/* Desktop: Help, quiet */}
+              <span className="hidden xl:flex items-center gap-5 mr-3">
+                <Link href="/tutorial" className="text-sm text-muted hover:text-ink transition-colors">Guide</Link>
+                <Link href="/blog" className="text-sm text-muted hover:text-ink transition-colors">Journal</Link>
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setSearchOpen((v) => !v)}
+                aria-label="Search"
+                aria-expanded={searchOpen}
+                className="w-10 h-10 rounded-full grid place-items-center text-ink hover:bg-paper transition-colors"
+              >
+                {SearchIcon}
+              </button>
+
               {user ? (
                 <Link
                   href="/account"
-                  className="hidden sm:inline-flex items-center gap-2 font-mono text-[13px] font-medium uppercase tracking-wide text-ink/70 hover:text-ink transition-colors"
+                  className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-ink hover:bg-paper rounded-full px-3 h-10"
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-4 h-4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-[18px] h-[18px]" aria-hidden="true">
                     <circle cx="12" cy="8" r="3.5" />
                     <path d="M5 20a7 7 0 0 1 14 0" strokeLinecap="round" />
                   </svg>
@@ -173,83 +154,128 @@ export default function Header() {
                 </Link>
               ) : (
                 <>
-                  <Link
-                    href="/login"
-                    className="hidden sm:inline-flex font-mono text-[13px] font-medium uppercase tracking-wide text-ink/70 hover:text-ink transition-colors"
-                  >
+                  <Link href="/login" className="hidden sm:inline-flex text-sm font-medium text-ink hover:bg-paper rounded-full px-3 h-10 items-center">
                     Log in
                   </Link>
-                  <Link href="/signup" className="hidden sm:inline-flex btn-primary">
-                    Sign Up
+                  <Link href="/signup" className="btn-primary !py-2.5 !px-4">
+                    Sign up
                   </Link>
                 </>
               )}
 
-              {/* Mobile Menu Button */}
               <button
-                className="lg:hidden flex flex-col justify-center items-center gap-[5px] w-11 h-11 shrink-0"
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label={isOpen ? 'Close menu' : 'Open menu'}
-                aria-expanded={isOpen}
+                className="lg:hidden w-10 h-10 grid place-items-center text-ink"
+                onClick={() => setMobileOpen((v) => !v)}
+                aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={mobileOpen}
               >
-                <span className={`block h-[1.5px] w-6 bg-ink transition-transform ${isOpen ? 'translate-y-[6.5px] rotate-45' : ''}`} />
-                <span className={`block h-[1.5px] w-6 bg-ink transition-opacity ${isOpen ? 'opacity-0' : 'opacity-100'}`} />
-                <span className={`block h-[1.5px] w-6 bg-ink transition-transform ${isOpen ? '-translate-y-[6.5px] -rotate-45' : ''}`} />
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+                  {mobileOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+                </svg>
               </button>
             </div>
           </>
         )}
 
         {isCampaign && (
-          <Link href="/signup" className="btn-stamp">
-            Create Free Account
+          <Link href="/signup" className="btn-stamp ml-auto">
+            Create free account
           </Link>
         )}
       </div>
 
-      <div className="perforated" />
+      {/* Search field */}
+      {searchOpen && !isCampaign && (
+        <div className="border-t border-line bg-white">
+          <form onSubmit={submitSearch} className="container-edit py-3 flex items-center gap-3" role="search">
+            <label htmlFor="site-search" className="sr-only">Search brands and items</label>
+            <span className="text-muted">{SearchIcon}</span>
+            <input
+              id="site-search"
+              ref={searchInput}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search brands and items, e.g. Baovicto jacket"
+              className="flex-1 min-w-0 bg-transparent text-base outline-none placeholder:text-muted"
+              autoComplete="off"
+            />
+            <button type="submit" className="btn-primary !py-2 !px-4">Search</button>
+          </form>
+        </div>
+      )}
 
-      {/* Mobile Nav */}
-      {!isCampaign && isOpen && (
-        <nav className="lg:hidden bg-stone border-b border-line">
-          <div className="container-edit flex flex-col py-4">
-            {ALL_NAV.map((item, i) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center font-mono text-sm uppercase tracking-wide py-3.5 border-b border-line/60 text-ink"
-                onClick={() => setIsOpen(false)}
-              >
-                <span className="text-muted mr-3">{String(i + 1).padStart(2, '0')}</span>
-                {item.label}
-              </Link>
-            ))}
-            {user ? (
-              <Link
-                href="/account"
-                className="btn-primary mt-5 w-full"
-                onClick={() => setIsOpen(false)}
-              >
-                {user.name ? `${user.name} — Account` : 'My Account'}
-              </Link>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="btn-secondary mt-5 w-full"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Log in
-                </Link>
-                <Link
-                  href="/signup"
-                  className="btn-primary mt-3 w-full"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
+      {/* Desktop Shop panel */}
+      {shopOpen && !isCampaign && (
+        <div id="shop-panel" className="hidden lg:block absolute left-0 right-0 top-full bg-white border-b border-line shadow-[0_24px_40px_-28px_rgba(14,14,16,0.35)]">
+          <div className="container-edit py-8 grid grid-cols-12 gap-8">
+            <div className="col-span-3">
+              <Link href="/fashion-listings" className="font-display text-lg text-ink hover:underline">Fashion</Link>
+              <ul className="mt-4 grid gap-2.5">
+                <li><Link href="/fashion-listings" className="text-[15px] text-ink hover:underline">All fashion</Link></li>
+                {FASHION_CATEGORIES.map((c) => (
+                  <li key={c.href}><Link href={c.href} className="text-[15px] text-ink/80 hover:text-ink hover:underline">{c.label}</Link></li>
+                ))}
+              </ul>
+            </div>
+            <div className="col-span-3">
+              <Link href="/tech-listings" className="font-display text-lg text-ink hover:underline">Tech</Link>
+              <ul className="mt-4 grid gap-2.5">
+                <li><Link href="/tech-listings" className="text-[15px] text-ink hover:underline">All tech</Link></li>
+                {TECH_CATEGORIES.map((c) => (
+                  <li key={c.href}><Link href={c.href} className="text-[15px] text-ink/80 hover:text-ink hover:underline">{c.label}</Link></li>
+                ))}
+              </ul>
+            </div>
+            <Link href="/gillys-picks" className="col-span-4 col-start-9 group">
+              <div
+                className="aspect-[16/10] rounded-md bg-paper bg-no-repeat mb-3"
+                style={{ backgroundImage: 'url(/carousel-3.jpg)', backgroundSize: '345% auto', backgroundPosition: '47.5% 32%' }}
+                role="img"
+                aria-label="Varsity jacket picked by Gilly"
+              />
+              <p className="font-display text-lg text-ink group-hover:underline">Gilly&apos;s Picks</p>
+              <p className="text-sm text-muted">Pieces Gilly wore first, with notes on fit.</p>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile menu: Shop / Discover / Help */}
+      {mobileOpen && !isCampaign && (
+        <nav className="lg:hidden border-t border-line bg-white max-h-[calc(100vh-4rem)] overflow-y-auto" aria-label="Main">
+          <div className="container-edit py-6 grid gap-7">
+            <div>
+              <p className="eyebrow mb-2">Shop</p>
+              <Link href="/fashion-listings" className="block font-display text-2xl text-ink py-1">Fashion</Link>
+              <div className="flex flex-wrap gap-2 mt-2 mb-3">
+                {FASHION_CATEGORIES.map((c) => (
+                  <Link key={c.href} href={c.href} className="tag">{c.label}</Link>
+                ))}
+              </div>
+              <Link href="/tech-listings" className="block font-display text-2xl text-ink py-1">Tech</Link>
+            </div>
+            <div>
+              <p className="eyebrow mb-2">Discover</p>
+              {DISCOVER_LINKS.map((l) => (
+                <Link key={l.href} href={l.href} className="block font-display text-2xl text-ink py-1">{l.label}</Link>
+              ))}
+            </div>
+            <div>
+              <p className="eyebrow mb-2">Help</p>
+              {HELP_LINKS.map((l) => (
+                <Link key={l.href} href={l.href} className="block text-base text-muted py-1.5">{l.label}</Link>
+              ))}
+            </div>
+            <div className="grid gap-3 pt-2">
+              {user ? (
+                <Link href="/account" className="btn-primary w-full">{user.name ? `${user.name}: account` : 'Your account'}</Link>
+              ) : (
+                <>
+                  <Link href="/signup" className="btn-primary w-full">Sign up</Link>
+                  <Link href="/login" className="btn-secondary w-full">Log in</Link>
+                </>
+              )}
+            </div>
           </div>
         </nav>
       )}
