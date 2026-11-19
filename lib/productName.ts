@@ -5,10 +5,10 @@ import { brandPrefixLength } from './brandMatch';
  * into its brand and item parts for display: the brand comes from
  * brands.json (longest matching leading name wins, so "Bevan Up" beats a
  * hypothetical "Bevan"), and the item name drops out of ALL CAPS into
- * sentence case, which is far easier to scan in a grid.
+ * title case ("Double Sided Wool Zip Up Jacket"), which is far easier to scan.
  *
  * A name whose brand isn't in brands.json keeps no brand and is just
- * sentence-cased whole.
+ * title-cased whole.
  */
 export interface NameParts {
   brand?: string;
@@ -16,13 +16,19 @@ export interface NameParts {
   itemName: string;
 }
 
-export function sentenceCase(text: string): string {
+/**
+ * Capitalises the first letter of every word, including after a hyphen or
+ * slash ("t-shirt" -> "T-Shirt"). ALL-CAPS names are lowered first. A word
+ * that already has a capital in it is left as typed (e.g. "iPhone", "NFC"
+ * inside a hand-cased name).
+ */
+export function titleCase(text: string): string {
   const t = text.trim().replace(/\s+/g, ' ');
   if (!t) return t;
-  // Only rewrite names that are shouting; leave hand-cased names alone.
-  if (t !== t.toUpperCase()) return t;
-  const lower = t.toLowerCase();
-  return lower.charAt(0).toUpperCase() + lower.slice(1);
+  const base = t === t.toUpperCase() ? t.toLowerCase() : t;
+  return base.replace(/[\p{L}\p{N}'’]+/gu, (word) =>
+    /\p{Lu}/u.test(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)
+  );
 }
 
 export function splitProductName(
@@ -34,13 +40,13 @@ export function splitProductName(
     const len = brandPrefixLength(name, b.brandName);
     if (len !== null && (!best || len > best.len)) best = { ...b, len };
   }
-  if (!best) return { itemName: sentenceCase(name) };
+  if (!best) return { itemName: titleCase(name) };
 
   const rest = name.trim().slice(best.len).replace(/^[\s\-–—:|]+/, '');
   return {
     brand: best.brandName,
     brandSlug: best.slug,
     // A listing that is only the brand name falls back to the full name.
-    itemName: sentenceCase(rest || name),
+    itemName: titleCase(rest || name),
   };
 }
