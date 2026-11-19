@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { loadActiveBrandNames } from '@/lib/activeBrands';
 import Head from 'next/head';
 import Link from 'next/link';
 import VerifiedTick from '@/components/VerifiedTick';
@@ -35,7 +36,9 @@ interface Product {
 export async function getStaticPaths() {
   try {
     const brandsData = await import('../../public/data/brands.json');
-    const brands = brandsData.default;
+    // Only pre-build brands that have products; an empty brand 404s (below).
+    const active = await loadActiveBrandNames(brandsData.default);
+    const brands = brandsData.default.filter((b: Brand) => !active || active.has(b.brandName));
     return { paths: brands.map((b: Brand) => ({ params: { slug: b.slug } })), fallback: 'blocking' };
   } catch (error) {
     console.error('Error generating static paths:', error);
@@ -49,6 +52,10 @@ export async function getStaticProps(context: any) {
     const brandsData = await import('../../public/data/brands.json');
     const brand = brandsData.default.find((b: Brand) => b.slug === slug);
     if (!brand) return { notFound: true };
+    // A brand with zero products is hidden until one is added; revalidate so
+    // the page comes back on its own.
+    const active = await loadActiveBrandNames([brand]);
+    if (active && !active.has(brand.brandName)) return { notFound: true, revalidate: 3600 };
     return { props: { brand }, revalidate: 3600 };
   } catch (error) {
     console.error('Error in getStaticProps:', error);

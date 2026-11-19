@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { loadActiveBrandNames } from '@/lib/activeBrands';
 import Head from 'next/head';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
@@ -17,9 +18,11 @@ interface Brand {
 export async function getStaticProps() {
   try {
     const brandsData = await import('../../public/data/brands.json');
-    const brands = [...brandsData.default].sort((a, b) =>
-      a.brandName.localeCompare(b.brandName, 'en', { sensitivity: 'base' })
-    );
+    // Brands with zero products are hidden (lib/activeBrands.ts).
+    const active = await loadActiveBrandNames(brandsData.default);
+    const brands = [...brandsData.default]
+      .filter((b) => !active || active.has(b.brandName))
+      .sort((a, b) => a.brandName.localeCompare(b.brandName, 'en', { sensitivity: 'base' }));
     return { props: { brands }, revalidate: 3600 };
   } catch (error) {
     console.error('Error fetching brands:', error);

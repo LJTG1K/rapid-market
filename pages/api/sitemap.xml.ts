@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { productMatchesBrand } from '../../lib/brandMatch';
 import { loadProducts } from '../../lib/products';
 import { CANONICAL_ORIGIN as BASE_URL } from '../../lib/siteUrl';
 
@@ -77,6 +78,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ...productEntries(tech, '?category=tech'),
       ...brands
         .filter((b) => b?.slug)
+        // Brands with zero products are hidden (their page 404s); skip them.
+        .filter((b) => fashion.source !== 'sheet' || [...fashion.products, ...tech.products].some((p) => productMatchesBrand(p.name, b.brandName)))
         .map((b) => ({ path: `/brands/${encodeURIComponent(b.slug)}`, priority: '0.7', changefreq: 'weekly' })),
       ...posts
         .filter((p) => p?.slug)

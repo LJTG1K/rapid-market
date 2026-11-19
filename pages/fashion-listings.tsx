@@ -193,6 +193,12 @@ export default function FashionListings() {
   // visit that lands directly in a filtered/sorted view (e.g. a category
   // link from elsewhere on the site) doesn't pay for shuffling the catalog
   // or scoring every product against the quiz just to throw it away unused.
+  // Brand filter only offers brands that actually have products listed.
+  const brandsWithProducts = useMemo(
+    () => (products.length ? brands.filter((b) => products.some((p) => productMatchesBrand(p.name, b.brandName))) : brands),
+    [brands, products]
+  );
+
   const randomPicks = useMemo(
     () => (isBrowseMode ? shuffle(products).slice(0, 8) : []),
     [products, isBrowseMode]
@@ -264,7 +270,7 @@ export default function FashionListings() {
                 allLabel: 'All Brands',
                 selected: selectedBrand,
                 onSelect: setSelectedBrand,
-                options: brands.map((b) => ({ key: b.slug, value: b.brandName, label: b.brandName })),
+                options: brandsWithProducts.map((b) => ({ key: b.slug, value: b.brandName, label: b.brandName })),
                 scroll: true,
               },
             ]}
