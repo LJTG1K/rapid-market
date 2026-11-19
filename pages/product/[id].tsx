@@ -2,7 +2,7 @@ import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import Stars from '@/components/Stars';
-import Stamp from '@/components/Stamp';
+import VerifiedTick from '@/components/VerifiedTick';
 import Reveal from '@/components/Reveal';
 import ProductImage from '@/components/ProductImage';
 import PerforatedDivider from '@/components/PerforatedDivider';
@@ -140,7 +140,7 @@ export default function ProductPage({ product, more, matchedBrand, cat }: Props)
   return (
     <>
       <Head>
-        <title>{`${product.name} — RAPID Marketplace`}</title>
+        <title>{`${product.brand ? `${product.brand} ` : ''}${product.itemName || product.name} — RAPID Marketplace`}</title>
         <meta name="description" content={product.description} />
         <link rel="canonical" href={canonical} />
         <meta property="og:title" content={`${product.name} — RAPID`} key="og:title" />
@@ -183,37 +183,32 @@ export default function ProductPage({ product, more, matchedBrand, cat }: Props)
         <Reveal className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           {/* Image */}
           <div className="relative">
-            <div className="aspect-[4/5] bg-paper border border-line overflow-hidden">
+            <div className="aspect-[4/5] bg-paper rounded-md overflow-hidden">
               {/* LCP for this route — eager + high priority. */}
               <ProductImage src={product.image} alt={product.name} variant="detail" priority />
             </div>
-            {product.verified && (
-              <div className="absolute -top-4 -left-4 hidden sm:block">
-                <Stamp size={84} centerText="QC" sub="Passed" ringText="Quality Checked · Verified Seller ·" spin={false} />
-              </div>
-            )}
           </div>
 
           {/* Info */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="font-mono text-[11px] uppercase tracking-wide text-muted">
-                {product.category}
-              </span>
-              {matchedBrand && (
-                <>
-                  <span className="text-muted/50" aria-hidden="true">·</span>
+            {/* Same brand line as the product cards: brand + verified tick. */}
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              {matchedBrand ? (
+                <span className="flex items-center gap-1.5">
                   <Link
                     href={`/brands/${matchedBrand.slug}`}
-                    className="link-underline font-mono text-[11px] uppercase tracking-wide"
+                    className="text-[13px] uppercase tracking-[0.06em] text-ink underline decoration-line underline-offset-[3px] hover:decoration-ink"
                   >
                     {matchedBrand.brandName}
                   </Link>
-                </>
-              )}
+                  <VerifiedTick />
+                </span>
+              ) : null}
+              {matchedBrand && <span className="text-muted/50" aria-hidden="true">·</span>}
+              <span className="text-[13px] text-muted">{product.category}</span>
             </div>
-            <h1 className="font-display font-black text-ink text-3xl md:text-4xl tracking-tightest leading-[1.05] mb-4">
-              {product.name}
+            <h1 className="font-display text-ink text-3xl md:text-4xl leading-[1.05] mb-4">
+              {product.itemName || product.name}
             </h1>
 
             <div className="flex items-center gap-2.5 mb-6">

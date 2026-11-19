@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Stamp from '@/components/Stamp';
+import VerifiedTick from '@/components/VerifiedTick';
 import Reveal from '@/components/Reveal';
 import ProductImage from '@/components/ProductImage';
 import { ProductGridSkeleton } from '@/components/ProductCardSkeleton';
@@ -132,7 +132,7 @@ export default function BrandPage({ brand }: { brand: Brand }) {
   return (
     <>
       <Head>
-        <title>{brand.brandName} — RAPID Marketplace</title>
+        <title>{`${brand.brandName} — RAPID Marketplace`}</title>
         <meta name="description" content={brand.description} />
         <link rel="canonical" href={`https://www.rapid.market/brands/${brand.slug}`} />
         <script
@@ -171,7 +171,12 @@ export default function BrandPage({ brand }: { brand: Brand }) {
             </div>
           </div>
           <div className="lg:col-span-4 flex lg:justify-end">
-            <Stamp size={104} centerText="QC" sub="Passed" ringText="Quality Checked · Verified Seller ·" />
+            {/* What's true before purchase: the seller is vetted. QC happens at
+                the warehouse after an order, so no "QC passed" claim here. */}
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink h-fit">
+              <VerifiedTick />
+              Verified seller
+            </span>
           </div>
         </div>
 
