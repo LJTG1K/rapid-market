@@ -51,6 +51,10 @@ const nextConfig = {
   redirects: async () => [
     // Jceaser was a misspelling of JCaesar and was merged into it.
     { source: '/brands/jceaser', destination: '/brands/jcaesar', permanent: true },
+    // The shipping calculator (and the /tools page that only listed it) was
+    // removed; send old links and search results to the ordering guide.
+    { source: '/tools', destination: '/tutorial', permanent: true },
+    { source: '/tools/:path*', destination: '/tutorial', permanent: true },
   ],
   headers: async () => [
     { source: '/:path*', headers: securityHeaders },

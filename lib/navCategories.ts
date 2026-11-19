@@ -34,6 +34,5 @@ export const DISCOVER_LINKS = [
 
 export const HELP_LINKS = [
   { label: 'How buying works', href: '/tutorial' },
-  { label: 'Shipping calculator', href: '/tools/shipping' },
   { label: 'Journal', href: '/blog' },
 ];

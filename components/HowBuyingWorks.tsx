@@ -18,8 +18,13 @@ const QC_PHOTOS: { src: string; alt: string }[] = [
   { src: '/assets/how-it-works/qc-pants.jpg', alt: 'Warehouse QC photo: belted check wide-leg trousers laid flat beside a cm ruler' },
 ];
 
-/** Optional photo for step 3 (a consolidated Sugargoo parcel). */
-const PARCEL_PHOTO: string | null = null;
+/**
+ * Step 3 photo. Stock image: "Brown cardboard box with bright orange tape" by
+ * Giorgio Trovato on Unsplash (Unsplash License: free for commercial use, no
+ * attribution required). https://unsplash.com/photos/_My6Tbu09ks
+ * Set to null to fall back to the drawn parcel.
+ */
+const PARCEL_PHOTO: string | null = '/assets/how-it-works/parcel.jpg';
 
 function Num({ n }: { n: number }) {
   return <span className="w-7 h-7 rounded-full bg-ink text-white grid place-items-center text-xs font-semibold shrink-0">{n}</span>;
@@ -79,7 +84,15 @@ function QcFrame() {
 
 function ParcelFrame() {
   if (PARCEL_PHOTO) {
-    return <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${PARCEL_PHOTO})` }} role="img" aria-label="Consolidated parcel" />;
+    return (
+      <Image
+        src={PARCEL_PHOTO}
+        alt="A sealed cardboard parcel with orange tape"
+        fill
+        sizes="(min-width: 768px) 33vw, 100vw"
+        className="object-cover object-[50%_60%]"
+      />
+    );
   }
   return (
     <div className="absolute inset-0 grid place-items-center bg-paper">
@@ -144,7 +157,6 @@ export default function HowBuyingWorks({ className = '' }: { className?: string 
             <p className="text-muted leading-relaxed mb-4">
               Combine everything you&apos;ve bought from different sellers into one parcel and ship it home together.
             </p>
-            <Link href="/tools/shipping" className="mt-auto text-sm font-medium link-underline self-start">Estimate shipping →</Link>
           </div>
         </li>
       </ol>

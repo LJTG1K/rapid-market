@@ -21,8 +21,6 @@ const STATIC_PAGES: Entry[] = [
   { path: '/blog', priority: '0.7', changefreq: 'weekly' },
   { path: '/style-quiz', priority: '0.7', changefreq: 'monthly' },
   { path: '/tutorial', priority: '0.7', changefreq: 'monthly' },
-  { path: '/tools', priority: '0.7', changefreq: 'monthly' },
-  { path: '/tools/shipping', priority: '0.9', changefreq: 'monthly' },
   { path: '/signup', priority: '0.6', changefreq: 'monthly' },
 ];
 

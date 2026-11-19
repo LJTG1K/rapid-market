@@ -53,7 +53,6 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li><Link href="/signup" className="hover:underline transition-colors">Create Account</Link></li>
               <li><Link href="/tutorial" className="hover:underline transition-colors">Ordering Guide</Link></li>
-              <li><Link href="/tools/shipping" className="hover:underline transition-colors">Shipping Calculator</Link></li>
               <li><Link href="/blog" className="hover:underline transition-colors">Journal</Link></li>
               <li><Link href="/campaign" className="hover:underline transition-colors">Campaign</Link></li>
               <li><Link href="/privacy" className="hover:underline transition-colors">Privacy Policy</Link></li>
